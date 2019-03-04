@@ -1,0 +1,52 @@
+{
+  "name": "CLUB",
+  "version": "1.0.0",
+  "description": "使用 `node` + `vue` + `express` 防写 cnode 社区",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon server/index",
+    "dev": "npx webpack --mode development --watch",
+    "build": "npx webpack --mode production"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/zwtzwx/CLUB.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/zwtzwx/CLUB/issues"
+  },
+  "homepage": "https://github.com/zwtzwx/CLUB#readme",
+  "devDependencies": {
+    "@babel/core": "^7.3.4",
+    "@babel/plugin-transform-runtime": "^7.3.4",
+    "@babel/preset-env": "^7.3.4",
+    "@babel/runtime": "^7.3.4",
+    "babel-loader": "^8.0.5",
+    "babel-plugin-component": "^1.1.1",
+    "body-parser": "^1.18.3",
+    "css-loader": "^2.1.0",
+    "ejs": "^2.6.1",
+    "element-ui": "^2.6.1",
+    "file-loader": "^3.0.1",
+    "mini-css-extract-plugin": "^0.5.0",
+    "node-sass": "^4.11.0",
+    "sass-loader": "^7.1.0",
+    "url-loader": "^1.1.2",
+    "vue-loader": "^15.7.0",
+    "vue-style-loader": "^4.1.2",
+    "vue-template-compiler": "^2.6.8",
+    "webpack": "^4.29.6",
+    "webpack-cli": "^3.2.3",
+    "webpack-dev-server": "^3.2.1"
+  },
+  "dependencies": {
+    "axios": "^0.18.0",
+    "express": "^4.16.4",
+    "vue": "^2.6.8",
+    "vue-router": "^3.0.2"
+  }
+}
