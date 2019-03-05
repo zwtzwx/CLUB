@@ -10,11 +10,7 @@ app.engine('html', require('ejs').renderFile);
 // app.use('/public', express.static(path.resolve(__dirname, '../pulbic')));
 app.use('/public', express.static(path.join(__dirname, '../public')));
 
-app.get('/', (req, res) => {
-  res.render('index', {
-    title: 'CLUB'
-  })
-})
+
 
 // api 接口路由信息
 app.use('/web', Router);
