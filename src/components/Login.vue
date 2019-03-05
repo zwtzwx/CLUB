@@ -25,11 +25,11 @@
           <el-input placeholder="用户名" autofocus></el-input>
         </el-form-item>
         <el-form-item>
-          <el-input placeholder="邮箱" type="email"></el-input>
+          <el-input placeholder="邮箱" type="email" v-model="registerInfo.mail"></el-input>
         </el-form-item>
         <el-form-item style="position:relative">
           <el-input placeholder="验证码"></el-input>
-          <button class="send-code-btn link" type="button">获取验证码</button>
+          <button class="send-code-btn link" type="button" @click="getCode">获取验证码</button>
         </el-form-item>
         <el-form-item>
           <el-input placeholder="密码" type="password"></el-input>
@@ -46,10 +46,24 @@ export default {
   data () {
     return {
       loginVisible: true,
-      isLogin: false
+      isLogin: false,
+      loginInfo: {
+
+      },
+      registerInfo: {
+        mail: ''
+      }
     }
   },
   methods: {
+    getCode () {
+      // 获取验证码
+      this.$json.post('/web/mail/send', {
+        mail: this.registerInfo.mail
+      }).then(() => {
+
+      })
+    }
   }
 }
 </script>
@@ -75,6 +89,7 @@ export default {
     height: 80%;
     right: 1px;
     top: 5px;
+    background-color: #fff;
   }
   .link {
     color: #007fff;
