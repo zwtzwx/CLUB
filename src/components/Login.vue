@@ -3,14 +3,15 @@
     :visible.sync="loginVisible"
     width="300px"
     custom-class="login-dialog"
+    @close="resetForm"
     >
     <div class="login" v-if="isLogin">
       <el-form>
-        <el-form-item>
-          <el-input placeholder="请输入用户名或邮箱" autofocus></el-input>
+        <el-form-item >
+          <el-input placeholder="请输入用户名或邮箱" autofocus v-model="loginInfo.name"></el-input>
         </el-form-item>
         <el-form-item>
-          <el-input placeholder="密码" type="password"></el-input>
+          <el-input placeholder="密码" type="password" v-model="loginInfo.password"></el-input>
         </el-form-item>
         <el-button type="primary" class="btn">登录</el-button>
       </el-form>
@@ -21,20 +22,22 @@
     </div>
     <div class="register" v-else>
       <el-form>
-        <el-form-item>
+        <!-- <el-form-item>
           <el-input placeholder="用户名" autofocus></el-input>
-        </el-form-item>
+        </el-form-item> -->
         <el-form-item>
-          <el-input placeholder="邮箱" type="email" v-model="registerInfo.mail"></el-input>
+          <el-input placeholder="请输入邮箱" 
+          type="email" v-model="registerMail" autofocus
+          @input="checkMail"></el-input>
         </el-form-item>
-        <el-form-item style="position:relative">
+        <!-- <el-form-item style="position:relative">
           <el-input placeholder="验证码"></el-input>
           <button class="send-code-btn link" type="button" @click="getCode">获取验证码</button>
         </el-form-item>
         <el-form-item>
           <el-input placeholder="密码" type="password"></el-input>
-        </el-form-item>
-        <el-button type="primary" class="btn">注册</el-button>
+        </el-form-item> -->
+        <el-button type="primary" class="btn" :disabled="correctMail" @click="signUp">注册</el-button>
       </el-form>
       <p class="other link" @click="isLogin = true">已有账号？登录</p>
     </div>
@@ -48,21 +51,39 @@ export default {
       loginVisible: true,
       isLogin: false,
       loginInfo: {
-
+        name: '',
+        password: ''
       },
-      registerInfo: {
-        mail: ''
-      }
+      registerMail: '',
+      correctMail: true
     }
   },
   methods: {
-    getCode () {
+    signUp () {
       // 获取验证码
       this.$json.post('/web/mail/send', {
-        mail: this.registerInfo.mail
-      }).then(() => {
-
+        mail: this.registerMail
+      }).then((res) => {
+        this.$message({
+          message: res.msg,
+          type: 'success',
+        })
+        console.log(res);
+        
       })
+    },
+    checkMail () {
+      // 检查邮箱
+      let mailReg = /^([A-Za-z0-9_\-\.])+\@([A-Za-z0-9_\-\.])+\.([A-Za-z]{2,4})$/;
+      if (mailReg.test(this.registerMail)) {
+        this.correctMail = false;
+      }
+    },
+    resetForm () {
+      // 关闭之前重置表单
+      this.correctMail = true;
+      this.registerMail = '';
+      this.loginInfo.name = this.loginInfo.password = '';
     }
   }
 }
@@ -81,16 +102,16 @@ export default {
   .el-form-item {
     margin-bottom: 10px;
   }
-  .send-code-btn {
-    border: none;
-    position: absolute;
-    outline: none;
-    font-size: 15px;
-    height: 80%;
-    right: 1px;
-    top: 5px;
-    background-color: #fff;
-  }
+  // .send-code-btn {
+  //   border: none;
+  //   position: absolute;
+  //   outline: none;
+  //   font-size: 15px;
+  //   height: 80%;
+  //   right: 1px;
+  //   top: 5px;
+  //   background-color: #fff;
+  // }
   .link {
     color: #007fff;
     cursor: pointer;

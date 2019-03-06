@@ -4,8 +4,8 @@ const path = require('path');
 const app = express();
 
 app.set('views', path.resolve(__dirname, '../'));
-app.set('view engine', 'html');
-app.engine('html', require('ejs').renderFile);
+app.set('view engine', 'ejs');
+app.engine('ejs', require('ejs').renderFile);
 
 // app.use('/public', express.static(path.resolve(__dirname, '../pulbic')));
 app.use('/public', express.static(path.join(__dirname, '../public')));

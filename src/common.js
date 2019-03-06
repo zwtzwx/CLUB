@@ -3,7 +3,7 @@ import axios from './lib/axios';
 
 import {
   Form, FormItem, Input, Button, Tag, Pagination,
-  Icon, Dialog
+  Icon, Dialog, Message
 } from 'element-ui';
 import { $json } from './lib/axios';
 
@@ -17,4 +17,5 @@ Vue.use(Pagination);
 Vue.use(Icon);
 Vue.use(Dialog);
 
+Vue.prototype.$message = Message;
 export default Vue;

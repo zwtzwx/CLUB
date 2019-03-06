@@ -12,13 +12,12 @@ const mailTransport = nodeMailer.createTransport({
 });
 
 module.exports = function (mail) {
-  console.log(mail);
-  
-  mailTransport.sendMail(mail, (err,info) => {
-    if (err) {
-      return console.log(err);
-    }
-    console.log('mail send: ', info.response);
-    
-  })
+  return new Promise((resolve, reject) => {
+    mailTransport.sendMail(mail, (err,info) => {
+      if (err) {
+        reject();
+      }
+      resolve();
+    })
+  });
 }
