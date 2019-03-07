@@ -1,10 +1,12 @@
 <template>
   <header>
-    <ul class="operate-list">
-      <li><a>首页</a></li>
-      <li @click="register(0)"><a>注册</a></li>
-      <li @click="register(1)"><a>登录</a></li>
-    </ul>
+    <div class="main-box">
+      <ul class="operate-list">
+        <li><router-link to="/">首页</router-link></li>
+        <li @click="register(0)">注册</li>
+        <li @click="register(1)">登录</li>
+      </ul>
+    </div>
   </header>
 </template>
 <script>
@@ -25,17 +27,24 @@ header{
   background-color: #fff;
   border-top: 2px solid $main-color;
   box-shadow: 0 2px 2px #ccc;
+  .main-box {
+    width: $main-width;
+    margin: 0 auto;
+    overflow: hidden;
+  }
   .operate-list {
     list-style-type: none;
     float: right;
     line-height: 60px;
     margin: 0;
-    margin-right: 50px;
+    // margin-right: 50px;
     li {
       display: inline-block;
       padding: 0 10px;
       cursor: pointer;
+      color: $gray;
       a {
+        text-decoration: none;
         color: $gray;
       }
     }

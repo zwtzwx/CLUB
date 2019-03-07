@@ -13,7 +13,7 @@
         <el-form-item>
           <el-input placeholder="密码" type="password" v-model="loginInfo.password"></el-input>
         </el-form-item>
-        <el-button type="primary" class="btn">登录</el-button>
+        <el-button type="primary" class="btn" @click="signIn">登录</el-button>
       </el-form>
       <p class="other">
         已有账号？<span class="link" @click="isLogin = false">登录</span>
@@ -22,21 +22,11 @@
     </div>
     <div class="register" v-else>
       <el-form>
-        <!-- <el-form-item>
-          <el-input placeholder="用户名" autofocus></el-input>
-        </el-form-item> -->
         <el-form-item>
           <el-input placeholder="请输入邮箱" 
           type="email" v-model="registerMail" autofocus
           @input="checkMail"></el-input>
         </el-form-item>
-        <!-- <el-form-item style="position:relative">
-          <el-input placeholder="验证码"></el-input>
-          <button class="send-code-btn link" type="button" @click="getCode">获取验证码</button>
-        </el-form-item>
-        <el-form-item>
-          <el-input placeholder="密码" type="password"></el-input>
-        </el-form-item> -->
         <el-button type="primary" class="btn" :disabled="correctMail" @click="signUp">注册</el-button>
       </el-form>
       <p class="other link" @click="isLogin = true">已有账号？登录</p>
@@ -59,17 +49,29 @@ export default {
     }
   },
   methods: {
+    // 注册
     signUp () {
       // 获取验证码
-      this.$json.post('/web/mail/send', {
+      this.$json.post('/mail/send', {
         mail: this.registerMail
       }).then((res) => {
         this.$message({
           message: res.msg,
           type: 'success',
-        })
-        console.log(res);
-        
+        });
+        this.loginVisible =false;
+      })
+    },
+    // 登录
+    signIn () {
+      if (!this.loginInfo.name || !this.loginInfo.password) {
+        return this.$message({
+          message: '用户名和密码不能为空',
+          type: 'error'
+        });
+      }
+      this.$json.post('/user/signin', {
+        ...this.loginInfo
       })
     },
     checkMail () {

@@ -14,6 +14,9 @@ router.use(bodyParser.urlencoded({extended: false}));
 router.post('/mail/send', mailControl.sendMail);
 
 // 注册
-router.post('/signup', userControl.register);
+router.post('/user/signup', userControl.register);
+
+// 登录
+router.post('/user/signin', userControl.login);
 
 module.exports = router;

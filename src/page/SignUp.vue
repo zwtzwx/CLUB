@@ -4,14 +4,17 @@
       <div class="main-box signup">
         <div class="content">
           <h3>用户注册</h3>
-          <el-form class="signup-form" :model="registerInfo" ref="signupForm">
-            <el-form-item prop="username" :rules="{ require: true, message: '用户名不能为空' }">
+          <p class="mail">邮箱：{{ urlParames ? urlParames.email: '' }}</p>
+          <el-form class="signup-form" :model="registerInfo" ref="signupForm" :rules="rule">
+            <el-form-item prop="username" :rules="{ required: true, message: '用户名不能为空', trigger: 'blur' }">
               <el-input placeholder="用户名" v-model="registerInfo.username"></el-input>
             </el-form-item>
-            <el-form-item prop="password" :rules="{ require: true, message: '密码不能为空' }">
-              <el-input placeholder="密码" type="password" v-model="registerInfo.password"></el-input>
+            <el-form-item prop="password" :rules="[
+            { required: true, message: '密码不能为空', trigger: 'blur' },
+            { min: 6, max: 16, message: '长度在 6 到 16 个字符', trigger: 'blur'}]">
+              <el-input placeholder="请输入6~16位密码" type="password" v-model="registerInfo.password"></el-input>
             </el-form-item>
-            <el-form-item prop="confirm" :rules="{ require: true, message: '请输入确认密码' }">
+            <el-form-item prop="confirm">
               <el-input placeholder="确认密码" type="password" v-model="registerInfo.confirm"></el-input>
             </el-form-item>
             <el-button type="primary" @click="signUp">立即注册</el-button>
@@ -25,38 +28,62 @@ import MyHeader from '../components/header';
 import qs from 'qs';
 export default {
   data () {
+    let checkPasswd = (rule, value, callback) => {
+      if (value !== this.registerInfo.password) {
+        callback(new Error('两次输入密码不一致！'));
+      }else {
+        callback();
+      }
+    };
     return {
       registerInfo: {
         username: '',
         password: '',
         confirm: ''
+      },
+      rule : {
+        confirm: [
+          { required: true, message: '请输入确认密码', trigger: 'blur' },
+          { validator: checkPasswd, trigger: 'blur'}
+        ]
       }
+    }
+  },
+  created() {
+    if (!this.urlParames.code || !this.urlParames.email || Object.keys(this.urlParames).length != 2) {
+      // 不是合法进入注册页面跳转到首页
+      this.$router.replace({ path: '/' });
     }
   },
   methods: {
     signUp () {
-      let params = qs.parse(window.location.href.split('?')[1]);
       this.$refs['signupForm'].validate((valid) => {
-        if (!valid) return false;
-      });
-      if (this.registerInfo.password != this.registerInfo.confirm) {
-        this.$message({
-          message: '两次输入的密码不一致',
-          type: 'error'
-        });
-      }
-      delete this.registerInfo.confirm;
-      this.$json.post('/web/signup', {
-        userInfo: {
-          ...params,
-          ...this.registerInfo
+        if (valid) {
+          delete this.registerInfo.confirm;
+          this.$json.post('/user/signup', {
+            userInfo: {
+              ...this.urlParames,
+              ...this.registerInfo
+            }
+          }).then((res) => {
+            this.$message({
+              message: res.meg,
+              type: 'success'
+            });
+            // 注册成功，跳转到首页
+            this.$router.replace({ path: '/' });
+          })
         }
-      })
-
+      });
     }
   },
   components: {
     MyHeader
+  },
+  computed: {
+    urlParames () {
+      return qs.parse(window.location.href.split('?')[1]);
+    }
   }
 }
 </script>
@@ -69,6 +96,10 @@ export default {
   .content {
     width: 50%;
     margin: 20px auto;
+  }
+  .mail {
+    color: #0371df;
+    line-height: 30px;
   }
 }
 </style>

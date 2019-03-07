@@ -1,10 +1,10 @@
 import $form from 'axios';
 import qs from 'qs';
 import baseURL from './base_url';
-
+import { Message } from 'element-ui';
 $form.defaults.timeout = 10000;
 $form.defaults.responseType = 'json';
-$form.defaults.baseURL = `${baseURL}`;
+$form.defaults.baseURL = `${baseURL}/web`;
 
 // 表单提交方式
 $form.defaults.headers['Content-Type'] = 'application/x-www-form-urlencoded; charset=utf-8';
@@ -17,7 +17,7 @@ $form.defaults.transformRequest = [
 // JSON 提交方式
 let $json = $form.create({
 
-    baseURL: `${baseURL}`,
+    baseURL: `${baseURL}/web`,
     headers: {
         ['Content-Type']: 'application/json; charset=utf-8'
     },
@@ -27,19 +27,27 @@ let $json = $form.create({
         }
     ]
 });
-
+const defaultMsg = '服务器错误，请重新连接服务器';
 // 配置拦截器
 function interceptorsRequestSuccess (config) {
     return config;
 }
 
 function interceptorsResponseSuccess (response) {
+    if (!response.data.ret) {
+        const msg = response.data.msg || defaultMsg;
+        !response.config.no_message && Message({ message: msg, type: 'error' });
+        return Promise.reject(response.data);
+    }
     return response.data;
 }
 
 function interceptorsResponseError (error) {
     if (!error.request) return;
-
+    if (error.request.status !== 401) {
+        const msg = error.response.data.msg ||  defaultMsg;
+        !error.config.no_message && Message({ message: msg, type: 'error' });
+    }
     return Promise.reject(error.response.data);
 }
 

@@ -35,7 +35,9 @@ exports.sendMail = (req, res) => {
     } else {
       mailOption.html = str;
       sender(mailOption).then(() => {
-        res.json({ msg: '邮件发送成功，请验证你的邮箱' });
+        res.json({ 
+          msg: '邮件发送成功，请验证你的邮箱',
+          ret: 1 });
       });
     }
   });
