@@ -1,6 +1,11 @@
 const Sequelize = require('sequelize');
 const sequelize = require('../tools/db');
+const crypto = require('crypto');
+
+
+// const NodeRSA = require('node-rsa');
 const Op = Sequelize.Op;
+
 // 定义 Model
 const User = sequelize.define('user_info', {
   id: {
@@ -38,10 +43,23 @@ const User = sequelize.define('user_info', {
 // 如果数据库中表已经存在，那么没必要设为 true
 User.sync({ force: false });
 
-exports.userRegister = async (userInfo) => {
-  console.log(userInfo);
+/**
+ * userInfo 用户信息
+ *    code: uuid 验证对应 email 的
+ *    email: 用户邮箱
+ *    key: `用户名@密码` 的加密字符串
+ */
+exports.userRegister = async (userInfo, privateKey) => {
   
-  
+  let buf = Buffer.from(userInfo.key, 'base64');
+  // 解密前端发送过来的用户名密码信息
+  let decrypted = crypto.privateDecrypt({
+    key:privateKey,
+    padding: crypto.constants.RSA_PKCS1_PADDING
+  }, buf);
+  console.log(decrypted.toString('utf-8'));
+  let [userName, userPassword] = decrypted.toString('utf-8').split('@');
+ 
   // return findUser(userInfo.username).then(function(result) {
   //   // result 将是找到的第一个条目 || null
   //   if (result) throw new Error('用户名已存在');
@@ -52,7 +70,8 @@ exports.userRegister = async (userInfo) => {
   //     code: userInfo.code
   //   })
   // })
-
+  // console.log(decrypted.toString('utf-8'));
+  
   // 查看邮箱是否被注册
   let email = await findUser('email', userInfo.email);
   if (email) throw new Error('邮箱已被注册');
@@ -61,8 +80,8 @@ exports.userRegister = async (userInfo) => {
   if (name) throw new Error('用户名已存在');
 
   return User.create({
-    name: userInfo.username,
-    password: userInfo.password,
+    name: userInfo.userName,
+    password: userInfo.userPassword,
     email: userInfo.email,
     code: userInfo.code
   });

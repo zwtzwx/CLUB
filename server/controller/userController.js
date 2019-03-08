@@ -1,20 +1,28 @@
 const User  = require('../model/user');
+const fs = require('fs');
+const path = require('path');
+const privateKey = fs.readFileSync(path.resolve(__dirname, '../rsa/rsa_private_key.pem')).toString('utf-8');
 // 用户注册
 exports.register = (req, res) => {
   let userInfo = req.body.userInfo;
-  try {
-    User.userRegister(userInfo).then(() => {
-      res.json({
-        msg: '注册成功',
-        ret: 1
-      })
-    });
-  } catch (e) {
-    res.json({
-      msg: e.message,
-      ret: 0
-    })
-  }
+  User.userRegister(userInfo, privateKey)
+  res.json({
+    msg: '注册成功',
+    ret: 1
+  })
+  // try {
+  //   User.userRegister(userInfo).then(() => {
+  //     res.json({
+  //       msg: '注册成功',
+  //       ret: 1
+  //     })
+  //   });
+  // } catch (e) {
+  //   res.json({
+  //     msg: e.message,
+  //     ret: 0
+  //   })
+  // }
 }
 
 exports.login = (req, res) => {
