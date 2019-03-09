@@ -2,16 +2,23 @@ const express = require('express');
 const mailControl = require('../controller/mailController');
 const userControl = require('../controller/userController');
 const jwt = require('jsonwebtoken');
-const expressJWT = require('express-jwt');
+//const expressJWT = require('express-jwt');
+const jwtServe = require('../service/jwt');
+const fs = require('fs');
+
 const router = express.Router();
 
-// var secretOrPrivateKey = "hello  BigManing"  //加密token 校验token时要使用
+var PrivateKey = fs.readFileSync(__dirname + '/../rsa/rsa_private_key.pem');  //加密token 校验token时要使用
 
-// router.use(expressJWT({
-//     secret: secretOrPrivateKey   
-// }).unless({
-//     path: ['/web/getToken']
-// }));
+router.use(jwtServe.jwtMid.unless({
+    path: [
+        {url: '/web/user/signin', methods: ['POST']},
+        { url: '/web/user/signup', methods: ['POST']},
+        { url: '/web/mail/send', methods: ['POST']},
+        { url: '/web/user/reg-email', methods: ['POST']},
+        { url: '/web/getToken', methods: ['GET']},
+    ]
+}));
 
 // 发送测试邮件
 router.post('/mail/send', mailControl.sendMail);
@@ -31,13 +38,15 @@ router.get('/getToken', function (req, res) {
         token: jwt.sign({
             name: "BinMaing",
             data: "============="
-        }, secretOrPrivateKey, {
-                expiresIn: 60 * 1
-            })
+        }, PrivateKey, {
+            algorithm: 'RS256',
+            expiresIn: 60 * 1
+        })
     })
 });
 
 router.get('/getData', function (req, res) {
+    console.log('请求的用户数据为：', req.user);
     res.send(req.user)
 });
 

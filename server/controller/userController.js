@@ -1,12 +1,13 @@
-const User  = require('../models/user');
 const fs = require('fs');
 const path = require('path');
-const privateKey = fs.readFileSync(path.resolve(__dirname, '../rsa/rsa_private_key.pem')).toString('utf-8');
-
-const sender = require('../tools/mail');
 const uuidv1 = require('uuid/v1');
 const ejs = require('ejs');
+
+const privateKey = fs.readFileSync(path.resolve(__dirname, '../rsa/rsa_private_key.pem')).toString('utf-8');
+const User  = require('../models/user');
+const sender = require('../tools/mail');
 const sendEmail = require('../service/sendMail');
+const jwtService = require('../service/jwt');
 
 
 // 发送注册邮件
@@ -19,21 +20,25 @@ exports.sendMail = function(req, res) {
 // 用户注册
 exports.register = (req, res) => {
   let userInfo = req.body.userInfo;
+
   User.userRegister(userInfo, privateKey).then(function(success) {
-    console.log('222', success);
+    res.json({
+      msg: '注册成功',
+      ret: 1
+    })
   }, function (fail) {
-    console.log('111',fail);
+    res.json({
+      msg: '注册失败',
+      ret: 0
+    })
   });
 
-  res.json({
-    msg: '注册成功',
-    ret: 1
-  })
 }
 
 // 登陆
 exports.login = (req, res) => {
-  let loginInfo = req.body;
+  let loginInfo = req.body.loginInfo;
+  console.log('传入的用户数据为：', loginInfo);
   User.userLogin(loginInfo).then((result) => {
     if (result) {
       // console.log(result.dataValues);
@@ -45,8 +50,12 @@ exports.login = (req, res) => {
           ret: 0
         });
       } else {
+        console.log(result.dataValues);
+
+        sign = jwtService.jwtSign(data);
+        console.log('签名为：', sign);
         res.json({
-          data,
+          sign,
           msg: '登录成功',
           ret: 1
         })

@@ -50,15 +50,15 @@ User.sync({ force: false });
  *    key: `用户名@密码` 的加密字符串
  */
 exports.userRegister = async (userInfo, privateKey) => {
-  
-  let buf = Buffer.from(userInfo.key, 'base64');
+
+  let buf = Buffer.from(userInfo.key.toString(), 'base64');
   // 解密前端发送过来的用户名密码信息
-  let decrypted = crypto.privateDecrypt({
-    key:privateKey,
-    padding: crypto.constants.RSA_PKCS1_PADDING
-  }, buf);
-  console.log(decrypted.toString('utf-8'));
-  let [userName, userPassword] = decrypted.toString('utf-8').split('@');
+  // let decrypted = crypto.privateDecrypt({
+  //   key:privateKey,
+  //   padding: crypto.constants.RSA_PKCS1_PADDING
+  // }, buf);
+  // console.log(decrypted.toString('utf-8'));
+  // let [userName, userPassword] = decrypted.toString('utf-8').split('@');
  
   // return findUser(userInfo.username).then(function(result) {
   //   // result 将是找到的第一个条目 || null
@@ -73,13 +73,14 @@ exports.userRegister = async (userInfo, privateKey) => {
   // console.log(decrypted.toString('utf-8'));
   
   // 查看邮箱是否被注册
-  let email = await findUser('email', userInfo.email);
+  let email = await User.findOne({ where: {'email': userInfo.email} });
   if (email) throw new Error('邮箱已被注册');
   // 查看用户名是否已经存在
-  let name = await findUser('name', userInfo.username);
+  let name = await User.findOne({where: {'name': userInfo.username}});
   if (name) throw new Error('用户名已存在');
 
-  return await User.create({
+  console.log('用户数据为：', userInfo);
+  return User.create({
     name: userInfo.userName,
     password: userInfo.userPassword,
     email: userInfo.email,
@@ -94,14 +95,16 @@ exports.userRegister = async (userInfo, privateKey) => {
  *    password: 密码
  */
 exports.userLogin = (loginInfo) => {
+  console.log('登陆用户数据为：', loginInfo);
+  console.log('登陆用户邮箱为：', loginInfo.email);
   return User.findOne({
     where: {
       [Op.or]: [
         { name: loginInfo.name },
-        { email: loginInfo.name } 
+        { email: loginInfo.email } 
       ]
     },
-    attributes: ['id', 'name', 'password']
+    attributes: ['id', 'name', 'email', 'password']
   });
 }
 
