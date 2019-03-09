@@ -1,13 +1,14 @@
 const nodeMailer = require('nodemailer');
+const config = require('../config');
 
 // 创建传输方式
 const mailTransport = nodeMailer.createTransport({
-  host: 'smtp.163.com',
-  secure: true,
-  port: 465,
+  host: config.email.host || 'smtp.163.com',
+  secure: config.email.secure || true,
+  port: config.email.port || 465,
   auth: {
-    user: '18774671721@163.com',
-    pass: 'zwx384500364'
+    user: config.email.user || '18774671721@163.com',
+    pass: config.email.password || 'zwx384500364'
   }
 });
 
