@@ -79,7 +79,7 @@ exports.userRegister = async (userInfo, privateKey) => {
   let name = await findUser('name', userInfo.username);
   if (name) throw new Error('用户名已存在');
 
-  return User.create({
+  return await User.create({
     name: userInfo.userName,
     password: userInfo.userPassword,
     email: userInfo.email,

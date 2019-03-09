@@ -16,6 +16,5 @@ exports.sendMail = (req, res) => {
   let mail = req.body.mail;
   let baseURL = req.headers.origin;
   console.log('测试路径');
-  let con = '';
   sendEmail.sendMail(mail, baseURL, res);
 }

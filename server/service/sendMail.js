@@ -2,6 +2,8 @@ const sender = require('../tools/mail');
 const uuidv1 = require('uuid/v1');
 const ejs = require('ejs');
 const config = require('../config');
+const crypto = require('crypto');
+const fs = require('fs');
 
 // 邮件模板
 let mailOption = {
@@ -25,11 +27,14 @@ function sendMail(mail, baseURL, res) {
     }
 
     mailOption.to = mail;
-    // 生成随机字符串
-    let uuid = uuidv1().replace(/-/g, '');
+    
+    // 采用当前时间戳加密之后作为注册邮件的签名，请求时验证数据，设定超时时间。
+    let buf = Date.now().toString();
+
+    let encrypted = Encrypt(buf, config.appKey);
 
     ejs.renderFile(__dirname + '/../views/email.ejs', {
-        url: `${baseURL}/#/signup?code=${uuid}&email=${mail}`
+        url: `${baseURL}/#/signup?code=${encrypted}&email=${mail}`
     }, function(err, str) {
         if (err) {
             console.log(err);
@@ -42,6 +47,22 @@ function sendMail(mail, baseURL, res) {
             });
         }
     });
+}
+
+// 简单加密解密
+
+let Encrypt = (data, key) => {
+    const cipher = crypto.createCipher('aes192', key);
+    var crypted = cipher.update(data, 'utf8', 'hex');
+    crypted += cipher.final('hex');
+    return crypted;
+}
+
+exports.Decrypt = (encrypted, key) => {
+    const decipher = crypto.createDecipher('aes192', key);
+    var decrypted = decipher.update(encrypted, 'hex', 'utf8');
+    decrypted += decipher.final('utf8');
+    return decrypted;
 }
 
 exports.sendMail = sendMail;
