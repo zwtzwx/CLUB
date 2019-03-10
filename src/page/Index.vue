@@ -14,6 +14,7 @@
 import MyHeader from '../components/header';
 import MyLeft from '../components/left';
 import MyRight from '../components/right';
+
 export default {
   components: {
     MyHeader,

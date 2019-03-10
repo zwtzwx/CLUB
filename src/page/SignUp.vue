@@ -25,23 +25,8 @@
 </template>
 <script>
 import MyHeader from '../components/header';
-import JSEncrypt from 'jsencrypt';
 import qs from 'qs';
-const publicKey = `-----BEGIN RSA PRIVATE KEY-----
-MIICXgIBAAKBgQDtI22xdRNAKZ356DaTHj+hhSlXwTfyHOcBWJmAnudWlm/eSX2w
-ZO2dt63dhdPPGBdA7bxYaamVmmNHIvyTt0JINXpGreufVWrVtYAfnzyYoc82VbtI
-AHUTI/AlLfzYYjn9W6nBDuvL1Sfqk71cGcgJEzurUE9w6XVFLzDqzHi1JQIDAQAB
-AoGBANwmae23TNniSQD67b+C83vWDd2kSXYCEwuS318jJo2iN9Tb0U3zRQ2IumbP
-mSXHrb7fdl12KrPyknw2JNpV5bcuP99b7en4NFhTVAsevnvYSQLehp81FD7ILDqE
-BRcbglOEDWxXKIJkwfwlcJoWMezd9C7reoE9ZAxx1CpB4ajBAkEA+DOIRUP4qj+r
-tgyKDKmSbcUmNnUrTi1trtw/9Cpf342GVgncK6x0ah9VU2xo2LpEhkpC9y+TUddI
-hJNfv5Ik/QJBAPSW6LRi/dVLQe6i5JJOg2bn5GpU36DWXo6jkwZW4TonTmiPAMgh
-RG2QnrZe1lx6n3LCPrPaAfaeqTAUGuihnUkCQQCPT6oCXJHrM6JhFnJrh0n+SdSb
-oyHjHQX07kWbJRCAk0YazcysBwKc+ASbi8AqS7sfUyfBdF365nR/4Fxrz+W9AkEA
-370EFa7QH8L+Bvu/Nw7XKNVLnvEQuCIg0T5UieIDmZzHHuJhhrDX1ZoLdSv/zwzk
-uqdxkDgGv8CXZ8Gcc90S8QJAea15jizW5qx55vgBsCBei4bq9HyLg2LHCxVdBiEv
-KCiZ0ou8Z321eTqVEasvwOhLwqRXb9E+qKKt5xBiZJKTVQ==
------END RSA PRIVATE KEY-----`;
+import getKey from '../lib/key';
 export default {
   data () {
     let checkPasswd = (rule, value, callback) => {
@@ -76,22 +61,15 @@ export default {
       this.$refs['signupForm'].validate((valid) => {
         if (valid) {
           delete this.registerInfo.confirm;
-          // 将用户名和密码进行加密传输
-          let encrypt = new JSEncrypt();
-          
-          
-          // 设置公钥
-          encrypt.setPublicKey(publicKey);
-          let userInfo = `${this.registerInfo.username}@${this.registerInfo.password}`;
-          // // 使用公钥加密
-          const encryKey = encrypt.encrypt(userInfo);
+          // 使用公钥加密密码
+          const encryKey = getKey(this.registerInfo.password);
           this.$json.post('/user/signup', {
             userInfo: {
               ...this.urlParames,
-              key: encryKey
+              name: this.registerInfo.username,
+              password: encryKey
             }
           }).then((res) => {
-            console.log(res.publicKey);
             this.$message({
               message: res.msg,
               type: 'success'

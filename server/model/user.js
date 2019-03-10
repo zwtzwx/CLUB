@@ -1,9 +1,6 @@
 const Sequelize = require('sequelize');
 const sequelize = require('../tools/db');
-const crypto = require('crypto');
-
-
-// const NodeRSA = require('node-rsa');
+const decrypt = require('../tools/decrpty');
 const Op = Sequelize.Op;
 
 // 定义 Model
@@ -35,6 +32,10 @@ const User = sequelize.define('user_info', {
     type: Sequelize.INTEGER,
     field: 'user_integral',
     defaultValue: 0  // 定义默认值
+  },
+  admin: {
+    type: Sequelize.BOOLEAN,
+    defaultValue: false 
   }
 }, {freezeTableName: true});
 
@@ -47,41 +48,21 @@ User.sync({ force: false });
  * userInfo 用户信息
  *    code: uuid 验证对应 email 的
  *    email: 用户邮箱
- *    key: `用户名@密码` 的加密字符串
+ *    name: 用户名
+ *    password: 密码的加密字符串
  */
-exports.userRegister = async (userInfo, privateKey) => {
-  
-  let buf = Buffer.from(userInfo.key, 'base64');
-  // 解密前端发送过来的用户名密码信息
-  let decrypted = crypto.privateDecrypt({
-    key:privateKey,
-    padding: crypto.constants.RSA_PKCS1_PADDING
-  }, buf);
-  console.log(decrypted.toString('utf-8'));
-  let [userName, userPassword] = decrypted.toString('utf-8').split('@');
- 
-  // return findUser(userInfo.username).then(function(result) {
-  //   // result 将是找到的第一个条目 || null
-  //   if (result) throw new Error('用户名已存在');
-  //   return User.create({
-  //     name: userInfo.username,
-  //     password: userInfo.password,
-  //     email: userInfo.email,
-  //     code: userInfo.code
-  //   })
-  // })
-  // console.log(decrypted.toString('utf-8'));
-  
+exports.userRegister = async (userInfo) => {
   // 查看邮箱是否被注册
   let email = await findUser('email', userInfo.email);
+  
   if (email) throw new Error('邮箱已被注册');
   // 查看用户名是否已经存在
-  let name = await findUser('name', userInfo.username);
+  let name = await findUser('name', userInfo.name);
   if (name) throw new Error('用户名已存在');
 
   return User.create({
-    name: userInfo.userName,
-    password: userInfo.userPassword,
+    name: userInfo.name,
+    password: userInfo.password,
     email: userInfo.email,
     code: userInfo.code
   });
@@ -93,16 +74,30 @@ exports.userRegister = async (userInfo, privateKey) => {
  *    name: 用户名或邮箱
  *    password: 密码
  */
-exports.userLogin = (loginInfo) => {
-  return User.findOne({
+exports.userLogin = async (userKey) => {
+
+  // 解密登陆用户信息
+  let [loginName, loginPasswd] = decrypt(userKey);
+  let result = await User.findOne({
     where: {
       [Op.or]: [
-        { name: loginInfo.name },
-        { email: loginInfo.name } 
+        { name: loginName },
+        { email: loginName } 
       ]
     },
-    attributes: ['id', 'name', 'password']
+    attributes: ['name', 'password', 'admin']
   });
+
+  if (result) {
+    // 解密数据库中的密码
+    let [password] = decrypt(result.dataValues.password);
+    if (password !== loginPasswd) {
+      throw new Error('密码不正确');
+    }
+    return result.dataValues;
+  } else {
+    throw new Error('用户名不正确');
+  }
 }
 
 /**
@@ -111,7 +106,7 @@ exports.userLogin = (loginInfo) => {
  * value 值
  */
 const findUser = (key, value) => {
-  return User.findOne({ where: { key: value } });
+  return User.findOne({ where: { [key]: value } });
 }
 
 exports.findUser = findUser;

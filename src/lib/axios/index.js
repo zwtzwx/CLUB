@@ -28,8 +28,12 @@ let $json = $form.create({
     ]
 });
 const defaultMsg = '服务器错误，请重新连接服务器';
+
 // 配置拦截器
 function interceptorsRequestSuccess (config) {
+    const token = localStorage.getItem('gen_id');
+    if (token)
+        config.headers['Authorization'] = token;
     return config;
 }
 

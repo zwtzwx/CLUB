@@ -35,6 +35,7 @@
   </el-dialog>
 </template>
 <script>
+import getKey from '../lib/key';
 export default {
   data () {
     return {
@@ -64,14 +65,23 @@ export default {
     },
     // 登录
     signIn () {
+      this.loginInfo.name = this.loginInfo.name.replace(/\s+/g, '');
+      this.loginInfo.password = this.loginInfo.password.replace(/\s+/g, '');
       if (!this.loginInfo.name || !this.loginInfo.password) {
         return this.$message({
           message: '用户名和密码不能为空',
           type: 'error'
         });
       }
+      // 将用户名(邮箱)密码加密
+      const userKey = getKey(this.loginInfo.name, this.loginInfo.password);
       this.$json.post('/user/signin', {
-        ...this.loginInfo
+        userKey
+      }).then((res) => {
+        // 获得后台传过来的 token 保存在本地
+        let token = res.data.token;
+        localStorage.setItem('gen_id', token);
+        this.loginVisible = false;
       })
     },
     checkMail () {
