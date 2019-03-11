@@ -45,7 +45,7 @@ async function sendMail(mail, baseURL, res) {
     
                 mailOption.html = str;
                 sender(mailOption).then(function() {
-                    resolve();
+                    resolve('ok');
                     // res.json({ret: 1, msg: '邮件发送成功，请验证你的邮箱'});
                 });
             }
