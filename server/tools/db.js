@@ -7,7 +7,7 @@ module.exports = new Sequelize(config.database.database, config.database.usernam
   dialect: config.database.dialect,
   operatorsAliases: config.database.operatorsAliases,
   define: {
-    timestamps: config.database.define
+    timestamps: config.database.define || true
   },
   pool: {
     max: config.database.poolMax,

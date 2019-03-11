@@ -20,7 +20,7 @@ exports.sendMail = function(req, res) {
 // 用户注册
 exports.register = (req, res) => {
   let userInfo = req.body.userInfo;
-
+  //TODO: 此处的 userInfo 需要验证，暂时没找到好的验证模块
   User.userRegister(userInfo, privateKey).then(function(success) {
     res.json({
       msg: '注册成功',

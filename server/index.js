@@ -17,8 +17,8 @@ app.engine('ejs', require('ejs').renderFile);
 // app.use('/public', express.static(path.resolve(__dirname, '../pulbic')));
 app.use(logger('dev'));                                         // 日志中间件
 // app.use(cors())                                               // 跨域中间件 此处用不上
-app.use(bodyParser.json());                                      // 基于 body-parser，不用再安装
-app.use(bodyParser.urlencoded({ extended: false }));             // 基于 body-parser，不用再安装，extended 是 false 只能是字符串和数组，为true可以是任何类型
+app.use(bodyParser.json());                                      
+app.use(bodyParser.urlencoded({ extended: false }));             // extended 是 false 只能是字符串和数组，为true可以是任何类型
 app.use('/public', express.static(path.join(__dirname, '../public'))); // 设置挂载静态文件目录，生产环境用 nginx 
 
 

@@ -1,9 +1,7 @@
 const sender = require('../tools/mail');
-const uuidv1 = require('uuid/v1');
 const ejs = require('ejs');
 const config = require('../config');
 const crypto = require('crypto');
-const fs = require('fs');
 
 // 邮件模板
 let mailOption = {
@@ -18,7 +16,7 @@ let mailOption = {
 };
 // 发送邮件
 
-function sendMail(mail, baseURL, res) {
+async function sendMail(mail, baseURL, res) {
     if (!mail) {
         res.status(400);
         res.json({
@@ -33,20 +31,27 @@ function sendMail(mail, baseURL, res) {
 
     let encrypted = Encrypt(buf, config.appKey);
 
-    ejs.renderFile(__dirname + '/../views/email.ejs', {
-        url: `${baseURL}/#/signup?code=${encrypted}&email=${mail}`
-    }, function(err, str) {
-        if (err) {
-            console.log(err);
-            res.json({ret: 0, msg: '', data: err});
-        } else {
+    return new Promise(function (resolve, reject) {                 // 构造 promise 对象
+        console.log('构造 promise 对象 的日志');
 
-            mailOption.html = str;
-            sender(mailOption).then(function() {
-                res.json({ret: 1, msg: '邮件发送成功，请验证你的邮箱'});
-            });
-        }
-    });
+        ejs.renderFile(__dirname + '/../views/email.ejs', {
+            url: `${baseURL}/#/signup?code=${encrypted}&email=${mail}`
+        }, function(err, str) {
+            if (err) {
+                console.log(err);
+                reject(err);
+                // res.json({ret: 0, msg: '', data: err});
+            } else {
+    
+                mailOption.html = str;
+                sender(mailOption).then(function() {
+                    resolve();
+                    // res.json({ret: 1, msg: '邮件发送成功，请验证你的邮箱'});
+                });
+            }
+        });
+    })
+
 }
 
 // 简单加密解密

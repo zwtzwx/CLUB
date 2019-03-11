@@ -12,9 +12,17 @@ let mailOption = {
   html: '点击激活：xxx'
 };
 // 发送邮件
-exports.sendMail = (req, res) => {
+exports.sendMail = function(req, res) {
   let mail = req.body.mail;
   let baseURL = req.headers.origin;
   console.log('测试路径');
-  sendEmail.sendMail(mail, baseURL, res);
+  try {
+    sendEmail.sendMail(mail, baseURL, res);
+    
+    res.json({ret: 1, msg: '邮件发送成功，请验证你的邮箱'});
+  } catch (error) {
+    console.log('失败：' + error);
+    res.json({ret: 0, msg: '', data: error});
+  }
+
 }
