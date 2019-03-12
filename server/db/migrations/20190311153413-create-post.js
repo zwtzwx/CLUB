@@ -43,13 +43,16 @@ module.exports = {
           defaultValue: 0  // 定义默认值
       },
       createdAt: {
-        allowNull: false,
         type: Sequelize.DATE,
         allowNull: true,
         defaultValue: null,
       },
       updatedAt: {
-        allowNull: false,
+        type: Sequelize.DATE,
+        allowNull: true,
+        defaultValue: null,
+      },
+      deletedAt: {
         type: Sequelize.DATE,
         allowNull: true,
         defaultValue: null,

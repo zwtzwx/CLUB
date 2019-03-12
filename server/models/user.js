@@ -27,8 +27,8 @@ const User = sequelize.define('user_info', {
     type: Sequelize.STRING,
     field: 'user_email'
   },
-  code: {
-    type: Sequelize.STRING,
+  code: {       // 暂时将此字段设置为用户状态，"2"为管理员，"1"为普通用户，"0"为未审核
+    type: Sequelize.INTEGER,
     field: 'user_code'
   },
   integray: {
@@ -41,7 +41,7 @@ const User = sequelize.define('user_info', {
 // 同步数据结构到数据库
 // 如果设置 force: true ，那么会先删除数据库已经存在的表，然后在创建新表
 // 如果数据库中表已经存在，那么没必要设为 true
-User.sync({ force: false });
+// User.sync({ force: false });
 
 /**
  * userInfo 用户信息

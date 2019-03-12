@@ -1,11 +1,13 @@
 # CLUB
 使用 `node` + `vue` + `express` 仿写 cnode 社区
 
-# 数据库
+## 数据库
 
 ## 数据库初始化
 
 ### 采用 seqlique-CLI 进行数据库数据的初始化，方便后期调用和测试
+
+数据库期望全部采用软删除
 
 目前数据为：帖子、帖子评论、帖子分类
 
@@ -15,3 +17,5 @@
 `node_modules/.bin/sequelize db:migrate:undo:all`
 生成数据种子，暂时是逐个生成，还需继续看文档
 `node_modules/.bin/sequelize db:seed:all`
+
+### 目前期望通过 sequelize 的 model 验证来解决大部分数据验证问题，目前找到的数据验证包文档都不够友好

@@ -24,4 +24,10 @@ const Category = sequelize.define('post_category', {
       field: 'major_image',
       comment: '分类主图'
     }
-  }, {freezeTableName: true});
+  }, {
+    freezeTableName: true,
+
+    // 软删除
+    paranoid: true,
+
+  });

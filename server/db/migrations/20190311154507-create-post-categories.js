@@ -25,13 +25,16 @@ module.exports = {
         comment: '分类主图'
       },
       createdAt: {
-        allowNull: false,
         type: Sequelize.DATE,
         allowNull: true,
         defaultValue: null,
       },
       updatedAt: {
-        allowNull: false,
+        type: Sequelize.DATE,
+        allowNull: true,
+        defaultValue: null,
+      },
+      deletedAt: {
         type: Sequelize.DATE,
         allowNull: true,
         defaultValue: null,
