@@ -40,7 +40,7 @@ router.get('/getToken', function (req, res) {
             data: "============="
         }, PrivateKey, {
             algorithm: 'RS256',
-            expiresIn: 60 * 1
+            expiresIn: 60 * 60   // 1h
         })
     })
 });
@@ -49,5 +49,11 @@ router.get('/getData', function (req, res) {
     console.log('请求的用户数据为：', req.user);
     res.send(req.user)
 });
+
+// router.use(function (err, req, res, next) {
+//     if (err.name === 'UnauthorizedError') {
+//       res.status(401).send('invalid token...');
+//     }
+// });
 
 module.exports = router;

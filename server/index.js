@@ -3,10 +3,12 @@ const express = require('express');
 const path = require('path');
 var bodyParser = require('body-parser');
 var logger = require('morgan');
+
 // var cors = require('cors')
 
 // 导入路由文件，每个文件是一个路由组
 const Router = require('./routers/router');
+const categoryRouter = require('./routers/category');
 
 const app = express();
 
@@ -31,6 +33,7 @@ app.get('/', (req, res) => {
   
 // api 接口路由信息
 app.use('/web', Router);
+app.use('/category', categoryRouter);
 
 
 // 捕获 404 并且继续错误处理

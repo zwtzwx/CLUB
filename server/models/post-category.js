@@ -12,17 +12,20 @@ const Category = sequelize.define('post_category', {
     category_name: {
       type: Sequelize.STRING,
       field: 'category_name',
-      unique: true   // 定义唯一性约束
+      unique: true,   // 定义唯一性约束
+      allowNull: false,
     },
     category_description: {
       type: Sequelize.STRING,
       field: 'category_description',
-      comment: '分类描述'
+      comment: '分类描述',
+      allowNull: false,
     },
     major_image: {
       type: Sequelize.STRING,
       field: 'major_image',
-      comment: '分类主图'
+      comment: '分类主图',
+      allowNull: true,
     }
   }, {
     freezeTableName: true,
@@ -31,3 +34,19 @@ const Category = sequelize.define('post_category', {
     paranoid: true,
 
   });
+
+exports.categoryIndex = async function () {
+  categories = await Category.findAll({
+    attributes: { exclude: ['createdAt', 'updatedAt', 'deletedAt'] }
+  });
+  return categories;
+}
+
+exports.categoryInsert = async function (data) {
+  categories = await Category.create({
+    category_name: data.category_name,
+    category_description: data.category_description,
+    major_image: data.major_image,
+  });
+  return categories;
+}
