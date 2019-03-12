@@ -1,9 +1,7 @@
 import Vue from './common';
 import VueRouter from 'vue-router';
 import router from './lib/router';
-import Vuex from 'vuex';
 import store from './store';
-
 
 Vue.use(VueRouter);
 new Vue({
