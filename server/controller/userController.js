@@ -1,18 +1,28 @@
 const User  = require('../model/user');
 const Token = require('../tools/token');
+const Mail = require('../tools/mail');
+const config = require('../config');
 
 
 // 用户注册
 exports.register = (req, res) => {
   let userInfo = req.body.userInfo;
   try {
+    // 先验证邮箱是否合法
+    Mail.vertifyCode(userInfo.code);
     User.userRegister(userInfo).then(() => {
       res.json({
         msg: '注册成功',
         ret: 1
       })
-    });
+    }).catch(err => {
+      res.json({
+        msg: err.message,
+        ret: 0
+      })
+    })
   } catch (e) {
+    console.log(e);
     res.json({
       msg: e.message,
       ret: 0
