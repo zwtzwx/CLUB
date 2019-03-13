@@ -2,6 +2,17 @@
   "name": "CLUB",
   "version": "1.0.0",
   "description": "使用 `node` + `vue` + `express` 防写 cnode 社区",
+  "apidoc": {
+    "title": "文婷专属文档",
+    "url" : "http://localhost:8080",
+    "order": [],
+    "header": {
+      "title": "这是头部"
+    },
+    "footer": {
+      "title": "这是底部"
+    }
+  },
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",

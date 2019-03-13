@@ -50,3 +50,30 @@ exports.categoryInsert = async function (data) {
   });
   return categories;
 }
+
+exports.findCategoryById = async function (category_id) {
+  category = await Category.findOne({
+    where: { id: category_id },
+    attributes: { exclude: ['createdAt', 'updatedAt', 'deletedAt'] }
+  });
+  return category;
+}
+
+exports.updateCategory = async function (category_id, data) {
+  categoryIns = await Category.findByPk(category_id);
+
+  result = await categoryIns.update({         // 数据库应该添加验证规则，不许添加空字符串、暂时没加
+    category_name: data.category_name,
+    category_description: data.category_description,
+    major_image: data.major_image,
+  });
+  return result;
+}
+
+exports.destroyCategory = async function (category_id) {
+
+  result = await Category.destroy({
+    where: { id: category_id }
+  });
+  return result;
+}

@@ -1,12 +1,24 @@
 /*
  * @Author: zwt
- * @LastEditors: Do not edit
+ * @LastAuthor: Do not edit
  * @since: 2019-03-12 21:44:08
- * @LastEditTime: 2019-03-13 00:17:27
+ * @lastTime: 2019-03-13 23:39:35
  */
 const category = require('../models/post-category');
 
 
+/**
+ * @api {get} /category 分类列表
+ * @apiName index
+ * @apiGroup Category
+ * @apiPermission public
+ * @apiDescription 分类列表
+ * @apiParam {String} node node
+ * @apiParamExample 这里是参数示例
+ * {}
+ * @apiSuccessExample 这里是成功返回示例
+ * {}
+ */
 exports.index = async function (req, res) {
     try {
         result = await category.categoryIndex();
@@ -18,6 +30,18 @@ exports.index = async function (req, res) {
     res.json({ret:1, msg:'', data: result})
 }
 
+/**
+ * @api {post} /category 添加分类
+ * @apiName store
+ * @apiGroup Category
+ * @apiPermission admin
+ * @apiDescription 添加分类
+ * @apiParam {String} node node
+ * @apiParamExample 这里是参数示例
+ * {}
+ * @apiSuccessExample 这里是成功返回示例
+ * {}
+ */
 exports.store = async function (req, res) {
     console.log('请求数据为：', req.body);
     try {
@@ -32,14 +56,79 @@ exports.store = async function (req, res) {
     res.json({ret:1, msg:'', data: result})
 }
 
-exports.show = function (req, res) {
-    
+/**
+ * @api {get} /category/{id} 分类详情
+ * @apiName show
+ * @apiGroup Category
+ * @apiPermission admin
+ * @apiDescription 分类详情
+ * @apiParam {String} node node
+ * @apiParamExample 这里是参数示例
+ * {}
+ * @apiSuccessExample 这里是成功返回示例
+ * {}
+ */
+exports.show = async function (req, res) {
+    category_id = req.params.category_id;
+    try {
+        result = await category.findCategoryById(category_id);               // 数据验证放到模型中
+        console.log(result);
+    } catch (error) {
+        console.log('查询错误，错误原因为：', error);
+        res.json({ret:0, msg:'', data: error})
+    }
+    res.json({ret:1, msg:'', data: result});
 }
 
-exports.update = function (req, res) {
-    
+/**
+ * @api {put} /category/{id} 修改分类
+ * @apiName update
+ * @apiGroup Category
+ * @apiPermission admin
+ * @apiDescription 修改分类
+ * @apiParam {String} node node
+ * @apiParamExample 这里是参数示例
+ * {}
+ * @apiSuccessExample 这里是成功返回示例
+ * {}
+ */
+exports.update = async function (req, res) {
+    category_id = req.params.category_id;
+    try {
+        result = await category.updateCategory(category_id, req.body);               // 数据验证放到模型中
+        console.log(result);
+    } catch (error) {
+        console.log('更新错误，错误原因为：', error);
+        res.json({ret:0, msg:'', data: error})
+    }
+    res.json({ret:1, msg:'', data: result});
 }
 
-exports.destory = function (req, res) {
+/**
+ * @api {delete} /category/{id} 删除分类
+ * @apiName destory
+ * @apiGroup Category
+ * @apiPermission admin
+ * @apiDescription 删除分类
+ * @apiParam {String} node node
+ * @apiParamExample 这里是参数示例
+ * {}
+ * @apiSuccessExample 这里是成功返回示例
+ * {}
+ */
+exports.destory = async function (req, res) {
+    category_id = req.params.category_id;
+    try {
+        result = await category.destroyCategory(category_id);               // 数据验证放到模型中
+        console.log(result);
+    } catch (error) {
+        console.log('查询错误，错误原因为：', error);
+        res.json({ret:0, msg:'', data: error})
+    }
+    if (result==1) {
+        res.json({ret:1, msg:'刪除成功', data: result});    
+    } else {
+        res.json({ret:1, msg:'该分类已刪除', data: result});
+    }
     
 }

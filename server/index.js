@@ -22,6 +22,7 @@ app.use(logger('dev'));                                         // 日志中间�
 app.use(bodyParser.json());                                      
 app.use(bodyParser.urlencoded({ extended: false }));             // extended 是 false 只能是字符串和数组，为true可以是任何类型
 app.use('/public', express.static(path.join(__dirname, '../public'))); // 设置挂载静态文件目录，生产环境用 nginx 
+app.use('/favicon.ico', express.static(path.join(__dirname, '../public/favicon.ico'))); // 设置挂载静态文件目录，生产环境用 nginx 
 
 
 app.get('/', (req, res) => {

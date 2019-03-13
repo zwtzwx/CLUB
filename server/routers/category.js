@@ -10,7 +10,8 @@ const categoryRouter = express.Router();
 // 除了带 category 的 get 请求，其他均需要 jwt 登陆验证
 categoryRouter.use(jwtServe.jwtMid.unless({
     path: [                                         
-        {url: '/category', methods: ['GET']}        
+        // {url: '/category', methods: ['GET']},
+        {url: /category.*/, methods: ['GET']}        
     ]
 }));
 

@@ -19,3 +19,10 @@
 `node_modules/.bin/sequelize db:seed:all`
 
 ### 目前期望通过 sequelize 的 model 验证来解决大部分数据验证问题，目前找到的数据验证包文档都不够友好
+
+## 接口
+
+文档采用 apidoc，命令为
+`npm install apidoc -g`
+ `apidoc -i server/controller/ -o public/apidoc/`
+文档链接：`/public/apidoc`
