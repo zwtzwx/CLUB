@@ -4,8 +4,14 @@ import SignUp from '../../page/SignUp.vue';
 
 // 路由规则
 const routes = [
-  { path: '/', component: Index},
-  { path: '/signup', component: SignUp}
+  { 
+    path: '/', 
+    name: 'home',
+    component: Index},
+  { 
+    path: '/signup', 
+    name: 'signup',
+    component: SignUp}
 ]
 
 const router = new VueRouter({

@@ -16,10 +16,19 @@ import MyLeft from '../components/left';
 import MyRight from '../components/right';
 
 export default {
+  data() {
+    return {
+      isLogin: false
+    }
+  },
   components: {
     MyHeader,
     MyLeft,
     MyRight
+  },
+  created () {
+    // 初始化获取用户信息
+    
   }
 }
 </script>

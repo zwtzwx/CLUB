@@ -19,4 +19,6 @@ router.post('/user/signup', userControl.register);
 // 登录
 router.post('/user/signin', userControl.login);
 
+// 根据 token 获取用户信息
+router.get('/user/user-info', userControl.getUserInfo);
 module.exports = router;

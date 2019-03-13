@@ -3,8 +3,18 @@
     <div class="main-box">
       <ul class="operate-list">
         <li><router-link to="/">首页</router-link></li>
-        <li @click="register(0)">注册</li>
-        <li @click="register(1)">登录</li>
+        <template v-if="!isLogin">
+          <li @click="register(0)">注册</li>
+          <li @click="register(1)">登录</li>
+        </template>
+        <template v-else>
+          <li>
+            <div>
+              <img :src="`/public/images/${headPic}`">
+              <i class="el-icon-caret-bottom"></i>
+            </div>
+          </li>
+        </template>
       </ul>
     </div>
   </header>
@@ -15,6 +25,14 @@ export default {
   methods: {
     register (type = 0) {
       editLogin(type);
+    }
+  },
+  computed: {
+    isLogin () {
+      return !!this.$store.state.user['id'];
+    },
+    headPic () {
+      return this.$store.state.user['headpic'] || 'default-avatar.svg';
     }
   }
 }

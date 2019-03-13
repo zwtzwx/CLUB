@@ -40,15 +40,23 @@ exports.login = async (req, res) => {
     let token = Token.generatorToken(info);
     res.json({
       data: {
-        token
+        token,
+        info
       },
       msg: '登录成功',
       ret: 1
     })
   } catch (error) {
+    console.log(error);
+    
     res.json({
       msg: error.message,
       ret: 0
     })
   }
+}
+
+exports.getUserInfo = (req, res) => {
+  console.log(req);
+  
 }

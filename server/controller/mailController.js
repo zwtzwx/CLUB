@@ -26,7 +26,6 @@ exports.sendMail = async(req, res) => {
       });
     });
   } catch (err) {
-    console.log(err);
     res.status(500).json({
       msg: '邮件发送失败',
       ret: 0

@@ -5,7 +5,7 @@ import {
   Form, FormItem, Input, Button, Tag, Pagination,
   Icon, Dialog, Message
 } from 'element-ui';
-import { $json } from './lib/axios';
+
 
 Vue.use(axios);
 Vue.use(Input);

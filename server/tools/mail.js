@@ -51,8 +51,7 @@ exports.vertifyCode = (code) => {
   if (/^[0-9]{13}$/.test(decrypted)) {
     // 获取当前时间戳，判断邮箱是否过期
     let now = Date.now();
-    console.log(Number.parseInt(decrypted) + 1 * 60 * 1000, now);
-    if ((Number.parseInt(decrypted) + 1 * 60 * 1000) <= now) {
+    if ((Number.parseInt(decrypted) + 30 * 60 * 1000) <= now) {
       // 已过期
       throw new Error('邮箱已过期，请重新注册!');
     }

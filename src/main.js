@@ -4,6 +4,12 @@ import router from './lib/router';
 import store from './store';
 
 Vue.use(VueRouter);
+
+// 初始化 TOKEN
+store.commit('initToken');
+// 初始化个人信息
+store.dispatch('getUser');
+
 new Vue({
   router,
   store,
@@ -11,6 +17,7 @@ new Vue({
     isBottom: false
   },
   created () {
+    
     this.toTopListen();
   },
   methods: {

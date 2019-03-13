@@ -36,6 +36,7 @@
 </template>
 <script>
 import getKey from '../lib/key';
+import { log } from 'util';
 export default {
   data () {
     return {
@@ -78,10 +79,16 @@ export default {
       this.$json.post('/user/signin', {
         userKey
       }).then((res) => {
-        // 获得后台传过来的 token 保存在本地
-        let token = res.data.token;
-        localStorage.setItem('gen_id', token);
-        this.loginVisible = false;
+        
+        if (res.ret) {
+          // 获得后台传过来的 token 保存在本地
+          this.$store.commit('saveToken', res.data.token);
+          // 保存用户信息
+          this.$store.commit('saveUserInfo', res.data.info);
+          this.loginVisible = false;
+          // 跳转到首页
+          this.$router.replace({name: 'home'});
+        }
       })
     },
     checkMail () {
@@ -114,16 +121,6 @@ export default {
   .el-form-item {
     margin-bottom: 10px;
   }
-  // .send-code-btn {
-  //   border: none;
-  //   position: absolute;
-  //   outline: none;
-  //   font-size: 15px;
-  //   height: 80%;
-  //   right: 1px;
-  //   top: 5px;
-  //   background-color: #fff;
-  // }
   .link {
     color: #007fff;
     cursor: pointer;

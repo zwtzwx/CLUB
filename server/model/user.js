@@ -1,6 +1,6 @@
 const Sequelize = require('sequelize');
 const sequelize = require('../tools/db');
-const decrypt = require('../tools/decrpty');
+const Crypto = require('../tools/crypto');
 const Op = Sequelize.Op;
 
 // 定义 Model
@@ -24,10 +24,6 @@ const User = sequelize.define('user_info', {
     type: Sequelize.STRING,
     field: 'user_email'
   },
-  code: {
-    type: Sequelize.STRING,
-    field: 'user_code'
-  },
   integray: {
     type: Sequelize.INTEGER,
     field: 'user_integral',
@@ -36,6 +32,13 @@ const User = sequelize.define('user_info', {
   admin: {
     type: Sequelize.BOOLEAN,
     defaultValue: false 
+  },
+  pic: {
+    type: Sequelize.STRING,
+    field: 'user_pic'
+  },
+  descirpt: {
+    type: Sequelize.STRING
   }
 }, {freezeTableName: true});
 
@@ -60,11 +63,14 @@ exports.userRegister = async (userInfo) => {
   let name = await findUser('name', userInfo.name);
   if (name) throw new Error('用户名已存在');
 
+  // 用私钥解密密码，将解密后的密码加盐后存储在数据库
+  let [password] = Crypto.rsaDecrypt(userInfo.password);
+  password = Crypto.hmacEncrypt(password);
+  console.log(password);
   return User.create({
     name: userInfo.name,
-    password: userInfo.password,
-    email: userInfo.email,
-    code: userInfo.code
+    password: password,
+    email: userInfo.email
   });
   
 }
@@ -77,7 +83,7 @@ exports.userRegister = async (userInfo) => {
 exports.userLogin = async (userKey) => {
 
   // 解密登陆用户信息
-  let [loginName, loginPasswd] = decrypt(userKey);
+  let [loginName, loginPasswd] = Crypto.rsaDecrypt(userKey);
   let result = await User.findOne({
     where: {
       [Op.or]: [
@@ -85,13 +91,13 @@ exports.userLogin = async (userKey) => {
         { email: loginName } 
       ]
     },
-    attributes: ['name', 'password', 'admin']
+    attributes: ['id', 'name', 'password', 'pic']
   });
 
   if (result) {
-    // 解密数据库中的密码
-    let [password] = decrypt(result.dataValues.password);
-    if (password !== loginPasswd) {
+    // 将铭文密码加盐加密与数据库中的密码比对
+    loginPasswd = Crypto.hmacEncrypt(loginPasswd);
+    if (loginPasswd !== result.dataValues.password) {
       throw new Error('密码不正确');
     }
     return result.dataValues;
