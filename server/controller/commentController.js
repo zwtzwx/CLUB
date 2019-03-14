@@ -2,17 +2,17 @@
  * @Author: zwt
  * @LastAuthor: Do not edit
  * @since: 2019-03-12 21:44:08
- * @lastTime: 2019-03-14 21:01:36
+ * @lastTime: 2019-03-14 21:00:00
  */
-const category = require('../models/post-category');
+const comment = require('../models/post-comment');
 
 
 /**
- * @api {get} /category 分类列表
+ * @api {get} /comment 评论列表
  * @apiName index
- * @apiGroup Category
+ * @apiGroup comment
  * @apiPermission public
- * @apiDescription 分类列表
+ * @apiDescription 评论列表
  * @apiParam {Number} page 页码
  * @apiParam {String} size 页面大小，默认为20
  * @apiParamExample 这里是参数示例
@@ -22,7 +22,7 @@ const category = require('../models/post-category');
  */
 exports.index = async function (req, res) {
     try {
-        result = await category.categoryIndex();
+        result = await comment.commentIndex();
     } catch (error) {
         console.log('查询错误，错误原因为：', error);
         res.json({ret:0, msg:'', data: error})
@@ -32,14 +32,15 @@ exports.index = async function (req, res) {
 }
 
 /**
- * @api {post} /category 添加分类
+ * @api {post} /comment 添加评论
  * @apiName store
- * @apiGroup Category
+ * @apiGroup comment
  * @apiPermission admin
- * @apiDescription 添加分类
- * @apiParam {String} category_name          分类名
- * @apiParam {String} category_description   分类描述
- * @apiParam {String} major_image            主图
+ * @apiDescription 添加评论
+ * @apiParam {String} comment_content    评论内容
+ * @apiParam {String} like_num           点赞数
+ * @apiParam {String} user_id            用户 id
+ * @apiParam {String} parent_id          父评论
  * @apiParamExample 这里是参数示例
  * {}
  * @apiSuccessExample 这里是成功返回示例
@@ -48,7 +49,7 @@ exports.index = async function (req, res) {
 exports.store = async function (req, res) {
     console.log('请求数据为：', req.body);
     try {
-        result = await category.categoryInsert(req.body);               // 数据验证放到模型中
+        result = await comment.commentInsert(req.body);               // 数据验证放到模型中
         console.log(result);
         delete(result.createdAt);
     } catch (error) {
@@ -60,20 +61,20 @@ exports.store = async function (req, res) {
 }
 
 /**
- * @api {get} /category/{id} 分类详情
+ * @api {get} /comment/{id} 评论详情
  * @apiName show
- * @apiGroup Category
+ * @apiGroup comment
  * @apiPermission admin
- * @apiDescription 分类详情
+ * @apiDescription 评论详情
  * @apiParamExample 这里是参数示例
  * {}
  * @apiSuccessExample 这里是成功返回示例
  * {}
  */
 exports.show = async function (req, res) {
-    category_id = req.params.category_id;
+    comment_id = req.params.comment_id;
     try {
-        result = await category.findCategoryById(category_id);               // 数据验证放到模型中
+        result = await comment.findCommentById(comment_id);               // 数据验证放到模型中
         console.log(result);
     } catch (error) {
         console.log('查询错误，错误原因为：', error);
@@ -83,23 +84,24 @@ exports.show = async function (req, res) {
 }
 
 /**
- * @api {put} /category/{id} 修改分类
+ * @api {put} /comment/{id} 修改评论
  * @apiName update
- * @apiGroup Category
+ * @apiGroup comment
  * @apiPermission admin
- * @apiDescription 修改分类
- * @apiParam {String} category_name          分类名
- * @apiParam {String} category_description   分类描述
- * @apiParam {String} major_image            主图
+ * @apiDescription 修改评论
+ * @apiParam {String} comment_content    评论内容
+ * @apiParam {String} like_num           点赞数
+ * @apiParam {String} user_id            用户 id
+ * @apiParam {String} parent_id          父评论
  * @apiParamExample 这里是参数示例
  * {}
  * @apiSuccessExample 这里是成功返回示例
  * {}
  */
 exports.update = async function (req, res) {
-    category_id = req.params.category_id;
+    comment_id = req.params.comment_id;
     try {
-        result = await category.updateCategory(category_id, req.body);               // 数据验证放到模型中
+        result = await comment.updateComment(comment_id, req.body);               // 数据验证放到模型中
         console.log(result);
     } catch (error) {
         console.log('更新错误，错误原因为：', error);
@@ -109,20 +111,20 @@ exports.update = async function (req, res) {
 }
 
 /**
- * @api {delete} /category/{id} 删除分类
+ * @api {delete} /comment/{id} 删除评论
  * @apiName destory
- * @apiGroup Category
+ * @apiGroup comment
  * @apiPermission admin
- * @apiDescription 删除分类
+ * @apiDescription 删除评论
  * @apiParamExample 这里是参数示例
  * {}
  * @apiSuccessExample 这里是成功返回示例
  * {}
  */
 exports.destory = async function (req, res) {
-    category_id = req.params.category_id;
+    comment_id = req.params.comment_id;
     try {
-        result = await category.destroyCategory(category_id);               // 数据验证放到模型中
+        result = await comment.destroyComment(comment_id);               // 数据验证放到模型中
         console.log(result);
     } catch (error) {
         console.log('查询错误，错误原因为：', error);
@@ -131,7 +133,7 @@ exports.destory = async function (req, res) {
     if (result==1) {
         res.json({ret:1, msg:'刪除成功', data: result});    
     } else {
-        res.json({ret:1, msg:'该分类已刪除', data: result});
+        res.json({ret:1, msg:'该评论已刪除', data: result});
     }
     
 }

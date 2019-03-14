@@ -9,6 +9,8 @@ var logger = require('morgan');
 // 导入路由文件，每个文件是一个路由组
 const Router = require('./routers/router');
 const categoryRouter = require('./routers/category');
+const postRouter = require('./routers/post');
+const commentRouter = require('./routers/comment');
 
 const app = express();
 
@@ -33,6 +35,8 @@ app.get('/', (req, res) => {
 // api 接口路由信息
 app.use('/web', Router);
 app.use('/category', categoryRouter);
+app.use('/post', postRouter);
+app.use('/comment', commentRouter);
 
 
 // 捕获 404 并且继续错误处理
@@ -52,4 +56,4 @@ app.use(function(err, req, res, next) {
 });
 
 
-app.listen(3000, () => console.log('Starting in 3000...'));
+app.listen(10005, () => console.log('Starting in 3000...'));

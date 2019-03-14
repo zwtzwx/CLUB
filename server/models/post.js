@@ -42,4 +42,79 @@ const Post = sequelize.define('post', {
         comment: '浏览数',
         defaultValue: 0  // 定义默认值
     }
-  }, {freezeTableName: true});
+  }, {
+    freezeTableName: true,
+
+    // 软删除
+    paranoid: true,
+
+  });
+
+
+exports.postIndex = async function (page=1, size=20, category_id=0) {
+  issetCategory = function (category_id) {
+    if (category_id!=0) {
+      return {category_id: category_id}
+    }
+    return {}
+  }
+
+  posts = await Post.findAndCountAll({
+    where: issetCategory(category_id),
+    offset:(page - 1) * size,
+    limit:size,
+    attributes: { exclude: ['createdAt', 'updatedAt', 'deletedAt'] }
+  })
+  return posts;
+}
+
+exports.postInsert = async function (data) {
+  posts = await Post.create({
+    post_title: data.post_title,
+    post_content: data.post_content,
+    major_image: data.major_image,
+    category_id: data.category_id,
+    user_id: data.user_id,
+    views: data.views,
+  });
+  return posts;
+}
+
+exports.findPostById = async function (post_id) {   // 每次浏览帖子浏览数 +1
+
+  post = await Post.findOne({
+    where: { id: post_id },
+    attributes: { exclude: ['createdAt', 'updatedAt', 'deletedAt'] }
+  });
+  if (post) {
+    let view = post.views;
+    console.log('views:', view);
+    await post.update({
+      views: view + 1
+    })  
+  }
+  
+  return post;
+}
+
+exports.updatePost = async function (post_id, data) {
+  postIns = await Post.findByPk(post_id);
+
+  result = await postIns.update({         // 数据库应该添加验证规则，不许添加空字符串、暂时没加
+    post_title: data.post_title,
+    post_content: data.post_content,
+    major_image: data.major_image,
+    category_id: data.category_id,
+    user_id: data.user_id,
+    views: data.views,
+  });
+  return result;
+}
+
+exports.destroyPost = async function (post_id) {
+
+  result = await Post.destroy({
+    where: { id: post_id }
+  });
+  return result;
+}
