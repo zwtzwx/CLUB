@@ -40,8 +40,9 @@ export default new Vuex.Store({
                 rsaVerify(context.state.token).then((decoded) => {
                     context.commit('saveUserInfo', decoded);
                 }).catch((err) => {
-                    console.log(err.message);
-                    
+                    localStorage.removeItem('gen_id');
+                    // 跳转到首页
+                    window.location.href = '/';
                 })
             }
         }

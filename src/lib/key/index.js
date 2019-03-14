@@ -24,7 +24,7 @@ export default function(...params) {
 // 利用公钥验证 token
 export function rsaVerify (token) {
     return new Promise((resovle, reject) => {
-        JWT.verify(token, publicKey, (err, decoded) => {
+        JWT.verify(token, publicKey, { algorithms: 'RS256' }, (err, decoded) => {
             if (err) reject(err)
             resovle(decoded);
         })
