@@ -18,6 +18,11 @@ module.exports = {
         field: 'like_num',
         comment: '点赞数'
       },
+      post_id: {
+        type: Sequelize.INTEGER,
+        field: 'post_id',
+        comment: '帖子'
+      },
       user_id: {
         type: Sequelize.INTEGER,
         field: 'user_id',

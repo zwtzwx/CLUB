@@ -1,5 +1,6 @@
 const Sequelize = require('sequelize');
 const sequelize = require('../tools/db');
+const post = require('./post');
 
 // 帖子评论模型
 const CommentModel = sequelize.define('post_comment', {
@@ -17,6 +18,18 @@ const CommentModel = sequelize.define('post_comment', {
       type: Sequelize.INTEGER,
       field: 'like_num',
       comment: '点赞数'
+    },
+    post_id: {
+      type: Sequelize.INTEGER,
+      field: 'post_id',
+      comment: '帖子',
+      references: {
+        // This is a reference to another model
+        model: post.Post,
+   
+        // This is the column name of the referenced model
+        key: 'id',
+      }
     },
     user_id: {
       type: Sequelize.INTEGER,
@@ -37,6 +50,7 @@ const CommentModel = sequelize.define('post_comment', {
 
   });
 
+exports.CommentModel = CommentModel;
 
 exports.commentIndex = async function () {
   comments = await CommentModel.findAll({
@@ -83,3 +97,9 @@ exports.destroyComment = async function (comment_id) {
   return result;
 }
 
+exports.countComments = async function (post_id) {
+  counts = await CommentModel.count({
+    where: { post_id: post_id }
+  });
+  return counts;
+}

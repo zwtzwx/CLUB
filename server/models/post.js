@@ -1,5 +1,6 @@
 const Sequelize = require('sequelize');
 const sequelize = require('../tools/db');
+// const postComment = require('./post-comment');
 
 // 帖子模型
 const Post = sequelize.define('post', {
@@ -50,6 +51,9 @@ const Post = sequelize.define('post', {
 
   });
 
+exports.Post = Post
+
+// Post.hasMany(postComment.CommentModel, {foreignKey: "post_id"})
 
 exports.postIndex = async function (page=1, size=20, category_id=0) {
   issetCategory = function (category_id) {
@@ -63,8 +67,12 @@ exports.postIndex = async function (page=1, size=20, category_id=0) {
     where: issetCategory(category_id),
     offset:(page - 1) * size,
     limit:size,
-    attributes: { exclude: ['createdAt', 'updatedAt', 'deletedAt'] }
+    order: [
+      ["id", "DESC"],
+    ],
+    attributes: { exclude: ['createdAt', 'updatedAt', 'deletedAt'] },
   })
+  // console.log(posts);
   return posts;
 }
 

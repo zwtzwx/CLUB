@@ -5,6 +5,7 @@ module.exports = {
     return queryInterface.bulkInsert('post_comment', [{
       comment_content: 'tom',
       like_num: 2,
+      post_id: 3,
       user_id: 1,
     }], {});
   },

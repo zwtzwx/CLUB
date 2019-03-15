@@ -2,9 +2,10 @@
  * @Author: zwt
  * @LastAuthor: Do not edit
  * @since: 2019-03-12 21:44:08
- * @lastTime: 2019-03-14 22:52:39
+ * @lastTime: 2019-03-16 00:55:23
  */
 const post = require('../models/post');
+const comment = require('../models/post-comment');
 const utils = require('util');
 
 
@@ -43,6 +44,13 @@ exports.index = async function (req, res) {
         res.json({ret:0, msg:'', data: error})
     }
     // console.log('返回结果为', result);
+
+    for (let index = 0; index < result.rows.length; index++) {
+        const row = result.rows[index];
+        count = await comment.countComments(row.dataValues.id);
+        result.rows[index].dataValues.comment = count;
+    }
+
     res.json({ret:1, msg:'', data: {data: result.rows, currentPage: page, total: result.count, size: size}})
 }
 
