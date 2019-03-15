@@ -45,7 +45,7 @@ exports.index = async function (req, res) {
     }
     // console.log('返回结果为', result);
 
-    for (let index = 0; index < result.rows.length; index++) {
+    for (let index = 0; index < result.rows.length; index++) {              // 添加评论条数
         const row = result.rows[index];
         count = await comment.countComments(row.dataValues.id);
         result.rows[index].dataValues.comment = count;
