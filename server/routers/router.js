@@ -24,7 +24,7 @@ router.use(jwtServe.jwtMid.unless({
 router.post('/mail/send', mailControl.sendMail);
 
 // 发送注册邮箱
-router.post('/user/reg-email', userControl.sendMail);
+// router.post('/user/reg-email', userControl.sendMail);
 
 // 注册
 router.post('/user/signup', userControl.register);
