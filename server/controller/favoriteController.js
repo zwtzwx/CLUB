@@ -1,23 +1,22 @@
 /*
  * @Author: zwt
  * @LastAuthor: Do not edit
- * @since: 2019-03-12 21:44:08
- * @lastTime: 2019-03-18 20:34:21
+ * @since: 2019-03-18 20:51:59
+ * @lastTime: 2019-03-18 21:02:52
  */
-const post = require('../models/post');
-const comment = require('../models/post-comment');
+const favorite = require('../models/favorite');
 const utils = require('util');
 
 
 /**
- * @api {get} /post 帖子列表
+ * @api {get} /favorite 收藏列表
  * @apiName index
- * @apiGroup post
+ * @apiGroup favorite
  * @apiPermission public
- * @apiDescription 帖子列表
+ * @apiDescription 收藏列表
  * @apiParam {Number} page 页码
- * @apiParam {Number} size 页面大小，默认为20
- * @apiParam {Number} category_id 分类 id 默认为所有（0）
+ * @apiParam {Number} size 页面大小，默认为10
+ * @apiParam {Number} favorite_type 收藏类型 1，收藏。2，用户。3.评论'
  * @apiParamExample 这里是参数示例
  * {}
  * @apiSuccessExample 这里是成功返回示例
@@ -32,48 +31,31 @@ exports.index = async function (req, res) {
         size = parseInt(req.param("size").trim());
     }
     page = page || 1;
-    size = size || 20;
+    size = size || 10;
     console.log('page=', page, 'size=', size)
 
-    let category_id = req.param('category_id') || 0
+    let favorite_type = req.param('favorite_type') || 0
 
     try {
-        result = await post.postIndex(page, size, category_id);
+        result = await favorite.favoriteIndex(page, size, favorite_type);
     } catch (error) {
         console.log('查询错误，错误原因为：', error);
         res.json({ret:0, msg:'', data: error});
     }
     // console.log('返回结果为', result);
 
-    for (let index = 0; index < result.rows.length; index++) {              // 添加评论条数
-        const row = result.rows[index];
-        count = await comment.countComments(row.dataValues.id);
-        result.rows[index].dataValues.comment = count;
-    }
-
-    // result.rows.forEach(async function(row, index) {
-    //     count = await comment.countComments(row.dataValues.id);
-        
-    //     console.log('取到的评论数计数为：', count);
-    //     result.rows[index].dataValues.comment = count;
-    //     console.log('当前遍历的对象为：', result.rows[index].dataValues);
-
-    // });
-
     res.json({ret:1, msg:'', data: {data: result.rows, currentPage: page, total: result.count, size: size}})
 }
 
 /**
- * @api {post} /post 添加帖子
+ * @api {post} /favorite 添加收藏
  * @apiName store
- * @apiGroup post
+ * @apiGroup favorite
  * @apiPermission admin
- * @apiDescription 添加帖子
- * @apiParam {String} post_title    帖子标题
- * @apiParam {String} post_content  帖子详情
- * @apiParam {String} major_image   主图
- * @apiParam {String} category_id   分类
- * @apiParam {String} user_id       发帖人
+ * @apiDescription 添加收藏
+ * @apiParam {String} favorites_id    收藏 id
+ * @apiParam {String} favorites_type  收藏类型
+ * @apiParam {String} user_id   关联用户
  * @apiParamExample 这里是参数示例
  * {}
  * @apiSuccessExample 这里是成功返回示例
@@ -82,7 +64,7 @@ exports.index = async function (req, res) {
 exports.store = async function (req, res) {
     console.log('请求数据为：', req.body);
     try {
-        result = await post.postInsert(req.body);               // 数据验证放到模型中
+        result = await favorite.favoriteInsert(req.body);               // 数据验证放到模型中
         console.log(result);
         delete(result.createdAt);
     } catch (error) {
@@ -94,20 +76,20 @@ exports.store = async function (req, res) {
 }
 
 /**
- * @api {get} /post/{id} 帖子详情
+ * @api {get} /favorite/{id} 收藏详情
  * @apiName show
- * @apiGroup post
+ * @apiGroup favorite
  * @apiPermission admin
- * @apiDescription 帖子详情
+ * @apiDescription 收藏详情
  * @apiParamExample 这里是参数示例
  * {}
  * @apiSuccessExample 这里是成功返回示例
  * {}
  */
 exports.show = async function (req, res) {
-    post_id = req.params.post_id;
+    favorite_id = req.params.favorite_id;
     try {
-        result = await post.findPostById(post_id);               // 数据验证放到模型中
+        result = await favorite.findfavoriteById(favorite_id);               // 数据验证放到模型中
         console.log(result.dataValues);
     } catch (error) {
         console.log('查询错误，错误原因为：', error);
@@ -117,25 +99,23 @@ exports.show = async function (req, res) {
 }
 
 /**
- * @api {put} /post/{id} 修改帖子
+ * @api {put} /favorite/{id} 修改收藏
  * @apiName update
- * @apiGroup post
+ * @apiGroup favorite
  * @apiPermission admin
- * @apiDescription 修改帖子
- * @apiParam {String} post_title    帖子标题
- * @apiParam {String} post_content  帖子详情
- * @apiParam {String} major_image   主图
- * @apiParam {String} category_id   分类
- * @apiParam {String} user_id       发帖人
+ * @apiDescription 修改收藏
+ * @apiParam {String} favorites_id    收藏 id
+ * @apiParam {String} favorites_type  收藏类型
+ * @apiParam {String} user_id   关联用户
  * @apiParamExample 这里是参数示例
  * {}
  * @apiSuccessExample 这里是成功返回示例
  * {}
  */
 exports.update = async function (req, res) {
-    post_id = req.params.post_id;
+    favorite_id = req.params.favorite_id;
     try {
-        result = await post.updatePost(post_id, req.body);               // 数据验证放到模型中
+        result = await favorite.updateFavorite(favorite_id, req.body);               // 数据验证放到模型中
         console.log(result);
     } catch (error) {
         console.log('更新错误，错误原因为：', error);
@@ -145,20 +125,20 @@ exports.update = async function (req, res) {
 }
 
 /**
- * @api {delete} /post/{id} 删除帖子
+ * @api {delete} /favorite/{id} 删除收藏
  * @apiName destory
- * @apiGroup post
+ * @apiGroup favorite
  * @apiPermission admin
- * @apiDescription 删除帖子
+ * @apiDescription 删除收藏
  * @apiParamExample 这里是参数示例
  * {}
  * @apiSuccessExample 这里是成功返回示例
  * {}
  */
 exports.destory = async function (req, res) {
-    post_id = req.params.post_id;
+    favorite_id = req.params.favorite_id;
     try {
-        result = await post.destroyPost(post_id);               // 数据验证放到模型中
+        result = await favorite.destroyFavorite(favorite_id);               // 数据验证放到模型中
         console.log(result);
     } catch (error) {
         console.log('查询错误，错误原因为：', error);
@@ -167,7 +147,7 @@ exports.destory = async function (req, res) {
     if (result==1) {
         res.json({ret:1, msg:'刪除成功', data: result});    
     } else {
-        res.json({ret:1, msg:'该帖子已刪除', data: result});
+        res.json({ret:1, msg:'该收藏已刪除', data: result});
     }
     
 }

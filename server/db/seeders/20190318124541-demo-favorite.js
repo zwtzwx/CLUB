@@ -2,10 +2,10 @@
 
 module.exports = {
   up: (queryInterface, Sequelize) => {
-    return queryInterface.bulkInsert('post_category', [{
-      category_name: 't22om',
-      category_description: 'Doe',
-      major_image: 'demo@demo.com',
+    return queryInterface.bulkInsert('favorite', [{
+      favorites_id: 1,
+      favorites_type: 1,
+      user_id: 1,
     }], {});
   },
 
