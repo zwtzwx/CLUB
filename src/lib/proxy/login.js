@@ -1,9 +1,12 @@
 import Vue from '../../common';
 import LoginDialog from '../../components/Login.vue';
-
+import store from '@/store';
+import router from '@/lib/router';
 const LoginConstructor = Vue.extend(LoginDialog);
 
-
+let mixin = {
+  store
+}
 
 let login; 
 
@@ -13,11 +16,11 @@ let login;
 const showLogin = (listType = 0) => {
   if  (!login) {
     login = new LoginConstructor({
-      el: document.createElement('div')
+      el: document.createElement('div'),
+      router,
+      mixins: [mixin]
     });
   }
-  console.log(listType);
-  
   login.isLogin = !!listType;
   login.loginVisible = true;
   document.body.appendChild(login.$el);

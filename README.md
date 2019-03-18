@@ -30,3 +30,11 @@
  `apidoc -i server/controller/ -o public/apidoc/`
 
 文档链接：`/public/apidoc`
+``` shell
+# 启动服务器
+npm run start
+
+# 打包
+npm run dev
+
+```

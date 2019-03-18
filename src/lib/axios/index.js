@@ -1,5 +1,6 @@
 import $form from 'axios';
 import qs from 'qs';
+import store from '@/store';
 import baseURL from './base_url';
 import { Message } from 'element-ui';
 $form.defaults.timeout = 10000;
@@ -28,8 +29,10 @@ let $json = $form.create({
     ]
 });
 const defaultMsg = '服务器错误，请重新连接服务器';
+
 // 配置拦截器
 function interceptorsRequestSuccess (config) {
+    config.headers['Authorization'] = store.state.token || localStorage.getItem('gen_id');
     return config;
 }
 

@@ -1,6 +1,6 @@
 var config = { 
     // 用于简单的对称加密
-    appKey: '123456',
+    appKey: 'zwtzwx',
     // 邮件配置
     email: {
         host: "",

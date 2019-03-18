@@ -1,9 +1,6 @@
 const Sequelize = require('sequelize');
 const sequelize = require('../tools/db');
-const crypto = require('crypto');
-
-
-// const NodeRSA = require('node-rsa');
+const Crypto = require('../tools/crypto');
 const Op = Sequelize.Op;
 
 // 定义 Model
@@ -27,14 +24,21 @@ const User = sequelize.define('user_info', {
     type: Sequelize.STRING,
     field: 'user_email'
   },
-  code: {       // 暂时将此字段设置为用户状态，"2"为管理员，"1"为普通用户，"0"为未审核
-    type: Sequelize.INTEGER,
-    field: 'user_code'
-  },
   integray: {
     type: Sequelize.INTEGER,
     field: 'user_integral',
     defaultValue: 0  // 定义默认值
+  },
+  admin: {
+    type: Sequelize.BOOLEAN,
+    defaultValue: false 
+  },
+  pic: {
+    type: Sequelize.STRING,
+    field: 'user_pic'
+  },
+  descirpt: {
+    type: Sequelize.STRING
   }
 }, {freezeTableName: true});
 
@@ -47,44 +51,26 @@ const User = sequelize.define('user_info', {
  * userInfo 用户信息
  *    code: uuid 验证对应 email 的
  *    email: 用户邮箱
- *    key: `用户名@密码` 的加密字符串
+ *    name: 用户名
+ *    password: 密码的加密字符串
  */
-exports.userRegister = async (userInfo, privateKey) => {
-
-  let buf = Buffer.from(userInfo.key.toString(), 'base64');
-  // 解密前端发送过来的用户名密码信息
-  // let decrypted = crypto.privateDecrypt({
-  //   key:privateKey,
-  //   padding: crypto.constants.RSA_PKCS1_PADDING
-  // }, buf);
-  // console.log(decrypted.toString('utf-8'));
-  // let [userName, userPassword] = decrypted.toString('utf-8').split('@');
- 
-  // return findUser(userInfo.username).then(function(result) {
-  //   // result 将是找到的第一个条目 || null
-  //   if (result) throw new Error('用户名已存在');
-  //   return User.create({
-  //     name: userInfo.username,
-  //     password: userInfo.password,
-  //     email: userInfo.email,
-  //     code: userInfo.code
-  //   })
-  // })
-  // console.log(decrypted.toString('utf-8'));
-  
+exports.userRegister = async (userInfo) => {
   // 查看邮箱是否被注册
-  let email = await User.findOne({ where: {'email': userInfo.email} });
+  let email = await findUser('email', userInfo.email);
+  
   if (email) throw new Error('邮箱已被注册');
   // 查看用户名是否已经存在
-  let name = await User.findOne({where: {'name': userInfo.username}});
+  let name = await findUser('name', userInfo.name);
   if (name) throw new Error('用户名已存在');
 
-  console.log('用户数据为：', userInfo);
+  // 用私钥解密密码，将解密后的密码加盐后存储在数据库
+  let [password] = Crypto.rsaDecrypt(userInfo.password);
+  password = Crypto.hmacEncrypt(password);
+  console.log(password);
   return User.create({
-    name: userInfo.userName,
-    password: userInfo.userPassword,
-    email: userInfo.email,
-    code: userInfo.code
+    name: userInfo.name,
+    password: password,
+    email: userInfo.email
   });
   
 }
@@ -94,18 +80,30 @@ exports.userRegister = async (userInfo, privateKey) => {
  *    name: 用户名或邮箱
  *    password: 密码
  */
-exports.userLogin = (loginInfo) => {
-  console.log('登陆用户数据为：', loginInfo);
-  console.log('登陆用户邮箱为：', loginInfo.email);
-  return User.findOne({
+exports.userLogin = async (userKey) => {
+
+  // 解密登陆用户信息
+  let [loginName, loginPasswd] = Crypto.rsaDecrypt(userKey);
+  let result = await User.findOne({
     where: {
       [Op.or]: [
-        { name: loginInfo.name },
-        { email: loginInfo.email } 
+        { name: loginName },
+        { email: loginName } 
       ]
     },
-    attributes: ['id', 'name', 'email', 'password']
+    attributes: ['id', 'name', 'password', 'pic']
   });
+
+  if (result) {
+    // 将铭文密码加盐加密与数据库中的密码比对
+    loginPasswd = Crypto.hmacEncrypt(loginPasswd);
+    if (loginPasswd !== result.dataValues.password) {
+      throw new Error('密码不正确');
+    }
+    return result.dataValues;
+  } else {
+    throw new Error('用户名不正确');
+  }
 }
 
 /**
@@ -114,7 +112,7 @@ exports.userLogin = (loginInfo) => {
  * value 值
  */
 const findUser = (key, value) => {
-  return User.findOne({ where: { key: value } });
+  return User.findOne({ where: { [key]: value } });
 }
 
 exports.findUser = findUser;

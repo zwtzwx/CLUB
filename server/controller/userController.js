@@ -1,71 +1,62 @@
-const fs = require('fs');
-const path = require('path');
-const uuidv1 = require('uuid/v1');
-const ejs = require('ejs');
+const User  = require('../model/user');
+const Token = require('../tools/token');
+const Mail = require('../tools/mail');
+const config = require('../config');
 
-const privateKey = fs.readFileSync(path.resolve(__dirname, '../rsa/rsa_private_key.pem')).toString('utf-8');
-const User  = require('../models/user');
-const sender = require('../tools/mail');
-const sendEmail = require('../service/sendMail');
-const jwtService = require('../service/jwt');
-
-
-// 发送注册邮件
-exports.sendMail = function(req, res) {
-  let mail = req.body.mail;
-  let baseURL = req.headers.origin;
-  sendEmail.sendMail(mail, baseURL, res);
-}
 
 // 用户注册
 exports.register = (req, res) => {
   let userInfo = req.body.userInfo;
-  //TODO: 此处的 userInfo 需要验证，暂时没找到好的验证模块
-  User.userRegister(userInfo, privateKey).then(function(success) {
-    res.json({
-      msg: '注册成功',
-      ret: 1
-    })
-  }, function (fail) {
-    res.json({
-      msg: '注册失败',
-      ret: 0
-    })
-  });
-
-}
-
-// 登陆
-exports.login = (req, res) => {
-  let loginInfo = req.body.loginInfo;
-  console.log('传入的用户数据为：', loginInfo);
-  User.userLogin(loginInfo).then((result) => {
-    if (result) {
-      // console.log(result.dataValues);
-      let data = result.dataValues;
-      if (data.password !== loginInfo.password) {
-        // 密码不正确
-        res.json({
-          msg: '密码不正确，请检查你的密码！',
-          ret: 0
-        });
-      } else {
-        console.log(result.dataValues);
-
-        sign = jwtService.jwtSign(data);
-        console.log('签名为：', sign);
-        res.json({
-          sign,
-          msg: '登录成功',
-          ret: 1
-        })
-      }
-    } else {
-      // 用户名或邮箱不正确
+  try {
+    // 先验证邮箱是否合法
+    Mail.vertifyCode(userInfo.code);
+    User.userRegister(userInfo).then(() => {
       res.json({
-        msg: '用户名或邮箱不正确！',
+        msg: '注册成功',
+        ret: 1
+      })
+    }).catch(err => {
+      res.json({
+        msg: err.message,
         ret: 0
       })
-    }
-  })
+    })
+  } catch (e) {
+    console.log(e);
+    res.json({
+      msg: e.message,
+      ret: 0
+    })
+  }
+}
+
+exports.login = async (req, res) => {
+  // `name@password` 形式的密文
+  let userKey = req.body.userKey;
+  try {
+    let info = await User.userLogin(userKey);
+    delete info.password;
+    // 生成 token
+    let token = Token.generatorToken(info);
+    res.json({
+      data: {
+        token,
+        info
+      },
+      msg: '登录成功',
+      ret: 1
+    })
+  } catch (error) {
+    console.log(error);
+    
+    res.json({
+      msg: error.message,
+      ret: 0
+    })
+  }
+}
+
+exports.getUserInfo = (req, res) => {
+  console.log(req);
+  
 }
