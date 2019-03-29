@@ -1,5 +1,5 @@
 const nodeMailer = require('nodemailer');
-const config = require('../config');
+const config = require('../config/config');
 const ejs = require('ejs');
 const path = require('path');
 const crypto = require('crypto');

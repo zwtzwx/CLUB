@@ -1,7 +1,7 @@
 const User  = require('../model/user');
 const Token = require('../tools/token');
 const Mail = require('../tools/mail');
-const config = require('../config');
+const config = require('../config/config');
 
 
 // 用户注册

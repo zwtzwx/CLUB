@@ -2,7 +2,7 @@
 const fs = require('fs');
 const path = require('path');
 const crypto = require('crypto');
-const config = require('../config');
+const config = require('../config/config');
 const privateKey = fs.readFileSync(path.resolve(__dirname, '../rsa/rsa_private_key.pem'));
 
 // rsa 私钥解密
