@@ -1,1 +1,1 @@
-export default window.location.origin;
+export default `localhost:3000`;

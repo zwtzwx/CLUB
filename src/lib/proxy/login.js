@@ -1,7 +1,7 @@
 import Vue from '../../common';
 import LoginDialog from '../../components/Login.vue';
 import store from '@/store';
-import router from '@/lib/router';
+import router from '@/router';
 const LoginConstructor = Vue.extend(LoginDialog);
 
 let mixin = {

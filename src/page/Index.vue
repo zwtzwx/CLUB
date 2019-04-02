@@ -8,13 +8,15 @@
       <!-- 右侧 -->
       <my-right></my-right>
     </main>
+    <!-- 底部 toTop 标识 -->
+    <to-top></to-top>
   </div>
 </template>
 <script>
-import MyHeader from '../components/header';
-import MyLeft from '../components/left';
-import MyRight from '../components/right';
-
+import MyHeader from '@/components/header';
+import MyLeft from '@/components/left';
+import MyRight from '@/components/right';
+import ToTop from '@/components/topbtn'
 export default {
   data() {
     return {
@@ -24,7 +26,8 @@ export default {
   components: {
     MyHeader,
     MyLeft,
-    MyRight
+    MyRight,
+    ToTop
   },
   created () {
     // 初始化获取用户信息

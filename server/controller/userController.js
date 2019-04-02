@@ -1,4 +1,4 @@
-const User  = require('../model/user');
+const User  = require('../models/user');
 const Token = require('../tools/token');
 const Mail = require('../tools/mail');
 const config = require('../config/config');

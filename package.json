@@ -6,7 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "nodemon server/index",
-    "dev": "npx webpack --mode development --watch",
+    "dev": "webpack-dev-server --mode development --watch",
     "build": "npx webpack --mode production"
   },
   "repository": {
@@ -45,6 +45,7 @@
   },
   "dependencies": {
     "axios": "^0.18.0",
+    "cors": "^2.8.5",
     "express": "^4.16.4",
     "express-jwt": "^5.3.1",
     "jsencrypt": "^3.0.0-rc.1",
