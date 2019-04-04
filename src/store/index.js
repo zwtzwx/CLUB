@@ -25,7 +25,9 @@ export default new Vuex.Store({
         },
         saveToken(state, data) {
             state.token = data;
-            localStorage.setItem('gen_id', data);
+            if (data) {
+                localStorage.setItem('gen_id', data);
+            }
         },
         saveUserInfo (state, user) {
             state.user.id = user.id;
@@ -39,6 +41,8 @@ export default new Vuex.Store({
                 // 查看 token 中的用户信息
                 rsaVerify(context.state.token).then((decoded) => {
                     context.commit('saveUserInfo', decoded);
+                    // 保存用户 ID
+                    localStorage.setItem('SUID', decoded.id);
                 }).catch((err) => {
                     localStorage.removeItem('gen_id');
                     // 跳转到首页

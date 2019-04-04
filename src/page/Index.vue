@@ -36,7 +36,6 @@ export default {
 }
 </script>
 <style lang="scss">
-@import '../sass/comment.scss';
 main {
   overflow: hidden;
 }

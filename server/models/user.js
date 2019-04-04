@@ -4,7 +4,7 @@ const Crypto = require('../tools/crypto');
 const Op = Sequelize.Op;
 
 // 定义 Model
-const User = sequelize.define('user_info', {
+const User = sequelize.define('user', {
   id: {
     type: Sequelize.INTEGER,
     field: 'user_id',   // id 映射到数据表中的 user_id 字段
@@ -40,7 +40,7 @@ const User = sequelize.define('user_info', {
   descirpt: {
     type: Sequelize.STRING
   }
-}, {freezeTableName: true});
+});
 
 // 同步数据结构到数据库
 // 如果设置 force: true ，那么会先删除数据库已经存在的表，然后在创建新表
@@ -94,7 +94,6 @@ exports.userLogin = async (userKey) => {
     },
     attributes: ['id', 'name', 'password', 'pic']
   });
-
   if (result) {
     // 将铭文密码加盐加密与数据库中的密码比对
     loginPasswd = Crypto.hmacEncrypt(loginPasswd);

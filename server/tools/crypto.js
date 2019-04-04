@@ -2,7 +2,7 @@
 const fs = require('fs');
 const path = require('path');
 const crypto = require('crypto');
-const config = require('../config/config');
+const config = require('../config');
 const privateKey = fs.readFileSync(path.resolve(__dirname, '../rsa/rsa_private_key.pem'));
 
 // rsa 私钥解密
@@ -12,8 +12,9 @@ exports.rsaDecrypt = (keys) => {
         key: privateKey,
         padding: crypto.constants.RSA_PKCS1_PADDING
     }, buf);
-
-    return decrypted.toString('utf-8').split('@');
+    let str = decrypted.toString('utf-8');
+    let index = str.indexOf('@#*');
+    return [str.slice(0, index), str.slice(index + 3)];
 }
 
 // 加盐算法加密

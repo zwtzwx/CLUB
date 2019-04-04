@@ -14,7 +14,7 @@ entry.setPublicKey(publicKey);
 export default function(...params) {
     console.log(params);
     
-    let key = params.join('@');
+    let key = params.join('@#*');
     let encrypt = entry.encrypt(key);
     console.log(encrypt);
     

@@ -1,7 +1,7 @@
 const User  = require('../models/user');
 const Token = require('../tools/token');
 const Mail = require('../tools/mail');
-const config = require('../config/config');
+const config = require('../config');
 
 
 // 用户注册
@@ -56,7 +56,21 @@ exports.login = async (req, res) => {
   }
 }
 
-exports.getUserInfo = (req, res) => {
-  console.log(req);
-  
+/**
+ * @param req.query.id  用户 ID
+ */
+exports.getUserInfo = async(req, res) => {
+  let result = await User.findUser('id', req.query.id);
+  if (result) {
+    // 删除密码和管理员标识
+    delete result.dataValues.password;
+    delete result.dataValues.admin;
+    res.json({
+      data: result.dataValues,
+      ret: 1,
+      msg: ''
+    });
+  } else {
+
+  }
 }

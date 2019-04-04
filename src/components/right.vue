@@ -1,8 +1,18 @@
 <template>
   <div class="right">
     <div class="section auth-section">
-      <div class="title">一个分享和求知的社区</div>
-      <div class="select">您可以<a href="#">登录</a>或<a href="#">注册</a></div>
+      <div  v-if="!authID">
+        <div class="title">一个分享和求知的社区</div>
+        <div class="select">您可以<a href="#">登录</a>或<a href="#">注册</a></div>
+      </div>
+      <div v-else>
+        <p class="title">个人信息</p>
+        <div class="user">
+          <div><span class="headpic"></span><span class="user-name"></span></div>
+          <div>积分：</div>
+          <div></div>
+        </div>
+      </div>
     </div>
     <div class="section">
       <div class="top">最热标签</div>
@@ -26,10 +36,46 @@
 </template>
 <script>
 export default {
-  
+  data() {
+    return {
+      userInfo: {
+        id: '',  // 用户 ID,
+        name: '',  // 用户名
+        pic: '',  // 用户头像
+        integray: 0,  // 用户积分
+        descirpt: ''  // 用户个性签名
+      }
+    }
+  },
+  mounted() {
+    // 如果用户已登录，获取用于信息
+    if (localStorage.getItem('SUID')) {
+      console.log(true)
+      this.getUserInfo();
+    }
+  },
+  methods: {
+    // 根据用户 ID 获取用户信息
+    getUserInfo () {
+      this.$form.get('/user/user-info', {
+        params: {
+          id: localStorage.getItem('SUID')
+        }
+      }).then((res) => {
+        if (ret) {
+          this.userInfo.id = res.data;
+        }
+      })
+    }
+  },
+  computed: {
+    authID () {
+      return this.$store.state.user.id || '';
+    }
+  }
 }
 </script>
-<style lang="scss">
+<style lang="scss" scoped>
 @import '../sass/_variable.scss';
 .right {
   width: 270px;

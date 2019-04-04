@@ -3,21 +3,21 @@
     <div class="main-box">
       <ul class="operate-list">
         <li><router-link to="/">首页</router-link></li>
-        <template v-if="!isLogin">
+        <template v-if="!userInfo.name">
           <li @click="register(0)">注册</li>
           <li @click="register(1)">登录</li>
         </template>
         <li v-else style="position:relative">
           <div class="dropdown">
             <div class="dropdown-link" @click="dropdown = !dropdown">
-              <img :src="`/public/images/${headPic}`" class="headpic">
+              <img :src="`${baseURL}/public/images/${headPic}`" class="headpic">
               <i class="el-icon-arrow-down" style="font-size: 20px;"></i>
             </div>
             <div v-show="dropdown">
               <ul class="dropdown-menu">
-                <li>用户：zwt</li>
-                <li class="dropdown-menu-item"><router-link to="/"><i class="iconfont icon-user"></i>我的主页</router-link></li>
-                <li class="dropdown-menu-item"><router-link to="/"><i class="iconfont icon-logout"></i>登出</router-link></li>
+                <li>用户：{{ userInfo.name }}</li>
+                <li class="dropdown-menu-item"><router-link :to="`user/${userInfo.name}`"><i class="iconfont icon-user"></i>我的主页</router-link></li>
+                <li class="dropdown-menu-item" @click="signOut"><i class="iconfont icon-logout"></i>登出</li>
               </ul>
               <span class="arrow"></span>
               <span class="arrow arrow-white"></span>
@@ -31,7 +31,7 @@
 </template>
 <script>
 import editLogin from '../lib/proxy/login.js';
-
+import { mapState } from 'vuex';
 export default {
   data() {
     return {
@@ -41,16 +41,22 @@ export default {
   methods: {
     register (type = 0) {
       editLogin(type);
+    },
+    // 登出
+    signOut () {
+      this.$store.commit('saveToken', '');
+      this.$store.commit('saveUserInfo', {});
+      localStorage.removeItem('gen_id');
+      localStorage.removeItem('SUID');
+      window.location.href = '/';
     }
   },
   computed: {
-    isLogin () {
-      console.log(this.$store.state.user['id']);
-      
-      return !!this.$store.state.user['id'];
-    },
     headPic () {
       return this.$store.state.user['headpic'] || 'default-avatar.svg';
+    },
+    userInfo () {
+      return this.$store.state.user
     }
   }
 }

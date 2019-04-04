@@ -16,10 +16,7 @@ export default {
   }
 }
 </script>
-<style lang="scss">
-@import '../../sass/comment.scss';
-@import '../../sass/_variable.scss';
-
+<style lang="scss" scoped>
 .profile {
   .left {
     background-color: #fff;

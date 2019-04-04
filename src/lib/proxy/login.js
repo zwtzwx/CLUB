@@ -1,4 +1,4 @@
-import Vue from '../../common';
+import Vue from 'vue';
 import LoginDialog from '../../components/Login.vue';
 import store from '@/store';
 import router from '@/router';

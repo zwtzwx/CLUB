@@ -11,8 +11,8 @@
             </el-form-item>
             <el-form-item prop="password" :rules="[
             { required: true, message: '密码不能为空', trigger: 'blur' },
-            { min: 6, max: 16, message: '长度在 6 到 16 个字符', trigger: 'blur'}]">
-              <el-input placeholder="请输入6~16位密码" type="password" v-model="registerInfo.password"></el-input>
+            { min: 6, message: '长度至少6位字符', trigger: 'blur'}]">
+              <el-input placeholder="至少6位字符" type="password" v-model="registerInfo.password"></el-input>
             </el-form-item>
             <el-form-item prop="confirm">
               <el-input placeholder="确认密码" type="password" v-model="registerInfo.confirm"></el-input>
@@ -92,7 +92,6 @@ export default {
 }
 </script>
 <style lang="scss">
-@import '../sass/comment.scss';
 .signup {
   background-color: #fff;
   box-sizing: border-box;
