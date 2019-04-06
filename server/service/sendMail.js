@@ -6,7 +6,7 @@ const crypto = require('crypto');
 // 邮件模板
 let mailOption = {
   // 发件人
-  from: config.email.user,
+  from: 'zwt',
   // 收件人
   to: '',
   // 主题
