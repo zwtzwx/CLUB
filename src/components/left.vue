@@ -3,11 +3,16 @@
     <!-- 文章分类导航 -->
     <div class="category-nav">
       <ul>
-        <li>全部</li>
-        <li>推荐</li>
-        <li>问答</li>
-        <li>招聘</li>
-      </ul>
+          <router-link
+            v-for="category in categories"
+            :to="{path: category.path}"
+            :key="category.name"
+            tag="li"
+            class="nav-item"
+            active-class="nav-item_status_active">
+            {{ category.name }}
+          </router-link>
+        </ul>
     </div>
     <!-- 文章显示 -->
     <div class="article-list">
@@ -41,7 +46,39 @@
 </template>
 <script>
 export default {
-  
+  name: 'left',
+  data () {
+    return {
+      categories: [
+        {
+          name: '全部',
+          path: '',
+          active: false
+        },
+        {
+          name: '推荐',
+          path: '2',
+          active: false
+        },
+        {
+          name: '问答',
+          path: '3',
+          active: false
+        },
+        {
+          name: '招聘',
+          path: '4',
+          active: false
+        }
+      ]
+    }
+  },
+  computed: {
+    productIcon () {
+      // console.log(this.$route.path, this.imgMap) //debug
+      return this.imgMap[this.$route.path]
+    }
+  }
 }
 </script>
 <style lang="scss">
@@ -63,6 +100,17 @@ export default {
       align-items: center;
       li {
         margin: 0 10px;
+      }
+      .nav-item {
+        color: #90979c;
+        font-size: 16px;
+      }
+      .nav-item:hover {
+        color: #3F7FBF;
+      }
+      .nav-item_status_active {
+        color: #3F7FBF;
+        border-bottom: 2px solid #3F7FBF;
       }
     }
   }
