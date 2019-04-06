@@ -1,8 +1,15 @@
 const path = require('path');
 
 module.exports = {
+<<<<<<< HEAD
   'config': path.resolve('server/config', 'database.json'),
   'models-path': path.resolve('server/db', 'models'),
   'seeders-path': path.resolve('server/db', 'seeders'),
   'migrations-path': path.resolve('server/db', 'migrations')
+=======
+  'config': path.resolve('server', 'db', 'config.json'),
+  'models-path': path.resolve('server', 'db', 'models'),
+  'seeders-path': path.resolve('server', 'db', 'seeders'),
+  'migrations-path': path.resolve('server', 'db', 'migrations')
+>>>>>>> zwt
 }

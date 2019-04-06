@@ -1,6 +1,50 @@
 const config = require('../config');
 const crypto = require('crypto');
+<<<<<<< HEAD
 // 验证邮箱
+=======
+
+// 创建传输方式
+const mailTransport = nodeMailer.createTransport({
+  host: config.email.host || 'smtp.163.com',
+  secure: config.email.secure || true,
+  port: config.email.port || 465,
+  auth: {
+    user: config.email.user || '18774671721@163.com',
+    pass: config.email.password || 'zwx384500364'
+  }
+});
+
+exports.sendEmail = function (mail) {
+  return new Promise((resolve, reject) => {
+    mailTransport.sendMail(mail, (err,info) => {
+      if (err) {
+        reject();
+      }
+      resolve();
+    })
+  });
+}
+
+// 渲染邮件模板
+
+exports.renderEmail = function (baseURL, mail) {
+  // 根据当前时间戳加密
+  let code = aseEncrypt(Date.now().toString(), config.appKey);
+  return new Promise ((resolve, reject) => {
+    ejs.renderFile(path.resolve(__dirname, '../../email.ejs'), {
+      url: `${baseURL}/#/signup?code=${code}&email=${mail}`
+    }, (err, str) => {
+      if (err) {
+        reject(err);
+      } else {
+        resolve(str);
+      }
+    });
+  })
+} 
+
+>>>>>>> zwt
 // 验证 code 是否合法
 exports.vertifyCode = (code) => {
   let decrypted = aseDecrypt(code, config.appKey);

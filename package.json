@@ -2,6 +2,17 @@
   "name": "CLUB",
   "version": "1.0.0",
   "description": "使用 `node` + `vue` + `express` 防写 cnode 社区",
+  "apidoc": {
+    "title": "文婷专属文档",
+    "url" : "http://localhost:8080",
+    "order": [],
+    "header": {
+      "title": "这是头部"
+    },
+    "footer": {
+      "title": "这是底部"
+    }
+  },
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
@@ -35,6 +46,7 @@
     "html-webpack-plugin": "^3.2.0",
     "mini-css-extract-plugin": "^0.5.0",
     "node-sass": "^4.11.0",
+    "nodemon": "^1.18.10",
     "sass-loader": "^7.1.0",
     "url-loader": "^1.1.2",
     "vue-loader": "^15.7.0",
@@ -46,16 +58,26 @@
   },
   "dependencies": {
     "axios": "^0.18.0",
+<<<<<<< HEAD
     "cors": "^2.8.5",
+=======
+    "body-parser": "^1.18.3",
+>>>>>>> zwt
     "express": "^4.16.4",
     "express-jwt": "^5.3.1",
     "jsencrypt": "^3.0.0-rc.1",
     "jsonwebtoken": "^8.5.0",
+    "morgan": "^1.9.1",
     "mysql2": "^1.6.5",
     "nodemailer": "^5.1.1",
+    "nodemon": "^1.18.10",
     "qs": "^6.6.0",
     "sequelize": "^4.43.0",
     "sequelize-cli": "^5.4.0",
+<<<<<<< HEAD
+=======
+    "uuid": "^3.3.2",
+>>>>>>> zwt
     "vue": "^2.6.8",
     "vue-router": "^3.0.2",
     "vuex": "^3.1.0"

@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 const nodeMailer = require('nodemailer');
 const config = require('../config');
 const ejs = require('ejs');
@@ -15,6 +16,10 @@ const mailTransport = nodeMailer.createTransport({
     pass: 'zwx384500364'
   }
 });
+=======
+const sendEmail = require('../service/sendMail');
+const Mail = require('../tools/mail');
+>>>>>>> zwt
 
 // 发送邮件
 exports.sendMail = async(req, res) => {

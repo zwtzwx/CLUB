@@ -1,6 +1,7 @@
 # CLUB
 使用 `node` + `vue` + `express` 仿写 cnode 社区
 
+<<<<<<< HEAD
 ## 数据库配置
 #### 数据迁移
 1. 初始化项目，生成文件夹
@@ -32,6 +33,37 @@ db:migrate:undo:all
  node_modules/.bin/sequelize seed:generate --name demo-user
 ```
 ## 启动服务
+=======
+## 数据库
+
+### 数据库初始化
+
+#### 采用 seqlique-CLI 进行数据库数据的初始化，方便后期调用和测试
+
+数据库期望全部采用软删除
+
+目前数据为：帖子、帖子评论、帖子分类
+
+迁移数据库，由于不熟练，手动复制的迁移文件，并且时间属性由于没找到正确的时间格式，设置为空。
+`node_modules/.bin/sequelize db:migrate`
+
+取消所有数据库迁移
+`node_modules/.bin/sequelize db:migrate:undo:all`
+
+生成数据种子，暂时是逐个生成，还需继续看文档
+`node_modules/.bin/sequelize db:seed:all`
+
+#### 目前期望通过 sequelize 的 model 验证来解决大部分数据验证问题，目前找到的数据验证包文档都不够友好
+
+## 接口
+
+文档采用 apidoc，命令为
+`npm install apidoc -g`
+
+ `apidoc -i server/controller/ -o public/apidoc/`
+
+文档链接：`/public/apidoc`
+>>>>>>> zwt
 ``` shell
 # 启动服务器
 npm run start
