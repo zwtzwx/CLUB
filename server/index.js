@@ -16,8 +16,6 @@ const categoryRouter = require('./routers/category');
 const postRouter = require('./routers/post');
 const commentRouter = require('./routers/comment');
 
-const app = express();
-
 app.set('views', [__dirname + '/views' ,path.resolve(__dirname, '../')]);
 app.set('view engine', 'ejs');
 app.engine('ejs', require('ejs').renderFile);
