@@ -1,8 +1,6 @@
 const config = require('../config');
 const crypto = require('crypto');
-<<<<<<< HEAD
 // 验证邮箱
-=======
 
 // 创建传输方式
 const mailTransport = nodeMailer.createTransport({
@@ -44,7 +42,6 @@ exports.renderEmail = function (baseURL, mail) {
   })
 } 
 
->>>>>>> zwt
 // 验证 code 是否合法
 exports.vertifyCode = (code) => {
   let decrypted = aseDecrypt(code, config.appKey);

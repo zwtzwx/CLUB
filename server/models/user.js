@@ -46,10 +46,6 @@ const User = sequelize.define('user', {
 // 如果设置 force: true ，那么会先删除数据库已经存在的表，然后在创建新表
 // 如果数据库中表已经存在，那么没必要设为 true
 // User.sync({ force: false });
-<<<<<<< HEAD:server/models/user.js
-
-=======
->>>>>>> zwt:server/models/user.js
 
 /**
  * userInfo 用户信息

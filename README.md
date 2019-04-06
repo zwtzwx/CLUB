@@ -1,7 +1,6 @@
 # CLUB
 使用 `node` + `vue` + `express` 仿写 cnode 社区
 
-<<<<<<< HEAD
 ## 数据库配置
 #### 数据迁移
 1. 初始化项目，生成文件夹
@@ -33,7 +32,6 @@ db:migrate:undo:all
  node_modules/.bin/sequelize seed:generate --name demo-user
 ```
 ## 启动服务
-=======
 ## 数据库
 
 ### 数据库初始化
@@ -63,7 +61,6 @@ db:migrate:undo:all
  `apidoc -i server/controller/ -o public/apidoc/`
 
 文档链接：`/public/apidoc`
->>>>>>> zwt
 ``` shell
 # 启动服务器
 npm run start

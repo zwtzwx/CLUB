@@ -1,12 +1,10 @@
 var createError = require('http-errors');
 const express = require('express');
 const path = require('path');
-<<<<<<< HEAD
 const cors = require('cors');
 const app = express();
 
 app.set('views', path.resolve(__dirname, 'view'));
-=======
 var bodyParser = require('body-parser');
 var logger = require('morgan');
 
@@ -21,16 +19,13 @@ const commentRouter = require('./routers/comment');
 const app = express();
 
 app.set('views', [__dirname + '/views' ,path.resolve(__dirname, '../')]);
->>>>>>> zwt
 app.set('view engine', 'ejs');
 app.engine('ejs', require('ejs').renderFile);
 
 // app.use('/public', express.static(path.resolve(__dirname, '../pulbic')));
-<<<<<<< HEAD
 app.use('/public', express.static(path.join(__dirname, '../public')));
 // 允许跨域请求
 app.use(cors());
-=======
 app.use(logger('dev'));                                         // 日志中间件
 // app.use(cors())                                               // 跨域中间件 此处用不上
 app.use(bodyParser.json());                                      
@@ -43,7 +38,6 @@ app.get('/', (req, res) => {
     })
   });
 
->>>>>>> zwt
   
 // api 接口路由信息
 app.use('/web', Router);

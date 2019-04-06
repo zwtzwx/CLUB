@@ -58,11 +58,8 @@
   },
   "dependencies": {
     "axios": "^0.18.0",
-<<<<<<< HEAD
     "cors": "^2.8.5",
-=======
     "body-parser": "^1.18.3",
->>>>>>> zwt
     "express": "^4.16.4",
     "express-jwt": "^5.3.1",
     "jsencrypt": "^3.0.0-rc.1",
@@ -74,10 +71,7 @@
     "qs": "^6.6.0",
     "sequelize": "^4.43.0",
     "sequelize-cli": "^5.4.0",
-<<<<<<< HEAD
-=======
     "uuid": "^3.3.2",
->>>>>>> zwt
     "vue": "^2.6.8",
     "vue-router": "^3.0.2",
     "vuex": "^3.1.0"
