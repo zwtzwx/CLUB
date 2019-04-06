@@ -30,6 +30,10 @@ module.exports = {
         field: 'user_integral',
         defaultValue: 0  // 定义默认值
       },
+      admin: {
+        type: Sequelize.BOOLEAN,
+        defaultValue: false 
+      },
       createdAt: {
         type: Sequelize.DATE,
         allowNull: true,
