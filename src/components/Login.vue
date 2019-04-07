@@ -76,7 +76,7 @@ export default {
       }
       // 将用户名(邮箱)密码加密
       const userKey = getKey(this.loginInfo.name, this.loginInfo.password);
-      this.$json.post('/user/signin', {
+      this.$json.post('/web/user/signin', {
         userKey
       }).then((res) => {
         
@@ -89,7 +89,12 @@ export default {
           // 跳转到首页
           this.$router.replace({name: 'home'});
         }
-      })
+      }).catch(
+        (err)=>{
+          console.log('在此处')
+          console.log(err)
+        }
+      )
     },
     checkMail () {
       // 检查邮箱

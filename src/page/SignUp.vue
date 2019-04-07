@@ -63,7 +63,7 @@ export default {
           delete this.registerInfo.confirm;
           // 使用公钥加密密码
           const encryKey = getKey(this.registerInfo.password);
-          this.$json.post('/user/signup', {
+          this.$json.post('/web/user/signup', {
             userInfo: {
               ...this.urlParames,
               name: this.registerInfo.username,

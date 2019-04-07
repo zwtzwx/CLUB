@@ -34,6 +34,10 @@ module.exports = {
         type: Sequelize.BOOLEAN,
         defaultValue: false 
       },
+      pic: {
+        type: Sequelize.STRING,
+        field: 'user_pic'
+      },
       createdAt: {
         type: Sequelize.DATE,
         allowNull: true,
@@ -49,7 +53,6 @@ module.exports = {
         allowNull: true,
         defaultValue: null,
       }
-      
     });
   },
   down: (queryInterface, Sequelize) => {
