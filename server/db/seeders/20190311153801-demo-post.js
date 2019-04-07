@@ -21,7 +21,7 @@ module.exports = {
         user_id: 1,
         views: 1,
         tags: 'python',
-        is_hot: 1,
+        is_hot: 0,
       },
       {
         post_title: 'golang',
@@ -31,7 +31,7 @@ module.exports = {
         user_id: 1,
         views: 1,
         tags: 'golang',
-        is_hot: 1,
+        is_hot: 0,
       },
       {
         post_title: '算法',

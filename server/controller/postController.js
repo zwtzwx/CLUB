@@ -32,7 +32,7 @@ exports.index = async function (req, res) {
         size = parseInt(req.param("size").trim());
     }
     page = page || 1;
-    size = size || 20;
+    size = size || 10;
     console.log('page=', page, 'size=', size)
 
     let category_id = req.param('category_id') || 0

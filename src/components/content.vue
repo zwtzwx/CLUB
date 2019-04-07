@@ -6,10 +6,12 @@
         <li class="article-item" v-for="post in posts" :key="post.id">
           <div class="title">{{ post.post_title }}</div>
           <div class="meta-row">
-            <span class="hot">推荐</span>
+            <span v-if="post.is_hot" class="hot">推荐</span>
+            <span v-else class="usual">普通</span>
+
             <span class="username">{{ 'user ' + post.user_id }}</span>
             <span class="time">6天前</span>
-            <span class="tag">JavaScript</span>
+            <span class="tag">{{ post.tag }}</span>
           </div>
           <!-- 留言 -->
           <div class="count">
@@ -24,8 +26,10 @@
           background
           class="pagination"
           layout="prev, pager, next"
-          :page-size="20"
-          :total="100">
+          :page-size="10"
+          :total="total"
+          @current-change="changePage"
+          >
           </el-pagination>
         </li>
       </ul>
@@ -39,6 +43,7 @@ export default {
   data () {
     return {
       posts: [],
+      page: 1,
       total: 0,
     }
   },
@@ -52,10 +57,31 @@ export default {
     .then((res) => {
       this.posts = res.data.data
       this.total = res.data.total
+      this.page = res.data.page
       console.log(this.posts)
     }, (err) => {
       console.log(err)
     })
+  },
+  methods: {
+    changePage(page) {
+      console.log('当前切换的页码为：', page)
+      this.$json.get('/post', {
+        params: {
+          page: page
+        }
+      })
+        .then((res) => {
+          this.posts = res.data.data
+          this.total = res.data.total
+          this.page = res.data.page
+          console.log(this.posts)
+          console.log('监听页码生效')
+        }, (err) => {
+          console.log('监听页码失败')
+          console.log(err)
+        })
+    }
   },
   watch: {
     // 复用组件生命周期钩子不再适用，需要用到监听属性监听路由
@@ -68,11 +94,31 @@ export default {
         .then((res) => {
           this.posts = res.data.data
           this.total = res.data.total
-          console.log('监听属性生效')
+          this.page = res.data.page
+          console.log('监听路由生效')
         }, (err) => {
+          console.log('监听路由失败')
           console.log(err)
         })
-    }
+    },
+    // 如果 `page` 发生改变，这个函数就会运行
+    //TODO: 此方法不对
+    // page (val) {
+    //   this.$json.get('/post', {
+    //     param: {
+    //       page: this.page
+    //     }
+    //   })
+    //     .then((res) => {
+    //       this.posts = res.data.data
+    //       this.total = res.data.total
+    //       this.page = res.data.page
+    //       console.log('监听页码生效')
+    //     }, (err) => {
+    //       console.log('监听页码失败')
+    //       console.log(err)
+    //     })
+    // }
   }
 }
 </script>
@@ -125,6 +171,9 @@ export default {
       font-size: 14px;
       .hot {
         color: red;
+      }
+      .usual {
+        color: #b2bac2;
       }
       span {
         // padding-right: 10px;
