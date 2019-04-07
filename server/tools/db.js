@@ -2,17 +2,17 @@ const Sequelize = require('sequelize');
 const config = require('../config')
 
 // 建立连接池
-module.exports = new Sequelize('club', 'root', '123456', {
+module.exports = new Sequelize('club', 'root', 'ls950322', {
   host: 'localhost',
   dialect: 'mysql',
   operatorsAliases: false,
   define: {
-    timestamps: config.database.define || true
+    timestamps: true
   },
   pool: {
-    max: config.database.poolMax,
-    min: config.database.poolMin,
-    acquire: config.database.poolAcquire,
-    idle: config.database.PoolIdle
+    max: 10,
+    min: 0,
+    acquire: 30000,
+    idle: 10000
   }
 })

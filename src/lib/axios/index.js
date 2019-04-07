@@ -18,7 +18,7 @@ $form.defaults.transformRequest = [
 // JSON 提交方式
 let $json = $form.create({
 
-    baseURL: `${baseURL}/web`,
+    baseURL: `${baseURL}`,
     headers: {
         ['Content-Type']: 'application/json; charset=utf-8'
     },

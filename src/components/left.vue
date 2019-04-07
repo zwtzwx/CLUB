@@ -15,69 +15,46 @@
         </ul>
     </div>
     <!-- 文章显示 -->
-    <div class="article-list">
-      <ul>
-        <li class="article-item" v-for="item in 20" :key="item">
-          <div class="title">TypeScript 初学</div>
-          <div class="meta-row">
-            <span class="hot">推荐</span>
-            <span class="username">sponing</span>
-            <span class="time">6天前</span>
-            <span class="tag">JavaScript</span>
-          </div>
-          <!-- 留言 -->
-          <div class="count">
-
-          </div>
-        </li>
-
-        <li class="article-item">
-          <el-pagination
-          background
-          class="pagination"
-          layout="prev, pager, next"
-          :page-size="20"
-          :total="100">
-        </el-pagination>
-        </li>
-      </ul>
-    </div>
+    <router-view :categories="categories"></router-view>
   </div>
 </template>
 <script>
+import MyContent from './content'
+
 export default {
   name: 'left',
+  components: { MyContent },
   data () {
     return {
       categories: [
         {
           name: '全部',
-          path: '',
+          path: 'home',
           active: false
         },
         {
           name: '推荐',
-          path: '2',
+          path: 'recommend',
           active: false
         },
         {
           name: '问答',
-          path: '3',
+          path: 'question',
           active: false
         },
         {
           name: '招聘',
-          path: '4',
+          path: 'resume',
           active: false
         }
       ]
     }
   },
   computed: {
-    productIcon () {
-      // console.log(this.$route.path, this.imgMap) //debug
-      return this.imgMap[this.$route.path]
-    }
+    // productIcon () {
+    //   // console.log(this.$route.path, this.imgMap) //debug
+    //   return this.imgMap[this.$route.path]
+    // }
   }
 }
 </script>

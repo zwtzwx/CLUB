@@ -70,7 +70,7 @@ exports.postIndex = async function (page=1, size=20, category_id=0) {
     order: [
       ["id", "DESC"],
     ],
-    attributes: { exclude: ['createdAt', 'updatedAt', 'deletedAt'] },
+    attributes: { exclude: ['updatedAt', 'deletedAt'] },
   })
   // console.log(posts);
   return posts;
