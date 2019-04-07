@@ -1,15 +1,7 @@
 'use strict';
-
 module.exports = {
   up: (queryInterface, Sequelize) => {
-    /*
-      Add altering commands here.
-      Return a promise to correctly handle asynchronicity.
-
-      Example:
-      return queryInterface.createTable('users', { id: Sequelize.INTEGER });
-    */
-    return queryInterface.createTable('users', { 
+    return queryInterface.createTable('users', {
       id: {
         type: Sequelize.INTEGER,
         field: 'user_id',   // id 映射到数据表中的 user_id 字段
@@ -19,7 +11,7 @@ module.exports = {
       name: {
         type: Sequelize.STRING,
         field: 'user_name',
-        unique: true   // 定义唯一性约束
+        // unique: true   // 定义唯一性约束
       },
       password: {
         type: Sequelize.STRING,
@@ -29,6 +21,10 @@ module.exports = {
         type: Sequelize.STRING,
         field: 'user_email'
       },
+      code: {       
+        type: Sequelize.INTEGER,
+        field: 'user_code'
+      },
       integray: {
         type: Sequelize.INTEGER,
         field: 'user_integral',
@@ -36,7 +32,7 @@ module.exports = {
       },
       admin: {
         type: Sequelize.BOOLEAN,
-        defaultValue: false
+        defaultValue: false 
       },
       pic: {
         type: Sequelize.STRING,
@@ -44,18 +40,25 @@ module.exports = {
       },
       descirpt: {
         type: Sequelize.STRING
+      },
+      createdAt: {
+        type: Sequelize.DATE,
+        allowNull: true,
+        defaultValue: null,
+      },
+      updatedAt: {
+        type: Sequelize.DATE,
+        allowNull: true,
+        defaultValue: null,
+      },
+      deletedAt: {
+        type: Sequelize.DATE,
+        allowNull: true,
+        defaultValue: null,
       }
     });
   },
-
   down: (queryInterface, Sequelize) => {
-    /*
-      Add reverting commands here.
-      Return a promise to correctly handle asynchronicity.
-
-      Example:
-      return queryInterface.dropTable('users');
-    */
     return queryInterface.dropTable('users');
   }
 };

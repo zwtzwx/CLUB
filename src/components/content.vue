@@ -3,21 +3,26 @@
     <!-- 文章显示 -->
     <div class="article-list">
       <ul>
-        <li class="article-item" v-for="post in posts" :key="post.id">
-          <div class="title">{{ post.post_title }}</div>
-          <div class="meta-row">
-            <span v-if="post.is_hot" class="hot">推荐</span>
-            <span v-else class="usual">普通</span>
+        <router-link
+            v-for="post in posts" 
+            :to="{path: 'detail/' + post.id}"
+            :key="post.id"
+            tag="li"
+            class="article-item">
+            <div class="title">{{ post.post_title }}</div>
+            <div class="meta-row">
+              <span v-if="post.is_hot" class="hot">推荐</span>
+              <span v-else class="usual">普通</span>
 
-            <span class="username">{{ 'user ' + post.user_id }}</span>
-            <span class="time">6天前</span>
-            <span class="tag">{{ post.tag }}</span>
-          </div>
-          <!-- 留言 -->
-          <div class="count">
+              <span class="username">{{ 'user ' + post.user_id }}</span>
+              <span class="time">6天前</span>
+              <span class="tag">{{ post.tag }}</span>
+            </div>
+            <!-- 留言 -->
+            <div class="count"></div>
+            
+          </router-link>
 
-          </div>
-        </li>
         <!-- 占位符的了解还不够 -->
         <!-- <p>{{ categories }}</p> -->
 

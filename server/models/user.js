@@ -95,7 +95,10 @@ exports.userLogin = async (userKey) => {
   });
   if (result) {
     // 将铭文密码加盐加密与数据库中的密码比对
+    console.log('传入的密码为：', loginPasswd)
+    console.log('当前密码为', result.dataValues.password)
     loginPasswd = Crypto.hmacEncrypt(loginPasswd);
+    console.log('传入的密码为：', loginPasswd)
     if (loginPasswd !== result.dataValues.password) {
       throw new Error('密码不正确');
     }

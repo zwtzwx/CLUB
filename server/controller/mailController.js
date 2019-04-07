@@ -2,8 +2,7 @@ const nodeMailer = require('nodemailer');
 const config = require('../config');
 const ejs = require('ejs');
 const path = require('path');
-
-
+const crypto = require('crypto');
 
 // 邮件传输方式
 const mailTransport = nodeMailer.createTransport({
@@ -82,3 +81,19 @@ const renderEmail = function (baseURL, mail) {
   })
 } 
 
+// 对称加密
+function aseEncrypt(data, key) {
+  const cipher = crypto.createCipher('aes192', key);
+
+  let crypted = cipher.update(data, 'utf8', 'hex');
+  crypted += cipher.final('hex');
+  return crypted;
+}
+// 对称解密
+function aseDecrypt(encrypted, key) {
+  const decipher = crypto.createDecipher('aes192', key);
+  // console.log(encrypted);
+  let decrypted = decipher.update(encrypted, 'hex', 'utf8');
+  decrypted += decipher.final('utf8');
+  return decrypted;
+}

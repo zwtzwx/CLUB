@@ -54,7 +54,7 @@ export default {
     // 注册
     signUp () {
       // 获取验证码
-      this.$json.post('/mail/send', {
+      this.$json.post('/web/mail/send', {
         mail: this.registerMail
       }).then((res) => {
         this.$message({

@@ -3,6 +3,7 @@ import Index from '@/page/Index.vue';
 import SignUp from '@/page/SignUp.vue';
 import Profile from '@/page/user/profile.vue';
 import MyContent from '@/components/content.vue';
+import Detail from '@/page/Detail.vue';
 // 路由规则
 const routes = [
   { 
@@ -32,6 +33,11 @@ const routes = [
         component: MyContent,
       }
     ]
+  },
+  { 
+    path: '/detail/*', 
+    name: 'detail',
+    component: Detail
   },
   { 
     path: '/signup', 
