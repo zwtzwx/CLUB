@@ -42,6 +42,18 @@ const Post = sequelize.define('post', {
         field: 'views',
         comment: '浏览数',
         defaultValue: 0  // 定义默认值
+    },
+    tag:{
+      type: Sequelize.STRING,
+      field: 'tags',
+      comment: '帖子标签',
+      defaultValue: 0   // 定义默认值
+    },
+    is_hot:{
+      type: Sequelize.INTEGER,
+      field: 'is_hot',
+      comment: '是否推荐',
+      defaultValue: 0  // 定义默认值
     }
   }, {
     freezeTableName: true,

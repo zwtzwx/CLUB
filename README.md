@@ -11,9 +11,11 @@ node_modules/.bin/sequelize init
 
 2. 创建数据库
 如果数据库还不存在，可以使用以下命令创建数据库
+
 ``` shell
 node_modules/.bin/sequelize db:create
 ```
+
 3. 运行迁移
 在创建完模型和迁移文件后，其实还没有在数据库中真正的创建表，这时候需要使用 `db:migrate` 创建
 ``` shell
