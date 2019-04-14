@@ -4,6 +4,7 @@ import SignUp from '@/page/SignUp.vue';
 import Profile from '@/page/user/profile.vue';
 import MyContent from '@/components/content.vue';
 import Detail from '@/page/Detail.vue';
+import Topic from '@/page/newTopic.vue';
 // 路由规则
 const routes = [
   { 
@@ -33,6 +34,11 @@ const routes = [
         component: MyContent,
       }
     ]
+  },
+  { 
+    path: '/new-topic', 
+    name: 'new-topic',
+    component: Topic
   },
   { 
     path: '/detail/*', 

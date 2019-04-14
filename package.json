@@ -4,7 +4,7 @@
   "description": "使用 `node` + `vue` + `express` 防写 cnode 社区",
   "apidoc": {
     "title": "文婷专属文档",
-    "url" : "http://localhost:8080",
+    "url": "http://localhost:8080",
     "order": [],
     "header": {
       "title": "这是头部"
@@ -58,10 +58,12 @@
   },
   "dependencies": {
     "axios": "^0.18.0",
-    "cors": "^2.8.5",
     "body-parser": "^1.18.3",
+    "cors": "^2.8.5",
     "express": "^4.16.4",
     "express-jwt": "^5.3.1",
+    "font-awesome": "^4.7.0",
+    "github-markdown-css": "^3.0.1",
     "jsencrypt": "^3.0.0-rc.1",
     "jsonwebtoken": "^8.5.0",
     "morgan": "^1.9.1",
@@ -71,6 +73,8 @@
     "qs": "^6.6.0",
     "sequelize": "^4.43.0",
     "sequelize-cli": "^5.4.0",
+    "showdown": "^1.9.0",
+    "simplemde": "^1.11.2",
     "uuid": "^3.3.2",
     "vue": "^2.6.8",
     "vue-router": "^3.0.2",

@@ -17,28 +17,12 @@
             <input class="span-common span-success pull-right collect_btn" type="submit" value="收藏" action="collect">
             </div>
             <div id="manage_topic"></div>
+            <!-- zIndex 显示的先后顺序，越大越会被显示 -->
           </div>
+                    <button @click="markdown2Html">To HTML</button>
 
-          <article class="markdown-body">
-            <!-- 此处有一个问题，编辑器保存的 markdown 是什么格式的，然后是 markdown 转 html 怎么转 -->
-                <h1 id="cmdmarkdown">欢迎使用 Cmd Markdown 编辑阅读器</h1>
-                  <hr />
-                  <p>我们理解您需要更便捷更高效的工具记录思想，整理笔记、知识，并将其中承载的价值传播给他人，<strong>Cmd Markdown</strong> 是我们给出的答案 —— 我们为记录思想和分享知识提供更专业的工具。 您可以使用 Cmd Markdown：</p>
-                  <blockquote>
-                    <ul>
-                    <li>整理知识，学习笔记</li>
-                    <li>发布日记，杂文，所见所想</li>
-                    <li>撰写发布技术文稿（代码支持）</li>
-                    <li>撰写发布学术论文（LaTeX 公式支持）</li>
-                    </ul>
-                  </blockquote>
-                  <p><img src="https://www.zybuluo.com/static/img/logo.png" alt="cmd-markdown-logo" /></p>
-                  <p>除了您现在看到的这个 Cmd Markdown 在线版本，您还可以前往以下网址下载：</p>
-                  <h3 id="windowsmaclinuxhttpswwwzybuluocomcmd"><a href="https://www.zybuluo.com/cmd/">Windows/Mac/Linux 全平台客户端</a></h3>
-                  <blockquote>
-                    <p>请保留此份 Cmd Markdown 的欢迎稿兼使用说明，如需撰写新稿件，点击顶部工具栏右侧的 <i class="icon-file"></i> <strong>新文稿</strong> 或者使用快捷键 <code>Ctrl+Alt+N</code>。</p>
-                  </blockquote>
-          </article> 
+          <markdown-editor id="contentEditor" ref="contentEditor" v-model="content" :height="300" :zIndex="20"></markdown-editor>
+
       </div>
       <!-- 右侧 -->
       <my-right></my-right>
@@ -49,30 +33,48 @@
 </template>
 
 <script>
+import showDown from 'showdown';
+
 import MyHeader from '@/components/header';
 import MyLeft from '@/components/left';
 import MyRight from '@/components/right';
 import ToTop from '@/components/topbtn';
-import 'github-markdown-css';
+import MarkdownEditor from '@/components/simpleMDE';
 
+const content = `
+**this is test**
+1. markdown
+2. editor
+## Simplemde
+[link](https://www.baidu.com) 
+![图片](https://i.imgur.com/sZlktY7.png)
+`
 export default {
-  data() {
-    return {
-      isLogin: false,
-    }
-  },
-  components: {
+    components: {
     MyHeader,
     MyLeft,
     MyRight,
-    ToTop
+    ToTop,
+    MarkdownEditor
   },
-  created () {
-    // 初始化获取用户信息
-    
+  data () {
+    return {
+      isLogin: false,
+      content: content,
+      html: ''
+    }
+  },
+  methods: {
+       markdown2Html() {
+        const converter = new showDown.Converter()
+        this.html = converter.makeHtml(this.content)
+        console.log(this.html)
+      }
   }
 }
+
 </script>
+
 <style lang="scss">
 @import '../sass/_variable.scss';
 @import '../sass/comment.scss';
@@ -178,20 +180,5 @@ main {
       
     }
   }
-  .markdown-body {
-		box-sizing: border-box;
-		min-width: 200px;
-		max-width: 980px;
-		margin: 0 auto;
-		padding: 45px;
-	}
-
-	@media (max-width: 767px) {
-		.markdown-body {
-			padding: 15px;
-		}
-	}
-
 }
 </style>
-
