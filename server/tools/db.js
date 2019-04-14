@@ -2,7 +2,7 @@ const Sequelize = require('sequelize');
 const config = require('../config')
 
 // 建立连接池
-module.exports = new Sequelize('club', 'root', 'ls950322', {
+module.exports = new Sequelize('club', 'test', '123456', {
   host: 'localhost',
   dialect: 'mysql',
   operatorsAliases: false,
