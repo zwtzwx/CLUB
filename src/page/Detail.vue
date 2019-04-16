@@ -24,7 +24,7 @@
                 <h1 id="cmdmarkdown">欢迎使用 Cmd Markdown 编辑阅读器</h1>
                   <hr />
                   <p>我们理解您需要更便捷更高效的工具记录思想，整理笔记、知识，并将其中承载的价值传播给他人，<strong>Cmd Markdown</strong> 是我们给出的答案 —— 我们为记录思想和分享知识提供更专业的工具。 您可以使用 Cmd Markdown：</p>
-                  <blockquote>
+                  <!-- <blockquote>
                     <ul>
                     <li>整理知识，学习笔记</li>
                     <li>发布日记，杂文，所见所想</li>
@@ -37,9 +37,18 @@
                   <h3 id="windowsmaclinuxhttpswwwzybuluocomcmd"><a href="https://www.zybuluo.com/cmd/">Windows/Mac/Linux 全平台客户端</a></h3>
                   <blockquote>
                     <p>请保留此份 Cmd Markdown 的欢迎稿兼使用说明，如需撰写新稿件，点击顶部工具栏右侧的 <i class="icon-file"></i> <strong>新文稿</strong> 或者使用快捷键 <code>Ctrl+Alt+N</code>。</p>
-                  </blockquote>
+                  </blockquote> -->
           </article> 
+
+          <div class="comment__header">
+            <span>回复</span>
+          </div>
+
+          <div class="comment__cell">aaa</div>
+            
+
       </div>
+
       <!-- 右侧 -->
       <my-right></my-right>
     </main>
@@ -184,6 +193,7 @@ main {
 		max-width: 980px;
 		margin: 0 auto;
 		padding: 45px;
+    border-bottom: 30px solid $border-color;
 	}
 
 	@media (max-width: 767px) {
@@ -192,6 +202,23 @@ main {
 		}
 	}
 
+  .comment__header {
+    padding: 10px;
+    background-color: #fdfdfd;
+    border-radius: 3px 3px 0 0;
+    border-bottom: 2px solid $border-color;
+    }
+
+  .comment__cell {
+      box-sizing: border-box;
+      height: 100px;
+      color: $nav-gray;
+      padding: 10px;
+      // border-bottom: 20px solid $border-color;
+     
+      font-size: 14px;
+      }
 }
+
 </style>
 
