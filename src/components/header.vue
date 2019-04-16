@@ -10,7 +10,7 @@
         <li v-else style="position:relative">
           <div class="dropdown">
             <div class="dropdown-link" @click="dropdown = !dropdown">
-              <img :src="`${baseURL}/public/images/${headPic}`" class="headpic">
+              <img :src="`${$baseURL}/public/images/${headPic}`" class="headpic">
               <i class="el-icon-arrow-down" style="font-size: 20px;"></i>
             </div>
             <div v-show="dropdown">

@@ -32,5 +32,5 @@ function aseDecrypt(encrypted, key) {
   return decrypted;
 }
 
-
+exports.aseEncrypt = aseEncrypt;
 

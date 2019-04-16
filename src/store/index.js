@@ -22,6 +22,9 @@ export default new Vuex.Store({
     mutations: {
         initToken(state) {
             state.token = localStorage.getItem('gen_id') || '';
+            if (!localStorage.getItem('gen_id')) {
+                localStorage.removeItem('SUID');
+            }
         },
         saveToken(state, data) {
             state.token = data;
@@ -45,6 +48,7 @@ export default new Vuex.Store({
                     localStorage.setItem('SUID', decoded.id);
                 }).catch((err) => {
                     localStorage.removeItem('gen_id');
+                    localStorage.removeItem('SUID');
                     // 跳转到首页
                     window.location.href = '/';
                 })

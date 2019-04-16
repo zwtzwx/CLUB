@@ -14,6 +14,10 @@ exports.rsaDecrypt = (keys) => {
     }, buf);
     let str = decrypted.toString('utf-8');
     let index = str.indexOf('@#*');
+    if (index === -1) {
+        // 注册时，只加密了密码
+        return [str]
+    }
     return [str.slice(0, index), str.slice(index + 3)];
 }
 

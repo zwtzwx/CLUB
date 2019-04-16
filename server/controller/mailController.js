@@ -2,7 +2,7 @@ const nodeMailer = require('nodemailer');
 const config = require('../config');
 const ejs = require('ejs');
 const path = require('path');
-
+const Mail = require('../tools/mail');
 
 
 // 邮件传输方式
@@ -65,7 +65,7 @@ exports.sendMail = async(req, res) => {
 // 渲染邮件模板
 const renderEmail = function (baseURL, mail) {
   // 根据当前时间戳加密
-  let code = aseEncrypt(Date.now().toString(), config.appKey);
+  let code = Mail.aseEncrypt(Date.now().toString(), config.appKey);
   return new Promise((resolve, reject) => {
     ejs.renderFile(path.resolve(__dirname, '../view/email.ejs'), {
       url: `${baseURL}/#/signup?code=${code}&email=${mail}`

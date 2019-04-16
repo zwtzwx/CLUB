@@ -65,9 +65,10 @@ exports.userRegister = async (userInfo) => {
   if (name) throw new Error('用户名已存在');
 
   // 用私钥解密密码，将解密后的密码加盐后存储在数据库
+  console.log(userInfo.password)
   let [password] = Crypto.rsaDecrypt(userInfo.password);
-  password = Crypto.hmacEncrypt(password);
   console.log(password);
+  password = Crypto.hmacEncrypt(password);
   return User.create({
     name: userInfo.name,
     password: password,
@@ -85,6 +86,7 @@ exports.userLogin = async (userKey) => {
 
   // 解密登陆用户信息
   let [loginName, loginPasswd] = Crypto.rsaDecrypt(userKey);
+  // console.log(loginName, loginPasswd)
   let result = await User.findOne({
     where: {
       [Op.or]: [
@@ -97,6 +99,7 @@ exports.userLogin = async (userKey) => {
   if (result) {
     // 将铭文密码加盐加密与数据库中的密码比对
     loginPasswd = Crypto.hmacEncrypt(loginPasswd);
+    console.log(loginPasswd, result.dataValues.password)
     if (loginPasswd !== result.dataValues.password) {
       throw new Error('密码不正确');
     }
@@ -104,6 +107,21 @@ exports.userLogin = async (userKey) => {
   } else {
     throw new Error('用户名不正确');
   }
+}
+
+exports.getTopIntegray = async () => {
+  let result = await User.findAll({
+    order: [
+      ['integray', 'DESC']
+    ],
+    limit: 10,
+    attributes: ['name', 'integray']
+  });
+  let list = [];
+  result.forEach((item) => {
+    list.push(item.dataValues);
+  }) 
+  return list;
 }
 
 /**

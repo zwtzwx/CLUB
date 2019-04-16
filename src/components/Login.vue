@@ -11,7 +11,7 @@
           <el-input placeholder="请输入用户名或邮箱" autofocus v-model="loginInfo.name"></el-input>
         </el-form-item>
         <el-form-item>
-          <el-input placeholder="密码" type="password" v-model="loginInfo.password"></el-input>
+          <el-input placeholder="密码" type="password" v-model="loginInfo.password" @keyup.enter.native="signIn"></el-input>
         </el-form-item>
         <el-button type="primary" class="btn" @click="signIn">登录</el-button>
       </el-form>
@@ -25,7 +25,7 @@
         <el-form-item>
           <el-input placeholder="请输入邮箱" 
           type="email" v-model="registerMail" autofocus
-          @input="checkMail"></el-input>
+          @input="checkMail" @keyup.enter.native="signUp"></el-input>
         </el-form-item>
         <el-button type="primary" class="btn" :disabled="correctMail" @click="signUp">注册</el-button>
       </el-form>

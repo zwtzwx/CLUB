@@ -1,18 +1,26 @@
 <template>
   <div class="right">
+    <!-- 未登录时显示登录注册、登陆后显示用户信息 -->
     <div class="section auth-section">
       <div  v-if="!authID">
         <div class="title">一个分享和求知的社区</div>
-        <div class="select">您可以<a href="#">登录</a>或<a href="#">注册</a></div>
+        <div class="select">您可以<a href="#" @click="onSign(1)">登录</a>或<a href="#" @click="onSign(0)">注册</a></div>
       </div>
       <div v-else>
-        <p class="title">个人信息</p>
+        <div class="title">个人信息</div>
         <div class="user">
-          <div><span class="headpic"></span><span class="user-name"></span></div>
-          <div>积分：</div>
-          <div></div>
+          <div>
+            <span class="headpic"><img :src="`${$baseURL}/public/images/${userInfo.pic}`" alt=""></span>
+            <span class="user-name">{{ userInfo.name }}</span>
+          </div>
+          <div>积分：{{ userInfo.integray }}</div>
+          <div>"{{ userInfo.descirpt }}"</div>
         </div>
       </div>
+    </div>
+    <!-- 发布帖子，只在登录的情况下显示 -->
+    <div class="section" v-if="authID">
+      <el-button type="primary" plain size="small" @click="topicAdd">发布话题</el-button>
     </div>
     <div class="section">
       <div class="top">最热标签</div>
@@ -27,50 +35,71 @@
     </div>
     <div class="section">
        <div class="top">积分排行榜</div>
-       <div class="top-item" v-for="item in 10" :key="item">
-         <span class="integral">21360</span>
-         <span class="name">leapon</span>
+       <div class="integral-item" v-for="(item, index) in integrayList" :key="index">
+         <span class="integral">{{ item.integray }}</span>
+         <span class="name">{{ item.name }}</span>
        </div>
     </div>
   </div>
 </template>
 <script>
+import EditLogin from '@/lib/proxy/login';
 export default {
   data() {
     return {
       userInfo: {
-        id: '',  // 用户 ID,
+        // id: '',  // 用户 ID,
         name: '',  // 用户名
         pic: '',  // 用户头像
         integray: 0,  // 用户积分
         descirpt: ''  // 用户个性签名
-      }
+      },
+      integrayList: []  // 积分排行数组
     }
   },
   mounted() {
     // 如果用户已登录，获取用于信息
-    if (localStorage.getItem('SUID')) {
-      console.log(true)
+    if (this.authID) {
       this.getUserInfo();
     }
+    this.getIntegrayList();
   },
   methods: {
     // 根据用户 ID 获取用户信息
     getUserInfo () {
       this.$form.get('/user/user-info', {
         params: {
-          id: localStorage.getItem('SUID')
+          id: this.authID
         }
       }).then((res) => {
-        if (ret) {
-          this.userInfo.id = res.data;
+        if (res.ret) {
+          this.userInfo.name = res.data.name;
+          this.userInfo.integray = res.data.integray || 0;
+          this.userInfo.pic = res.data.pic || 'default-avatar.svg';
+          this.userInfo.descirpt = res.data.descirpt || '这个人没留下个性签名！';
         }
       })
+    },
+    // 获取积分排行榜
+    getIntegrayList () {
+      this.$form('client/integray').then((res) => {
+        if (res.ret) {
+          this.integrayList = res.data;
+        }
+      })
+    },
+    // 发布话题
+    topicAdd () {
+      this.$router.push({ name: 'topicadd' });
+    },
+    // 登录、注册
+    onSign (type) {
+      EditLogin(type);
     }
   },
   computed: {
     authID () {
-      return this.$store.state.user.id || '';
+      return localStorage.getItem('SUID') || '';
     }
   }
 }
@@ -108,13 +137,26 @@ export default {
     margin: 5px 5px;
     cursor: pointer;
   }
-  .top-item {
+  .integral-item {
     line-height: 28px;
     font-size: 14px;
     color: $gray;
   }
   .integral {
     margin-right: 8px;
+  }
+  .headpic {
+    display: table-cell;
+    width: 50px;
+    height: 50px;
+    img {
+      width: 100%;
+    }
+  }
+  .user-name {
+    display: table-cell;
+    vertical-align: middle;
+    padding-left: 20px;
   }
   // .el-form-item {
   //   margin-bottom: 10px;

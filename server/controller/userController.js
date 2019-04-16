@@ -30,8 +30,11 @@ exports.register = (req, res) => {
   }
 }
 
+/**
+ * 用户登录
+ * @param req.body.userKey  'name@#*password' 形式的密文
+ */
 exports.login = async (req, res) => {
-  // `name@password` 形式的密文
   let userKey = req.body.userKey;
   try {
     let info = await User.userLogin(userKey);
@@ -57,6 +60,7 @@ exports.login = async (req, res) => {
 }
 
 /**
+ * 获取用户信息
  * @param req.query.id  用户 ID
  */
 exports.getUserInfo = async(req, res) => {
@@ -73,4 +77,21 @@ exports.getUserInfo = async(req, res) => {
   } else {
 
   }
+}
+
+exports.TopIntegray = async(req, res) => {
+  try {
+    let integrayList = await User.getTopIntegray();
+    res.json({
+      data: integrayList,
+      msg: '',
+      ret: 1
+    })
+  }catch (e) {
+    res.json({
+      msg: e,
+      ret: 0
+    })
+  }
+
 }

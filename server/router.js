@@ -21,4 +21,7 @@ router.post('/user/signin', userControl.login);
 
 // 根据用户 ID 获取用户信息
 router.get('/user/user-info', userControl.getUserInfo);
+
+// 获取积分排行榜
+router.get('/client/integray', userControl.TopIntegray);
 module.exports = router;
