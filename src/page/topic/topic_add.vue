@@ -19,31 +19,27 @@
                 </el-form-item>
                  <!-- 内容 -->
                 <el-form-item prop="content">
-                    <quill-editor v-model="topicContent.content"
-                    @change="onEditorChange($event)">
-                    </quill-editor> 
-                    <el-upload
-                        action="http://localhost:3000/images"
-                        :data="uploadData"
-                        :before-upload="beforeUpload"
-                        style="display:none"
-                        :on-success="uploadSuccess">    
-                    </el-upload>
+                    <mavon-editor
+                        ref="md"
+                        class="editor"
+                        defaultOpen="edit"
+                        @imgAdd="imgAdd"
+                        v-model="topicContent.content"
+                        :toolbars="toolbar"></mavon-editor>
                 </el-form-item>
                 <!-- 提交 -->
                 <el-form-item>
-                     <el-button plain>提交</el-button>
+                     <el-button type="primary" @click="saveTopic">提交</el-button>
                 </el-form-item>
             </el-form>
         </div>
     </div>
 </template>
 <script>
-import 'quill/dist/quill.bubble.css';
-import 'quill/dist/quill.core.css';
-import 'quill/dist/quill.snow.css';
-// import { quillEditor } from 'vue-quill-editor';
+import 'mavon-editor/dist/css/index.css'
 import MyHeader from '@/components/header';
+import toolBar from '@/lib/mixin/toolbar.js';
+import { imgURL } from '@/lib/axios/base_url.js';
 import { Select, Option, Upload } from 'element-ui';
 export default {
     data() {
@@ -67,22 +63,27 @@ export default {
                 plate: '',
                 title: '',
                 content: ''
-            },
-            uploadData: {
-
             }
         }
     },
+    mixins: [toolBar],
     methods: {
-        onEditorChange({ html }) {
-            console.log(html);
+        // 图片上传
+        imgAdd (pos, file) {
+            this.$json.post(`/images/uploading`, {
+                image: file.miniurl,   // base64 格式的图片
+                name: `${file.name}`
+            }).then(res => {
+                if (res.ret) {
+                    this.$refs.md.$img2Url(pos, `${imgURL}/${res.data}`);
+                }
+            })
         },
-        // 上传前
-        beforeUpload (file) {
-
-        },
-        // 上传成功后
-        uploadSuccess () {}
+        // 发表评论
+        saveTopic () {
+            console.log(this.topicContent.content);
+            
+        }
     },
     components: {
         MyHeader,
@@ -96,8 +97,11 @@ export default {
 .topic-add {
     background-color: #fff;
     padding: 20px;
+    .editor {
+        min-height: 600px;
+    }
 }
-.ql-container {
-    height: 400px;
-}
+// .ql-container {
+//     height: 400px;
+// }
 </style>

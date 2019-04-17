@@ -36,6 +36,7 @@ export default new Vuex.Store({
             state.user.id = user.id;
             state.user.name = user.name;
             state.user.headpic = user.pic;
+            localStorage.setItem('SUID', user.id);
         }
     },
     actions: {

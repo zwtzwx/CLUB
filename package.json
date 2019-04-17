@@ -51,13 +51,14 @@
     "express-jwt": "^5.3.1",
     "jsencrypt": "^3.0.0-rc.1",
     "jsonwebtoken": "^8.5.0",
+    "mavon-editor": "^2.7.3",
     "mysql2": "^1.6.5",
     "nodemailer": "^5.1.1",
     "qs": "^6.6.0",
     "sequelize": "^4.43.0",
     "sequelize-cli": "^5.4.0",
     "vue": "^2.6.8",
-    "vue-quill-editor": "^3.0.6",
+    "vue-markdown": "^2.2.4",
     "vue-router": "^3.0.2",
     "vuex": "^3.1.0"
   }

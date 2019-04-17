@@ -2,6 +2,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const mailControl = require('./controller/mailController');
 const userControl = require('./controller/userController');
+const topicControl = require('./controller/topicController');
 const router = express.Router();
 router.use(bodyParser.json());
 router.use(bodyParser.urlencoded({extended: false}));
@@ -24,4 +25,11 @@ router.get('/user/user-info', userControl.getUserInfo);
 
 // 获取积分排行榜
 router.get('/client/integray', userControl.TopIntegray);
+
+// 图片上传
+router.post('/images/uploading', topicControl.uploadImage);
+
+
+// 发表话题
+router.post('/topic');
 module.exports = router;

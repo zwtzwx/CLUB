@@ -87,7 +87,8 @@ export default {
           this.$store.commit('saveUserInfo', res.data.info);
           this.loginVisible = false;
           // 跳转到首页
-          this.$router.replace({name: 'home'});
+          // this.$router.replace({name: 'home'});
+          window.location.href = '/';
         }
       })
     },

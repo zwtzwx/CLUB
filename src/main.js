@@ -1,7 +1,8 @@
 import Vue from 'vue';
 import axios from './lib/axios';
 import VueRouter from 'vue-router';
-import VueQuillEditor from 'vue-quill-editor';
+// import VueQuillEditor from 'vue-quill-editor';
+import MavonEditor from 'mavon-editor'
 import router from './router';
 import store from './store';
 import baseURL from './lib/axios/base_url';
@@ -12,7 +13,7 @@ import {
 
 Vue.use(VueRouter);
 Vue.use(axios);
-
+Vue.use(MavonEditor);
 Vue.use(Input);
 Vue.use(Form);
 Vue.use(FormItem);
@@ -33,12 +34,12 @@ const toolBarOption = [
   ['image', 'clean']
 ]
 
-Vue.use(VueQuillEditor, {
-  modules: {
-    toolbar: toolBarOption
-  },
-  theme: 'snow'
-});
+// Vue.use(VueQuillEditor, {
+//   modules: {
+//     toolbar: toolBarOption
+//   },
+//   theme: 'snow'
+// });
 Vue.prototype.$message = Message;
 Vue.prototype.$baseURL = baseURL;
 // 初始化 TOKEN

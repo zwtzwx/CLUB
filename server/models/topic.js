@@ -8,6 +8,10 @@ const Topic = sequelize.define('topic', {
         primaryKey: true,
         autoIncrement: true
     },
+    section_id: {              // 分类 ID
+        type: Sequelize.INTEGER,   
+        allowNull: false
+    },
     user_id: {                  // 用户 ID
         type: Sequelize.INTEGER,   
         allowNull: false
@@ -19,12 +23,23 @@ const Topic = sequelize.define('topic', {
     content: {   // 帖子内容
         type: Sequelize.TEXT
     },
-    recommend: {   // 是否推荐
+    hot: {   // 是否热帖
         type: Sequelize.INTEGER,
         defaultValue: 0
     }, 
     created: {   // 发表时间
+        field: 'created_at',
         type: Sequelize.DATE
+    },
+    comment: {           // 评论数
+        field: 'commment_num',
+        type: Sequelize.INTEGER,
+        defaultValue: 0
+    },
+    scan: {        // 浏览数
+        field: 'scan_num',
+        type: Sequelize.INTEGER,
+        defaultValue: 0
     }
 });
 

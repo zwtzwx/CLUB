@@ -39,6 +39,12 @@ const User = sequelize.define('user', {
   },
   descirpt: {
     type: Sequelize.STRING
+  },
+  created_at: {
+    type: Sequelize.DATE
+  },
+  login_at: {
+    type: Sequelize.DATE
   }
 });
 
