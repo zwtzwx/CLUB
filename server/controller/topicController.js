@@ -33,7 +33,7 @@ exports.uploadImage = ((req, res) => {
   }
 });
 
-exports.topicAdd((req, res) => {
+exports.topicAdd = ((req, res) => {
   const topic = req.body;
   
 })
