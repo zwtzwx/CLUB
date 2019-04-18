@@ -44,7 +44,58 @@
             <span>回复</span>
           </div>
 
-          <div class="comment__cell">aaa</div>
+          <div class="comment__cell reply_area reply_item" reply_id="5bd5bebea66f05ec3b4fec04" reply_to_id="" id="5bd5bebea66f05ec3b4fec04">
+            <div class="author_content">
+              <a href="/user/dangyanglim" class="user_avatar">
+              <img src="https://avatars2.githubusercontent.com/u/16640185?v=4&amp;s=120" title="dangyanglim"></a>
+
+              <div class="user_info">
+                <a class="dark reply_author" href="/user/dangyanglim">dangyanglim</a>
+                <a class="reply_time" href="#5bd5bebea66f05ec3b4fec04">4楼•6 个月前</a>
+                
+              </div>
+              <div class="user_action">
+                <span>
+                  <i class="fa up_btn           fa-thumbs-o-up" title="喜欢"></i>
+                  <span class="up-count">
+                    15
+                  </span>
+                </span>
+        
+                <span>
+                  
+                    <i class="fa fa-reply reply2_btn" title="回复"></i>
+                  
+                </span>
+              </div>
+
+            </div>
+            <div class="reply_content from-dangyanglim">
+              <div class="markdown-text"><p>想说点什么</p></div>
+            </div>
+            <div class="clearfix">
+              <div class="reply2_area">
+                
+                <form class="reply2_form" action="/5bd4772a14e994202cd5bdb7/reply" method="post">
+                  <input type="hidden" name="_csrf" value="dSSiLzzp--BEy62mrD5I2KhMOZhUmPds39HM">
+                  <input type="hidden" name="reply_id" value="5bd5bebea66f05ec3b4fec04">
+
+                  <div class="markdown_editor in_editor">
+                    <div class="markdown_in_editor">
+                      <textarea class="span8 editor reply_editor" id="reply2_editor_5bd5bebea66f05ec3b4fec04" name="r_content" rows="4" style="display: none;"></textarea><div class="editor-toolbar"><a class="eicon-bold"></a><a class="eicon-italic"></a><i class="separator">|</i><a class="eicon-quote"></a><a class="eicon-unordered-list"></a><a class="eicon-ordered-list"></a><i class="separator">|</i><a class="eicon-link"></a><a class="eicon-image"></a><i class="separator">|</i><a class="eicon-info" href="http://lab.lepture.com/editor/markdown" target="_blank"></a><a class="eicon-preview"></a><a class="eicon-fullscreen"></a></div><div class="CodeMirror cm-s-paper"><div style="overflow: hidden; position: relative; width: 3px; height: 0px;"><textarea autocorrect="off" autocapitalize="off" spellcheck="false" tabindex="0" style="position: absolute; padding: 0px; width: 1000px; height: 1em; outline: none; font-size: 4px;"></textarea></div><div class="CodeMirror-hscrollbar"><div style="height: 1px;"></div></div><div class="CodeMirror-vscrollbar"><div style="width: 1px;"></div></div><div class="CodeMirror-scrollbar-filler"></div><div class="CodeMirror-gutter-filler"></div><div class="CodeMirror-scroll" tabindex="-1"><div class="CodeMirror-sizer" style="min-width: 33px;"><div style="position: relative;"><div class="CodeMirror-lines"><div style="position: relative; outline: none;"><div class="CodeMirror-measure"><pre>&nbsp;<span>​</span></pre></div><div style="position: relative; z-index: 1;"></div><div class="CodeMirror-code"></div><div class="CodeMirror-cursor">&nbsp;</div><div class="CodeMirror-cursor CodeMirror-secondarycursor">&nbsp;</div></div></div></div></div><div style="position: absolute; height: 30px; width: 1px;"></div><div class="CodeMirror-gutters" style="display: none;"></div></div></div>
+
+                      <div class="editor_buttons">
+                        <input class="span-primary reply2_submit_btn submit_btn" type="submit" data-id="5bd5bebea66f05ec3b4fec04" data-loading-text="回复中.." value="回复">
+                      </div>
+                    </div>
+
+                  </div>
+
+                </form>
+                
+              </div>
+            </div>
+          </div>
             
 
       </div>
@@ -214,9 +265,22 @@ main {
       height: 100px;
       color: $nav-gray;
       padding: 10px;
+      
       // border-bottom: 20px solid $border-color;
-     
+      border-bottom: 1px solid #f0f0f0;
       font-size: 14px;
+      .author_content .user_avatar {
+        display: inline-block;
+        float: left;
+        }
+      img {
+        width: auto\9;
+        height: auto;
+        max-width: 100%;
+        vertical-align: middle;
+        border: 0;
+        // -ms-interpolation-mode: bicubic;
+        }
       }
 }
 
