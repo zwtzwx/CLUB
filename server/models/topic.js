@@ -23,7 +23,7 @@ const Topic = sequelize.define('topic', {
     content: {   // 帖子内容
         type: Sequelize.TEXT
     },
-    hot: {   // 是否热帖
+    recommend: {   // 是否热帖
         type: Sequelize.INTEGER,
         defaultValue: 0
     }, 
@@ -32,7 +32,7 @@ const Topic = sequelize.define('topic', {
         type: Sequelize.DATE
     },
     comment: {           // 评论数
-        field: 'commment_num',
+        field: 'comment_num',
         type: Sequelize.INTEGER,
         defaultValue: 0
     },
@@ -43,3 +43,19 @@ const Topic = sequelize.define('topic', {
     }
 });
 
+// 发表话题
+// topic : {
+//     user_id,
+//     plate,
+//     title,
+//     content
+// }
+exports.topicAdd = (topic) => {
+    return Topic.create({
+        section_id: Number.parseInt(topic.plate),
+        user_id: Number.parseInt(topic.user_id),
+        title: topic.title,
+        content: topic.content,
+        created: new Date()
+    })
+}

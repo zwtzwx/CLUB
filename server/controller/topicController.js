@@ -1,6 +1,7 @@
 const fs = require('fs');
 const path = require('path');
 const crypto = require('crypto');
+const Topics = require('../models/topic');
 
 /**
  *  图片上传
@@ -33,7 +34,29 @@ exports.uploadImage = ((req, res) => {
   }
 });
 
-exports.topicAdd = ((req, res) => {
+/**
+ *  用户发表话题
+ *  @param
+ *  id  用户id
+ *  plate  板块id
+ *  title  话题标题
+ *  content  话题内容
+ */
+exports.topicAdd = (req, res) => {
   const topic = req.body;
-  
-})
+  console.log(topic);
+  try {
+    Topics.topicAdd(topic).then(() => {
+      res.json({
+        ret: 1,
+        data: '',
+        msg: '发表成功'
+      })
+    })
+  }catch(err) {
+    res.json({
+      ret: 0,
+      msg: err.message
+    })
+  } 
+}

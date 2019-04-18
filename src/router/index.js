@@ -25,7 +25,7 @@ const routes = [
     component: Profile
   },
   {
-    path: '/topic/add',
+    path: '/topic/add/:id',
     name: 'topicadd',
     component: TopicAdd
   }

@@ -29,7 +29,7 @@
                 </el-form-item>
                 <!-- 提交 -->
                 <el-form-item>
-                     <el-button type="primary" @click="saveTopic">提交</el-button>
+                     <el-button type="primary" @click="saveTopic" :loading="btnLoading">提交</el-button>
                 </el-form-item>
             </el-form>
         </div>
@@ -63,7 +63,8 @@ export default {
                 plate: '',
                 title: '',
                 content: ''
-            }
+            },
+            btnLoading: false
         }
     },
     mixins: [toolBar],
@@ -81,8 +82,19 @@ export default {
         },
         // 发表评论
         saveTopic () {
-            console.log(this.topicContent.content);
-            
+            this.btnLoading = true;
+            this.topicContent['user_id'] = this.$route.params.id;
+            this.$json.post('topic', {...this.topicContent}).then(res => {
+                if (res.ret) {
+                    this.$message({
+                        message: res.msg,
+                        type: 'success'
+                    })
+                    this.$router.push({ name: 'home' });
+                }
+            }).finally(() => {
+                this.btnLoading = false
+            })
         }
     },
     components: {
@@ -101,7 +113,4 @@ export default {
         min-height: 600px;
     }
 }
-// .ql-container {
-//     height: 400px;
-// }
 </style>

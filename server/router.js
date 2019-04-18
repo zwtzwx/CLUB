@@ -31,5 +31,5 @@ router.post('/images/uploading', topicControl.uploadImage);
 
 
 // 发表话题
-router.post('/topic');
+router.post('/topic', topicControl.topicAdd);
 module.exports = router;

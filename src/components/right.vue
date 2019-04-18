@@ -90,7 +90,7 @@ export default {
     },
     // 发布话题
     topicAdd () {
-      this.$router.push({ name: 'topicadd' });
+      this.$router.push({ name: 'topicadd', params: { id: this.authID } });
     },
     // 登录、注册
     onSign (type) {
