@@ -12,6 +12,23 @@ module.exports = {
         isBetaMember: false
       }], {});
     */
+    return queryInterface.bulkInsert('sections', [
+      {
+        id: 1,
+        section_name: '分享',
+        created_at: new Date()
+      },
+      {
+        id: 2,
+        section_name: '问答',
+        created_at: new Date()
+      },
+      {
+        id: 3,
+        section_name: "招聘",
+        created_at: new Date()
+      }
+    ])
   },
 
   down: (queryInterface, Sequelize) => {
@@ -22,5 +39,6 @@ module.exports = {
       Example:
       return queryInterface.bulkDelete('People', null, {});
     */
+    return queryInterface.bulkDelete('sections', null, {});
   }
 };

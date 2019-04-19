@@ -1,7 +1,6 @@
 const Sequelize = require('sequelize');
 const sequelize = require('../../tools/db');
 const Section = require('./section');
-const User = require('./user');
 // 帖子
 const Topic = sequelize.define('topic', {
     id: {
@@ -51,8 +50,7 @@ const Topic = sequelize.define('topic', {
         defaultValue: 0
     }
 });
-// Topic.belongsTo(Section, {foreignKey: 'section_id', sourceKey: 'id'});
-Topic.belongsTo(User, {foreignKey: 'user_id', sourceKey: 'id'});
+
 
 // Topic.sync({ force: false });
 module.exports = Topic;

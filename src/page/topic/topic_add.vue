@@ -92,7 +92,9 @@ export default {
                     })
                     this.$router.push({ name: 'home' });
                 }
+                this.btnLoading = false
             }).finally(() => {
+                console.log(11)
                 this.btnLoading = false
             })
         }

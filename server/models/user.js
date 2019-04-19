@@ -9,7 +9,7 @@ const Op = Sequelize.Op;
 // 如果数据库中表已经存在，那么没必要设为 true
 // User.sync({ force: false });
 
-
+DB.User.hasMany(DB.Topic, {foreignKey: 'user_id', sourceKey: 'id'});
 
 /**
  * userInfo 用户信息
@@ -35,7 +35,8 @@ exports.userRegister = async (userInfo) => {
   return DB.User.create({
     name: userInfo.name,
     password: password,
-    email: userInfo.email
+    email: userInfo.email,
+    created: new Date()
   });
   
 }
@@ -66,12 +67,21 @@ exports.userLogin = async (userKey) => {
     if (loginPasswd !== result.dataValues.password) {
       throw new Error('密码不正确');
     }
+    // 更新最后登录时间
+    DB.User.update({
+      login: new Date(),
+    }, {
+      where: {
+        id: result.dataValues.id
+      }
+    });
     return result.dataValues;
   } else {
     throw new Error('用户名不正确');
   }
 }
 
+// 获取积分排名列表
 exports.getTopIntegray = async () => {
   let result = await DB.User.findAll({
     order: [
@@ -94,6 +104,18 @@ exports.getTopIntegray = async () => {
  */
 const findUser = (key, value) => {
   return DB.User.findOne({ where: { [key]: value } });
+}
+
+// 添加积分 integral id
+exports.updateIntegral = (id, count) =>{
+  return DB.User.findById(id).then((user) => {
+    return user.increment('integral', { by: count })
+  })
+  // return DB.User.update({ integral: integral+count }, {
+  //   where: {
+  //     id
+  //   }
+  // })
 }
 
 exports.findUser = findUser;

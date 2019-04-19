@@ -12,13 +12,13 @@
     <!-- 文章显示 -->
     <div class="article-list">
       <ul>
-        <li class="article-item" v-for="item in topicList" :key="item">
-          <div class="title">TypeScript 初学</div>
+        <li class="article-item" v-for="item in topicList" :key="item.id">
+          <div class="title">{{ item.title }}</div>
           <div class="meta-row">
-            <span class="hot">推荐</span>
-            <span class="username">sponing</span>
+            <span class="hot" v-if="item.recommend">推荐</span>
+            <span class="username">{{ item.user.name }}</span>
             <span class="time">6天前</span>
-            <span class="tag">JavaScript</span>
+            <!-- <span class="tag">JavaScript</span> -->
           </div>
           <!-- 留言 -->
           <div class="count">
@@ -47,7 +47,8 @@ export default {
       page_params: {
         page: '',
         size: 20,
-        plate: ''
+        section: '',
+        total: 0
       }
     }
   },
@@ -59,10 +60,15 @@ export default {
     getTopicList () {
       this.$form.get(`topic`, {
         params: {
-          ...this.page_params
+          page: this.page_params.page,
+          size: this.page_params.size,
+          section: this.page_params.section
         }
       }).then(res => {
-
+        if (res.ret) {
+          this.page_params.total = res.data.total || 0
+          this.topicList = res.data.data
+        }
       })
     }
   }

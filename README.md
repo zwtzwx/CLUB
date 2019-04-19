@@ -38,6 +38,17 @@ db:migrate:undo:all
 ``` shell
  node_modules/.bin/sequelize seed:generate --name demo-user
 ```
+7. 撤销种子
+``` shell
+# 撤销最近的种子
+node_modules/.bin/sequelize db:seed:undo
+# 撤销所有的种子
+node_modules/.bin/sequelize db:seed:undo:all
+```
+8. 运行种子
+``` shell
+node_modules/.bin/sequelize db:seed:all
+```
 ## 启动服务
 ``` shell
 # 启动服务器

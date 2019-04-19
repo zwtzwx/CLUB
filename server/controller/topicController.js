@@ -35,7 +35,7 @@ exports.uploadImage = ((req, res) => {
 });
 
 /**
- *  用户发表话题
+ *  用户发表话题  发表话题成功后添加 10 积分
  *  @param
  *  id  用户id
  *  plate  板块id
@@ -66,7 +66,7 @@ exports.topicAdd = (req, res) => {
  *  @param
  *    page   当前页  默认为1
  *    size   固定 20
- *    palte  分类板块
+ *    section  分类板块
  */
 exports.getTopicList = async(req, res) => {
   let params = req.query;
@@ -76,11 +76,13 @@ exports.getTopicList = async(req, res) => {
   params.size = Number.parseInt(params.size);
   try {
     let result = await Topics.getTopics(params);
-    console.log(result)
     res.json({
       ret: 1,
       msg: 1,
-      data: result
+      data: {
+        total: result.count,
+        data: result.rows
+      }
     })
   }catch(err) {
     res.json({

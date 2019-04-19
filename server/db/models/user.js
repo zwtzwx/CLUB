@@ -1,7 +1,6 @@
 
 const Sequelize = require('sequelize');
 const sequelize = require('../../tools/db');
-const Topic = require('./topic');
 // 定义 Model
 const User = sequelize.define('user', {
     id: {
@@ -42,6 +41,6 @@ const User = sequelize.define('user', {
       field: 'login_at'
     }
 });
-User.hasMany(Topic, {foreignKey: 'user_id', sourceKey: 'id'});
+
 // User.sync({ force: false });
 module.exports = User;

@@ -27,7 +27,7 @@
           type="email" v-model="registerMail" autofocus
           @input="checkMail" @keyup.enter.native="signUp"></el-input>
         </el-form-item>
-        <el-button type="primary" class="btn" :disabled="correctMail" @click="signUp">注册</el-button>
+        <el-button type="primary" class="btn" :disabled="correctMail" @click="signUp" :loading="btnLoading">注册</el-button>
       </el-form>
       <p class="other link" @click="isLogin = true">已有账号？登录</p>
     </div>
@@ -47,13 +47,15 @@ export default {
         password: ''
       },
       registerMail: '',
-      correctMail: true
+      correctMail: true,
+      btnLoading: false
     }
   },
   methods: {
     // 注册
     signUp () {
       // 获取验证码
+      this.btnLoading = true;
       this.$json.post('/mail/send', {
         mail: this.registerMail
       }).then((res) => {
@@ -62,6 +64,8 @@ export default {
           type: 'success',
         });
         this.loginVisible =false;
+      }).finally(() => {
+        this.btnLoading = true;
       })
     },
     // 登录

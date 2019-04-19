@@ -13,7 +13,7 @@
             <span class="headpic"><img :src="`${$baseURL}/public/images/${userInfo.pic}`" alt=""></span>
             <span class="user-name">{{ userInfo.name }}</span>
           </div>
-          <div>积分：{{ userInfo.integray }}</div>
+          <div>积分：{{ userInfo.integral }}</div>
           <div>"{{ userInfo.descirpt }}"</div>
         </div>
       </div>
@@ -36,7 +36,7 @@
     <div class="section">
        <div class="top">积分排行榜</div>
        <div class="integral-item" v-for="(item, index) in integrayList" :key="index">
-         <span class="integral">{{ item.integray }}</span>
+         <span class="integral">{{ item.integral }}</span>
          <span class="name">{{ item.name }}</span>
        </div>
     </div>
@@ -51,7 +51,7 @@ export default {
         // id: '',  // 用户 ID,
         name: '',  // 用户名
         pic: '',  // 用户头像
-        integray: 0,  // 用户积分
+        integral: 0,  // 用户积分
         descirpt: ''  // 用户个性签名
       },
       integrayList: []  // 积分排行数组
@@ -74,7 +74,7 @@ export default {
       }).then((res) => {
         if (res.ret) {
           this.userInfo.name = res.data.name;
-          this.userInfo.integray = res.data.integray || 0;
+          this.userInfo.integral = res.data.integral || 0;
           this.userInfo.pic = res.data.pic || 'default-avatar.svg';
           this.userInfo.descirpt = res.data.descirpt || '这个人没留下个性签名！';
         }
