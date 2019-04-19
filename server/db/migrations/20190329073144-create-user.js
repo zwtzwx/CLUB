@@ -12,38 +12,40 @@ module.exports = {
     return queryInterface.createTable('users', { 
       id: {
         type: Sequelize.INTEGER,
-        field: 'user_id',   // id 映射到数据表中的 user_id 字段
         primaryKey: true,   // 定义主键
         autoIncrement: true  // 定义自增字段
       },
       name: {
         type: Sequelize.STRING,
-        field: 'user_name',
         unique: true   // 定义唯一性约束
       },
       password: {
         type: Sequelize.STRING,
-        field: 'user_password'
       },
       email: {
         type: Sequelize.STRING,
-        field: 'user_email'
       },
-      integray: {
+      integral: {
         type: Sequelize.INTEGER,
-        field: 'user_integral',
         defaultValue: 0  // 定义默认值
       },
       admin: {
-        type: Sequelize.BOOLEAN,
-        defaultValue: false
+        type: Sequelize.TINYINT,
+        defaultValue: 0
       },
       pic: {
         type: Sequelize.STRING,
-        field: 'user_pic'
       },
-      descirpt: {
+      descript: {
         type: Sequelize.STRING
+      },
+      created: {
+        type: Sequelize.DATE,
+        field: 'created_at'
+      },
+      login: {
+        type: Sequelize.DATE,
+        field: 'login_at'
       }
     });
   },

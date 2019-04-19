@@ -32,4 +32,7 @@ router.post('/images/uploading', topicControl.uploadImage);
 
 // 发表话题
 router.post('/topic', topicControl.topicAdd);
+
+// 获取话题列表
+router.get('/topic', topicControl.getTopicList);
 module.exports = router;

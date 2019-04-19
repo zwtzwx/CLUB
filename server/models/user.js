@@ -1,57 +1,14 @@
 const Sequelize = require('sequelize');
-const sequelize = require('../tools/db');
 const Crypto = require('../tools/crypto');
+const DB = require('../db/models');
 const Op = Sequelize.Op;
 
-// 定义 Model
-const User = sequelize.define('user', {
-  id: {
-    type: Sequelize.INTEGER,
-    field: 'user_id',   // id 映射到数据表中的 user_id 字段
-    primaryKey: true,   // 定义主键
-    autoIncrement: true  // 定义自增字段
-  },
-  name: {
-    type: Sequelize.STRING,
-    field: 'user_name',
-    unique: true   // 定义唯一性约束
-  },
-  password: {
-    type: Sequelize.STRING,
-    field: 'user_password'
-  },
-  email: {
-    type: Sequelize.STRING,
-    field: 'user_email'
-  },
-  integray: {
-    type: Sequelize.INTEGER,
-    field: 'user_integral',
-    defaultValue: 0  // 定义默认值
-  },
-  admin: {
-    type: Sequelize.BOOLEAN,
-    defaultValue: false 
-  },
-  pic: {
-    type: Sequelize.STRING,
-    field: 'user_pic'
-  },
-  descirpt: {
-    type: Sequelize.STRING
-  },
-  created_at: {
-    type: Sequelize.DATE
-  },
-  login_at: {
-    type: Sequelize.DATE
-  }
-});
 
 // 同步数据结构到数据库
 // 如果设置 force: true ，那么会先删除数据库已经存在的表，然后在创建新表
 // 如果数据库中表已经存在，那么没必要设为 true
 // User.sync({ force: false });
+
 
 
 /**
@@ -75,7 +32,7 @@ exports.userRegister = async (userInfo) => {
   let [password] = Crypto.rsaDecrypt(userInfo.password);
   console.log(password);
   password = Crypto.hmacEncrypt(password);
-  return User.create({
+  return DB.User.create({
     name: userInfo.name,
     password: password,
     email: userInfo.email
@@ -93,7 +50,7 @@ exports.userLogin = async (userKey) => {
   // 解密登陆用户信息
   let [loginName, loginPasswd] = Crypto.rsaDecrypt(userKey);
   // console.log(loginName, loginPasswd)
-  let result = await User.findOne({
+  let result = await DB.User.findOne({
     where: {
       [Op.or]: [
         { name: loginName },
@@ -116,12 +73,12 @@ exports.userLogin = async (userKey) => {
 }
 
 exports.getTopIntegray = async () => {
-  let result = await User.findAll({
+  let result = await DB.User.findAll({
     order: [
-      ['integray', 'DESC']
+      ['integral', 'DESC']
     ],
     limit: 10,
-    attributes: ['name', 'integray']
+    attributes: ['name', 'integral']
   });
   let list = [];
   result.forEach((item) => {
@@ -136,7 +93,7 @@ exports.getTopIntegray = async () => {
  * value 值
  */
 const findUser = (key, value) => {
-  return User.findOne({ where: { [key]: value } });
+  return DB.User.findOne({ where: { [key]: value } });
 }
 
 exports.findUser = findUser;

@@ -12,7 +12,7 @@
     <!-- 文章显示 -->
     <div class="article-list">
       <ul>
-        <li class="article-item" v-for="item in 20" :key="item">
+        <li class="article-item" v-for="item in topicList" :key="item">
           <div class="title">TypeScript 初学</div>
           <div class="meta-row">
             <span class="hot">推荐</span>
@@ -31,7 +31,7 @@
           background
           class="pagination"
           layout="prev, pager, next"
-          :page-size="20"
+          :page-size="page_params.size"
           :total="100">
         </el-pagination>
         </li>
@@ -41,7 +41,31 @@
 </template>
 <script>
 export default {
-  
+  data () {
+    return {
+      topicList: [],
+      page_params: {
+        page: '',
+        size: 20,
+        plate: ''
+      }
+    }
+  },
+  created() {
+    this.getTopicList();
+  },
+  methods: {
+    // 获取话题列表，默认获取 `全部` 下的话题
+    getTopicList () {
+      this.$form.get(`topic`, {
+        params: {
+          ...this.page_params
+        }
+      }).then(res => {
+
+      })
+    }
+  }
 }
 </script>
 <style lang="scss">

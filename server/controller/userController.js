@@ -10,6 +10,7 @@ exports.register = (req, res) => {
   try {
     // 先验证邮箱是否合法
     Mail.vertifyCode(userInfo.code);
+    console.log(12);
     User.userRegister(userInfo).then(() => {
       res.json({
         msg: '注册成功',

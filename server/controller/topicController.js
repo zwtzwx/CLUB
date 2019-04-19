@@ -60,3 +60,34 @@ exports.topicAdd = (req, res) => {
     })
   } 
 }
+
+/**
+ *  获取不同分类下的话题
+ *  @param
+ *    page   当前页  默认为1
+ *    size   固定 20
+ *    palte  分类板块
+ */
+exports.getTopicList = async(req, res) => {
+  let params = req.query;
+  if (!params.page) {
+    params.page = 1;
+  }
+  params.size = Number.parseInt(params.size);
+  try {
+    let result = await Topics.getTopics(params);
+    console.log(result)
+    res.json({
+      ret: 1,
+      msg: 1,
+      data: result
+    })
+  }catch(err) {
+    res.json({
+      data: '',
+      msg: err.message,
+      ret: 0
+    })
+  }
+  
+}

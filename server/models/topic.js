@@ -1,47 +1,9 @@
 const Sequelize = require('sequelize');
 const sequelize = require('../tools/db');
+const DB = require('../db/models');
+const Op = Sequelize.Op;
 
-// 帖子
-const Topic = sequelize.define('topic', {
-    id: {
-        type: Sequelize.INTEGER,
-        primaryKey: true,
-        autoIncrement: true
-    },
-    section_id: {              // 分类 ID
-        type: Sequelize.INTEGER,   
-        allowNull: false
-    },
-    user_id: {                  // 用户 ID
-        type: Sequelize.INTEGER,   
-        allowNull: false
-    },
-    title: {    // 帖子标题
-        type: Sequelize.STRING,
-        allowNull: false
-    },
-    content: {   // 帖子内容
-        type: Sequelize.TEXT
-    },
-    recommend: {   // 是否热帖
-        type: Sequelize.INTEGER,
-        defaultValue: 0
-    }, 
-    created: {   // 发表时间
-        field: 'created_at',
-        type: Sequelize.DATE
-    },
-    comment: {           // 评论数
-        field: 'comment_num',
-        type: Sequelize.INTEGER,
-        defaultValue: 0
-    },
-    scan: {        // 浏览数
-        field: 'scan_num',
-        type: Sequelize.INTEGER,
-        defaultValue: 0
-    }
-});
+
 
 // 发表话题
 // topic : {
@@ -51,11 +13,44 @@ const Topic = sequelize.define('topic', {
 //     content
 // }
 exports.topicAdd = (topic) => {
-    return Topic.create({
+    return DB.Topic.create({
         section_id: Number.parseInt(topic.plate),
         user_id: Number.parseInt(topic.user_id),
         title: topic.title,
         content: topic.content,
         created: new Date()
     })
+}
+
+// 获取话题列表
+// params = { page, size, plate }
+exports.getTopics = (params) => {
+    return DB.Topic.findAll({
+            attributes: [
+                'id',
+                'user_id',
+                'title',
+                'user_name',
+                'recommend',
+                'comment'
+            ],
+            include:[
+                {
+                    model: DB.User,
+                    where: {
+                        user_id: Sequelize.col('user.user_id')
+                    }
+                }
+            ],
+            offset: (params.page - 1) * params.size,
+            limit: params.size,
+            order: [
+                ['created', 'DESC']
+            ],
+            where: {
+                section_id: {
+                    [Op.like]: params.plate ? params.plate : '%'
+                }
+            }
+        })
 }
