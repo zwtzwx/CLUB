@@ -1,5 +1,5 @@
 <template>
-  <div class="right">
+  <div class="right main-right">
     <!-- 未登录时显示登录注册、登陆后显示用户信息 -->
     <div class="section auth-section">
       <div  v-if="!authID">
@@ -10,7 +10,7 @@
         <div class="title">个人信息</div>
         <div class="user">
           <div>
-            <span class="headpic"><img :src="`${$baseURL}/public/images/${userInfo.pic}`" alt=""></span>
+            <span class="headpic"><img src="../../asset/images/default-avatar.svg" alt=""></span>
             <span class="user-name">{{ userInfo.name }}</span>
           </div>
           <div>积分：{{ userInfo.integral }}</div>
@@ -105,12 +105,8 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
-@import '../sass/_variable.scss';
+@import '@/sass/_variable.scss';
 .right {
-  width: 270px;
-  float: left;
-  box-sizing: border-box;
-  margin-left: 20px;
   .section {
     background-color: #fff;
     padding: 10px;

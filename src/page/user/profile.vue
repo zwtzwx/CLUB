@@ -9,14 +9,14 @@
   </div>
 </template>
 <script>
-import MyRight from '@/components/right.vue';
+import MyRight from '../common/right.vue';
 export default {
   components: {
     MyRight
   }
 }
 </script>
-<style lang="scss" scoped>
+<style lang="scss">
 .profile {
   .left {
     background-color: #fff;

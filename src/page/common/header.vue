@@ -10,7 +10,7 @@
         <li v-else style="position:relative">
           <div class="dropdown">
             <div class="dropdown-link" @click="dropdown = !dropdown">
-              <img :src="`${$baseURL}/public/images/${headPic}`" class="headpic">
+              <img src="../../asset/images/default-avatar.svg" class="headpic">
               <i class="el-icon-arrow-down" style="font-size: 20px;"></i>
             </div>
             <div v-show="dropdown">
@@ -30,7 +30,7 @@
   </header>
 </template>
 <script>
-import editLogin from '../lib/proxy/login.js';
+import editLogin from '@/lib/proxy/login.js';
 import { mapState } from 'vuex';
 export default {
   data() {
@@ -62,8 +62,7 @@ export default {
 }
 </script>
 <style lang="scss">
-@import "../sass/_variable.scss";
-// @import "../sass/comment.scss";
+@import '@/sass/_variable.scss';
 header{
   height: 60px;
   background-color: #fff;

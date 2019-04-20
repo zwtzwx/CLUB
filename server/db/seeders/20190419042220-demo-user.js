@@ -20,7 +20,7 @@ module.exports = {
         email: "zwt123@bccto.me",
         integral: 0,
         admin: 0,
-        created: new Date()
+        created_at: new Date()
       }
     ], {});
   },

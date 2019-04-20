@@ -37,7 +37,7 @@
 </template>
 <script>
 import 'mavon-editor/dist/css/index.css'
-import MyHeader from '@/components/header';
+import MyHeader from '../common/header';
 import toolBar from '@/lib/mixin/toolbar.js';
 import { imgURL } from '@/lib/axios/base_url.js';
 import { Select, Option, Upload } from 'element-ui';

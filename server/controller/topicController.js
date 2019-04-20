@@ -44,7 +44,6 @@ exports.uploadImage = ((req, res) => {
  */
 exports.topicAdd = (req, res) => {
   const topic = req.body;
-  console.log(topic);
   try {
     Topics.topicAdd(topic).then(() => {
       res.json({
@@ -81,7 +80,8 @@ exports.getTopicList = async(req, res) => {
       msg: 1,
       data: {
         total: result.count,
-        data: result.rows
+        data: result.rows,
+        currentPage: params.page || 1
       }
     })
   }catch(err) {
@@ -91,5 +91,26 @@ exports.getTopicList = async(req, res) => {
       ret: 0
     })
   }
-  
+}
+
+/**
+ * 获取话题详情
+ * @param
+ *  req.params.topicID 话题ID
+ */
+exports.topcDetails = (req, res) => {
+  try {
+    Topics.topcDetails(Number.parseInt(req.params.topicID)).then(result => {
+      res.json({
+        ret: 1,
+        msg: '',
+        data: result
+      })
+    })
+  }catch(err) {
+    res.status(500).json({
+      msg: err.message,
+      ret: 0
+    })
+  }
 }

@@ -1,5 +1,5 @@
 <template>
-  <div class="left">
+  <div class="left main-left">
     <!-- 文章分类导航 -->
     <div class="category-nav">
       <ul>
@@ -12,27 +12,35 @@
     <!-- 文章显示 -->
     <div class="article-list">
       <ul>
-        <li class="article-item" v-for="item in topicList" :key="item.id">
-          <div class="title">{{ item.title }}</div>
+        <li class="article-item" 
+          v-for="item in topicList" :key="item.id"
+          @click="onTopicDetail(item.id)">
           <div class="meta-row">
             <span class="hot" v-if="item.recommend">推荐</span>
             <span class="username">{{ item.user.name }}</span>
             <span class="time">6天前</span>
             <!-- <span class="tag">JavaScript</span> -->
           </div>
-          <!-- 留言 -->
-          <div class="count">
-
+          <div class="title">{{ item.title }}</div>
+          <div class="about">
+            <span class="info">
+              <i class="el-icon-view"></i>
+              {{ item.scan }}
+            </span>
+            <span class="info">
+              <i class="iconfont icon-liuyan" style="top: 2px"></i>
+              {{ item.comment }}
+            </span> 
           </div>
         </li>
 
         <li class="article-item">
           <el-pagination
-          background
           class="pagination"
-          layout="prev, pager, next"
+          layout="prev, pager, next, total, jumper"
+          :current-page="page_params.page"
           :page-size="page_params.size"
-          :total="100">
+          :total="page_params.total">
         </el-pagination>
         </li>
       </ul>
@@ -45,7 +53,7 @@ export default {
     return {
       topicList: [],
       page_params: {
-        page: '',
+        page: 1,
         size: 20,
         section: '',
         total: 0
@@ -53,7 +61,7 @@ export default {
     }
   },
   created() {
-    this.getTopicList();
+    this.getTopicList()
   },
   methods: {
     // 获取话题列表，默认获取 `全部` 下的话题
@@ -67,20 +75,21 @@ export default {
       }).then(res => {
         if (res.ret) {
           this.page_params.total = res.data.total || 0
+          this.page_params.page = Number.parseInt(res.data.currentPage) || 1
           this.topicList = res.data.data
         }
       })
+    },
+    // 话题详情
+    onTopicDetail (topicID) {
+      this.$router.push({ name: 'topicdetail', params: { id: topicID } })
     }
   }
 }
 </script>
 <style lang="scss">
-@import '../sass/_variable.scss';
-@import '../sass/comment.scss';
+@import '@/sass/_variable.scss';
 .left {
-  background-color: #fff;
-  float: left;
-  width: calc(100% - 290px);
   .category-nav {
     box-sizing: border-box;
     height: 50px;
@@ -97,8 +106,8 @@ export default {
     }
   }
   .article-item {
-    height: 60px;
-    padding: 10px;
+    height: 80px;
+    padding: 10px 20px;
     border-bottom: 1px solid $border-color;
     cursor: pointer;
     .title {
@@ -106,10 +115,14 @@ export default {
       font-size: 17px;
       font-weight: bold;
       margin-bottom: 10px;
+      &:hover {
+        text-decoration: underline;
+      }
     }
     .meta-row {
       color: #b2bac2;
       font-size: 14px;
+      line-height: 23px;
       .hot {
         color: red;
       }
@@ -129,6 +142,19 @@ export default {
   }
   .pagination {
     margin-top: 10px;
+  }
+  .about {
+    color: #b2bac2;
+    i {
+      font-size: 18px;
+      position: relative;
+      top: 1px;
+      font-weight: 700;
+    }
+  }
+  .info {
+    margin-right: 10px;
+    font-weight: 700;
   }
 }
 </style>

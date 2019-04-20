@@ -6,7 +6,8 @@ module.exports = {
   entry: path.resolve(__dirname, 'src/main.js'),
   output: {
     path: path.resolve(__dirname, 'public'),
-    filename: '[name].js'
+    filename: '[name].js',
+    chunkFilename: '[name].js'
   },
   module: {
     rules: [
@@ -66,7 +67,8 @@ module.exports = {
     new HtmlWebpackPlugin({
       template: 'src/index.html',
       filename: 'index.html',
-      inject: true
+      inject: true,
+      chunksSortMode: 'none'
     })
   ],
   // 配置开发环境本地 server

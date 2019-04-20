@@ -50,7 +50,4 @@ const Topic = sequelize.define('topic', {
         defaultValue: 0
     }
 });
-
-
-// Topic.sync({ force: false });
 module.exports = Topic;

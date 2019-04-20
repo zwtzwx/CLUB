@@ -16,7 +16,6 @@ DB.Topic.belongsTo(DB.User, {foreignKey: 'user_id', sourceKey: 'id'});
 //     content
 // }
 exports.topicAdd = async(topic) => {
-    // 插入话题
     await DB.Topic.create({
         section_id: Number.parseInt(topic.plate),
         user_id: Number.parseInt(topic.user_id),
@@ -29,34 +28,52 @@ exports.topicAdd = async(topic) => {
 }
 
 // 获取话题列表
-// params = { page, size, plate }
+// params = { page, size, section }
 exports.getTopics = (params) => {
     return DB.Topic.findAndCountAll({
-            attributes: [
-                'id',
-                'user_id',
-                'title',
-                'recommend',
-                'comment'
-            ],
-            include:[
-                {
-                    model: DB.User,
-                    attributes: ['name']
-                    // where: {
-                    //     user_id: Sequelize.col('user.user_id')
-                    // }
-                }
-            ],
-            offset: (params.page - 1) * params.size,
-            limit: params.size,
-            order: [
-                ['created', 'DESC']
-            ],
-            where: {
-                section_id: {
-                    [Op.like]: params.plate ? params.section : '%'
-                }
+        attributes: [
+            'id',
+            'user_id',
+            'title',
+            'recommend',
+            'comment',
+            'scan',
+            'created'
+        ],
+        include:[
+            {
+                model: DB.User,
+                attributes: ['name']
             }
-        })
+        ],
+        offset: (params.page - 1) * params.size,
+        limit: params.size,
+        order: [
+            ['created', 'DESC']
+        ],
+        where: {
+            section_id: {
+                [Op.like]: params.plate ? params.section : '%'
+            }
+        }
+    })
+}
+
+// 详细话题
+exports.topcDetails = async(topicID) => {
+    // 话题浏览数加一
+    await DB.Topic.findById(topicID).then(topic => {
+        topic.increment('scan')
+    })
+    return DB.Topic.findById(topicID, {
+        attributes: {
+            exclude: ['user_id', 'section_id']
+        },
+        include: [
+            {
+                model: DB.User,
+                attributes: ['id', 'pic', 'name', 'descript']
+            }
+        ]
+    })
 }

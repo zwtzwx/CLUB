@@ -1,9 +1,9 @@
 import Vue from 'vue';
 import axios from './lib/axios';
 import VueRouter from 'vue-router';
-// import VueQuillEditor from 'vue-quill-editor';
 import MavonEditor from 'mavon-editor'
 import router from './router';
+import App from './App.vue';
 import store from './store';
 import baseURL from './lib/axios/base_url';
 import {
@@ -23,23 +23,6 @@ Vue.use(Pagination);
 Vue.use(Icon);
 Vue.use(Dialog);
 
-const toolBarOption = [
-  ['bold', 'italic', 'underline', 'strike', 'code', 'link'],
-  ['blockquote', 'code-block'],
-  [{'header': 1}, {'header': 2}],
-  [{'list': 'ordered'}, {'list': 'bullet'}],
-  [{ 'color': [] }, { 'background': [] }],
-  [{'script': 'sub'}, {'script': 'super'}],
-  [{'indent': '-1'}, {'indent': '+1'}],
-  ['image', 'clean']
-]
-
-// Vue.use(VueQuillEditor, {
-//   modules: {
-//     toolbar: toolBarOption
-//   },
-//   theme: 'snow'
-// });
 Vue.prototype.$message = Message;
 Vue.prototype.$baseURL = baseURL;
 // 初始化 TOKEN
@@ -50,6 +33,9 @@ store.dispatch('getUser');
 new Vue({
   router,
   store,
-  el: '#app'
-})
+  template: '<app />',
+  components: {
+    App
+  }
+}).$mount('#app')
 

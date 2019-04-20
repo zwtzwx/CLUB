@@ -24,7 +24,7 @@
     </div>
 </template>
 <script>
-import MyHeader from '../components/header';
+import MyHeader from './common/header';
 import qs from 'qs';
 import getKey from '../lib/key';
 export default {

@@ -1,12 +1,21 @@
-import VueRouter from 'vue-router';
+import VueRouter from 'vue-router'
 // 首页
-import Index from '@/page/Index.vue';
+const Index = loadView('Index')
 // 注册页
-import SignUp from '@/page/SignUp.vue';
+const SignUp = loadView('SignUp')
+
 // 个人中心
-import Profile from '@/page/user/profile.vue';
+const Profile = loadView('user/profile')
+
 // 添加话题
-import TopicAdd from '@/page/topic/topic_add.vue';
+const TopicAdd = loadView('topic/topic_add')
+
+// 话题详情
+const TopicDetail = loadView('topic/topic_detail');
+// 按需加载
+function loadView(view) {
+  return () => import(/* webpackChunkName: "chunks" */ `@/page/${view}.vue`)
+}
 
 const routes = [
   { 
@@ -25,9 +34,14 @@ const routes = [
     component: Profile
   },
   {
-    path: '/topic/add/:id',
+    path: '/topic/topic_add/:id',
     name: 'topicadd',
     component: TopicAdd
+  },
+  {
+    path: '/topic/topic_detail/:id',
+    name: 'topicdetail',
+    component: TopicDetail
   }
 ]
 

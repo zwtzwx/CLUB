@@ -35,4 +35,7 @@ router.post('/topic', topicControl.topicAdd);
 
 // 获取话题列表
 router.get('/topic', topicControl.getTopicList);
+
+// 获取话题详情
+router.get('/topic/:topicID', topicControl.topcDetails);
 module.exports = router;

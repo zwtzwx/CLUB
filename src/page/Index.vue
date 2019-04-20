@@ -13,9 +13,9 @@
   </div>
 </template>
 <script>
-import MyHeader from '@/components/header';
-import MyLeft from '@/components/left';
-import MyRight from '@/components/right';
+import MyHeader from './common/header';
+import MyLeft from './common/left';
+import MyRight from './common/right';
 import ToTop from '@/components/topbtn'
 export default {
   data() {
