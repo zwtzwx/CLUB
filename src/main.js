@@ -30,6 +30,11 @@ store.commit('initToken');
 // 初始化个人信息
 store.dispatch('getUser');
 
+// 2019-04-19T06:16:51.000Z
+Vue.filter('formateDate', function (value) {
+  if (!value) return ''
+  return value.split('T').join(' ').split('.')[0]
+})
 new Vue({
   router,
   store,

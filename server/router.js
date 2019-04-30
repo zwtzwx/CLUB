@@ -38,4 +38,8 @@ router.get('/topic', topicControl.getTopicList);
 
 // 获取话题详情
 router.get('/topic/:topicID', topicControl.topcDetails);
+
+// 根据输入的标题查询话题列表
+router.get('/search', topicControl.topicSearch);
+
 module.exports = router;

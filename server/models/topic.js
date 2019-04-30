@@ -53,7 +53,37 @@ exports.getTopics = (params) => {
         ],
         where: {
             section_id: {
-                [Op.like]: params.plate ? params.section : '%'
+                [Op.like]: params.section ? params.section : '%'
+            }
+        }
+    })
+}
+
+exports.getTopicsByTitle = (params) => {
+    return DB.Topic.findAndCountAll({
+        attributes: [
+            'id',
+            'user_id',
+            'title',
+            'recommend',
+            'comment',
+            'scan',
+            'created'
+        ],
+        include:[
+            {
+                model: DB.User,
+                attributes: ['name']
+            }
+        ],
+        offset: (params.page - 1) * params.size,
+        limit: params.size,
+        order: [
+            ['created', 'DESC']
+        ],
+        where: {
+            title: {
+                [Op.like]: `%${params.query}%`
             }
         }
     })
@@ -75,5 +105,21 @@ exports.topcDetails = async(topicID) => {
                 attributes: ['id', 'pic', 'name', 'descript']
             }
         ]
+    })
+}
+
+// 获取用户回复数最高的 n 篇文章
+exports.getTopicsByUser = (userId, n) => {
+    return DB.Topic.findAll({
+        attributes: ['id', 'title', 'comment'],
+        where: {
+            user_id: userId
+        },
+        // group: 'user_id',
+        // having: ['user_id=?', userId],
+        order: [
+            ['comment', 'DESC']
+        ],
+        limit: n
     })
 }

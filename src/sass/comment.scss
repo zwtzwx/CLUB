@@ -9,11 +9,13 @@ html, body {
 .main-box {
   width: 1000px;
   margin : 30px auto;
+  overflow: hidden;
 }
 .main-left {
   background-color: #fff;
   float: left;
   width: calc(100% - 290px);
+  box-sizing: border-box;
 }
 
 .main-right {

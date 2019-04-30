@@ -94,17 +94,55 @@ exports.getTopicList = async(req, res) => {
 }
 
 /**
+ *  根据搜索的标题内容获取话题列表
+ *  @param
+ *  page default 1
+ *  size default 20
+ *  query  搜索内容
+ */
+exports.topicSearch = async(req, res) => {
+  let params = req.query
+  params.page = Number.parseInt(params.page)
+  params.size = Number.parseInt(params.size)
+  try {
+    let result = await Topics.getTopicsByTitle(params)
+    // 将查到 Title 与搜索内容相同的进行高亮显示
+    markTitle(params.query, result.rows)
+    res.json({
+      ret: 1,
+      msg: '',
+      data: {
+        total: result.count,
+        data: result.rows,
+        currentPage: params.page || 1
+      }
+    })
+  }catch(err) {
+    res.json({
+      data: '',
+      msg: err.message,
+      ret: 0
+    })
+  }
+}
+
+/**
  * 获取话题详情
  * @param
  *  req.params.topicID 话题ID
  */
-exports.topcDetails = (req, res) => {
+exports.topcDetails = async(req, res) => {
   try {
-    Topics.topcDetails(Number.parseInt(req.params.topicID)).then(result => {
+    let result = await Topics.topcDetails(Number.parseInt(req.params.topicID))
+    // 获取用户点击量最高的5条话题
+    Topics.getTopicsByUser(result.user.id, 5).then(resp => {
       res.json({
         ret: 1,
         msg: '',
-        data: result
+        data: {
+          topic: result,
+          articles: resp
+        }
       })
     })
   }catch(err) {
@@ -113,4 +151,20 @@ exports.topcDetails = (req, res) => {
       ret: 0
     })
   }
+}
+
+const markTitle = (query, titleList = []) => {
+  if (!titleList.length || !query) return
+  let reg = new RegExp(query, 'gi')
+  titleList.forEach(item => {
+    // item.title = item.title.replace(reg, `<mark>${item.title}</mark>`)
+    let markList = item.title.match(reg)
+    let splitList = item.title.split(reg)
+    let number = 1
+    markList.forEach((ele, index) => {
+      let markStr = `<mark>${ele}</mark>`
+      splitList.splice(index + number++, 0, markStr)
+    })
+    item.title = splitList.join('')
+  })
 }

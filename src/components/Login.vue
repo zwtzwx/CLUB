@@ -63,7 +63,7 @@ export default {
           message: res.msg,
           type: 'success',
         });
-        this.loginVisible =false;
+        this.btnLoading =false;
       }).finally(() => {
         this.btnLoading = true;
       })

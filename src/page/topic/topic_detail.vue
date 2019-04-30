@@ -19,9 +19,53 @@
                 :subfield="false"
                 defaultOpen="preview">
                 </mavon-editor>
+
+                <!-- 评论 -->
+                <div class="comment-box">
+                    <div class="title">评论</div>
+                    <div class="publish">
+                        <div class="avatar-box">
+                            <img src="../../asset/images/default-avatar.svg" alt="">
+                        </div>
+                        <div class="rich-input">
+                            <el-input type="textarea" autosize 
+                                placeholder="输入评论..."
+                                class="comment"
+                                v-model="comment"></el-input>
+                        </div>
+                    </div>
+                    <div class="comment-list">
+                        <div class="comment-item">
+                            
+                        </div>
+                    </div>
+                </div>
             </div>
             <div class="main-right">
-
+                <!-- 作者信息 -->
+                <div class="author-box">
+                    <div class="title">关于作者</div>
+                    <div class="author-info">
+                        <div class="author-avatar">
+                            <img src="../../asset/images/default-avatar.svg" alt="">
+                        </div>
+                        <div class="author-name">{{ author.name }}</div>
+                    </div>
+                    <div class="descript">{{ author.descript || '"这个人什么也没留下！"' }}</div>
+                </div>
+                <!-- 作者文章   -->
+                <div class="author-article">
+                    <div class="title">作者文章</div>
+                    <ul class="articles">
+                        <li v-for="item in articleList" :key="item.id">
+                            <div>{{ item.title }}</div>
+                            <div class="article-comment">
+                                <i class="iconfont icon-liuyan"></i>
+                                <span>{{ item.comment }}</span>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
             </div>
         </main>
     </div>
@@ -43,7 +87,9 @@ export default {
                 name: '',  // 作者名
                 pic: '',  // 作者头像
                 descript: ''  // 作者个性签名
-            }
+            },
+            articleList: [],
+            comment: ''
         }
     },
     created() {
@@ -53,14 +99,15 @@ export default {
         getTopicDetail() {
             this.$form.get(`topic/${this.$route.params.id}`).then(res => {
                 if (res.ret) {
-                    this.author.id = res.data.user.id
-                    this.author.name = res.data.user.name
-                    this.author.pic = res.data.user.pic || ''
-                    this.author.descript = res.data.user.descript || ''
-                    this.article.title = res.data.title
-                    this.article.content = res.data.content
-                    this.article.scan = res.data.scan || 0
-                    this.article.createdAt = this.formateDate(res.data.created)
+                    this.author.id = res.data.topic.user.id
+                    this.author.name = res.data.topic.user.name
+                    this.author.pic = res.data.topic.user.pic || ''
+                    this.author.descript = res.data.topic.user.descript || ''
+                    this.article.title = res.data.topic.title
+                    this.article.content = res.data.topic.content
+                    this.article.scan = res.data.topic.scan || 0
+                    this.article.createdAt = this.formateDate(res.data.topic.created)
+                    this.articleList = res.data.articles || []
                 }
             })
         },
@@ -114,6 +161,64 @@ export default {
     }
     .v-note-panel.shadow {
         box-shadow: none !important;
+    }
+    .author-box {
+        background-color: #fff;
+        .author-info {
+            padding: 10px;
+            display: flex;
+        }
+        .descript {
+            padding: 0 10px 10px 10px;
+        }
+    }
+    .author-article {
+        margin-top: 20px;
+        background-color: #fff;
+        li {
+            padding: 10px 15px;
+            cursor: pointer;
+            line-height: 24px;
+            &:hover {
+                background-color: #fbfbfb;
+            }
+        }
+        .article-comment {
+            color: #555; 
+        }
+    }
+    .author-box, .author-article {
+        .title {
+            padding: 10px;
+            font-size: 14px;
+            border-bottom: 1px solid rgba(150, 150, 150, .1);
+        }
+    }
+    .comment-box {
+        .title {
+            padding: 20px 0;
+            text-align: center;
+            color: #8A9AA9;
+        }
+        .publish {
+            padding: 15px;
+            display: flex;
+            background-color: #fafbfc;
+            border-radius: 4px;
+            margin: 15px 0;
+        }
+        img {
+            border-radius: 50%;
+        }
+        textarea {
+            min-height: 36px !important;
+            margin-left: 10px;
+            width: 500px;
+            resize: none;
+        }
+    }
+    .comment-list {
+        margin: 0 15px 0 46px;
     }
 }
 </style>

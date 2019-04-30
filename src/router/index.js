@@ -11,7 +11,10 @@ const Profile = loadView('user/profile')
 const TopicAdd = loadView('topic/topic_add')
 
 // 话题详情
-const TopicDetail = loadView('topic/topic_detail');
+const TopicDetail = loadView('topic/topic_detail')
+
+// 搜索文章
+const TopicSearch = loadView('topic/search')
 // 按需加载
 function loadView(view) {
   return () => import(/* webpackChunkName: "chunks" */ `@/page/${view}.vue`)
@@ -42,6 +45,11 @@ const routes = [
     path: '/topic/topic_detail/:id',
     name: 'topicdetail',
     component: TopicDetail
+  },
+  {
+    path: '/topic/search',
+    name: 'topicsearch',
+    component: TopicSearch
   }
 ]
 

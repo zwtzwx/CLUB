@@ -51,8 +51,6 @@ exports.login = async (req, res) => {
       ret: 1
     })
   } catch (error) {
-    console.log(error);
-    
     res.json({
       msg: error.message,
       ret: 0

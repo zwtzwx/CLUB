@@ -94,7 +94,6 @@ export default {
                 }
                 this.btnLoading = false
             }).finally(() => {
-                console.log(11)
                 this.btnLoading = false
             })
         }

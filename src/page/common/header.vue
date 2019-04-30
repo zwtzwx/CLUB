@@ -3,6 +3,14 @@
     <div class="main-box">
       <ul class="operate-list">
         <li><router-link to="/">首页</router-link></li>
+        <li>
+          <el-input
+            v-model="title"
+            size="small"
+            placehoder="文章标题"
+            @keyup.enter.native="articleSearch"
+            suffix-icon="el-icon-search"></el-input>
+        </li>
         <template v-if="!userInfo.name">
           <li @click="register(0)">注册</li>
           <li @click="register(1)">登录</li>
@@ -13,7 +21,7 @@
               <img src="../../asset/images/default-avatar.svg" class="headpic">
               <i class="el-icon-arrow-down" style="font-size: 20px;"></i>
             </div>
-            <div v-show="dropdown">
+            <div v-show="dropdown" style="height: 130px">
               <ul class="dropdown-menu">
                 <li>用户：{{ userInfo.name }}</li>
                 <li class="dropdown-menu-item"><router-link :to="`user/${userInfo.name}`"><i class="iconfont icon-user"></i>我的主页</router-link></li>
@@ -33,9 +41,11 @@
 import editLogin from '@/lib/proxy/login.js';
 import { mapState } from 'vuex';
 export default {
+  props: ['query'],
   data() {
     return {
-      dropdown: false
+      dropdown: false,
+      title: this.query || ''
     }
   },
   methods: {
@@ -49,6 +59,16 @@ export default {
       localStorage.removeItem('gen_id');
       localStorage.removeItem('SUID');
       window.location.href = '/';
+    },
+    // 搜索文章（根据标题）
+    articleSearch () {
+      if (!this.title) return
+      // 去搜索页
+      if (this.$route.name === 'topicsearch') {
+        this.$emit('search', this.title)
+      } else {
+        this.$router.push({ name: 'topicsearch', query: { query: this.title } })
+      }
     }
   },
   computed: {
