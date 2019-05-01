@@ -7,7 +7,7 @@ const Op = Sequelize.Op;
 
 DB.Topic.belongsTo(DB.Section, {foreignKey: 'section_id', sourceKey: 'id'});
 DB.Topic.belongsTo(DB.User, {foreignKey: 'user_id', sourceKey: 'id'});
-
+DB.Topic.hasMany(DB.Comment, { foreignKey: 'topic_id', sourceKey: 'id' })
 // 发表话题
 // topic : {
 //     user_id,

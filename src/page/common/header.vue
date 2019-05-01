@@ -9,7 +9,9 @@
             size="small"
             placehoder="文章标题"
             @keyup.enter.native="articleSearch"
-            suffix-icon="el-icon-search"></el-input>
+            suffix-icon="el-icon-search">
+            <i slot="suffix" class="el-icon-seach" @click.native="articleSearch"></i>
+          </el-input>
         </li>
         <template v-if="!userInfo.name">
           <li @click="register(0)">注册</li>
@@ -24,7 +26,7 @@
             <div v-show="dropdown" style="height: 130px">
               <ul class="dropdown-menu">
                 <li>用户：{{ userInfo.name }}</li>
-                <li class="dropdown-menu-item"><router-link :to="`user/${userInfo.name}`"><i class="iconfont icon-user"></i>我的主页</router-link></li>
+                <li class="dropdown-menu-item"><router-link :to="`/user/${userInfo.name}`"><i class="iconfont icon-user"></i>我的主页</router-link></li>
                 <li class="dropdown-menu-item" @click="signOut"><i class="iconfont icon-logout"></i>登出</li>
               </ul>
               <span class="arrow"></span>

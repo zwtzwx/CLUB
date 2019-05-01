@@ -1,6 +1,6 @@
-const Sequelize = require('sequelize');
-const sequelize = require('../../tools/db');
-const Section = require('./section');
+const Sequelize = require('sequelize')
+const sequelize = require('../../tools/db')
+
 // 帖子
 const Topic = sequelize.define('topic', {
     id: {

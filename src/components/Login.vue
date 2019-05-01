@@ -92,7 +92,8 @@ export default {
           this.loginVisible = false;
           // 跳转到首页
           // this.$router.replace({name: 'home'});
-          window.location.href = '/';
+          // window.location.href = '/';
+          this.$router.go(0)
         }
       })
     },

@@ -10,7 +10,7 @@ const Op = Sequelize.Op;
 // User.sync({ force: false });
 
 DB.User.hasMany(DB.Topic, {foreignKey: 'user_id', sourceKey: 'id'});
-
+DB.User.hasMany(DB.Comment, { foreignKey: 'user_id', sourceKey: 'id' })
 /**
  * userInfo 用户信息
  *    code: uuid 验证对应 email 的

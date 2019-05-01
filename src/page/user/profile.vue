@@ -1,11 +1,12 @@
 <template>
   <div class="main-box profile">
-    <div class="left">
+    <div class="main-left">
       <div class="user-info">
         
       </div>
     </div>
-    <my-right></my-right>
+    <!-- <my-right></my-right> -->
+    <div class="main-right"></div>
   </div>
 </template>
 <script>
