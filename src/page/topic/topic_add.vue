@@ -23,7 +23,7 @@
                         ref="md"
                         class="editor"
                         defaultOpen="edit"
-                        @imgAdd="imgAdd"
+                        @imgAdd="imgAdd('md')"
                         v-model="topicContent.content"
                         :toolbars="toolbar"></mavon-editor>
                 </el-form-item>
@@ -38,7 +38,7 @@
 <script>
 import 'mavon-editor/dist/css/index.css'
 import MyHeader from '../common/header';
-import toolBar from '@/lib/mixin/toolbar.js';
+import mavonEditor from '@/lib/mixin/mavonedit.js';
 import { imgURL } from '@/lib/axios/base_url.js';
 import { Select, Option, Upload } from 'element-ui';
 export default {
@@ -67,19 +67,8 @@ export default {
             btnLoading: false
         }
     },
-    mixins: [toolBar],
+    mixins: [mavonEditor],
     methods: {
-        // 图片上传
-        imgAdd (pos, file) {
-            this.$json.post(`/images/uploading`, {
-                image: file.miniurl,   // base64 格式的图片
-                name: `${file.name}`
-            }).then(res => {
-                if (res.ret) {
-                    this.$refs.md.$img2Url(pos, `${imgURL}/${res.data}`);
-                }
-            })
-        },
         // 发表评论
         saveTopic () {
             this.btnLoading = true;

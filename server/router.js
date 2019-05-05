@@ -43,6 +43,12 @@ router.get('/topic/:topicID', topicControl.topcDetails)
 // 根据输入的标题查询话题列表
 router.get('/search', topicControl.topicSearch)
 
+// 删除话题
+router.delete('/topic/:topicID', topicControl.delTopic)
+
 // 添加评论
 router.post('/comment', commentControl.addComment)
+router.get('/comment', commentControl.getComment)
+// 删除评论
+router.delete('/comment/:commentID', commentControl.delComment)
 module.exports = router;

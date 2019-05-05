@@ -168,3 +168,24 @@ const markTitle = (query, titleList = []) => {
     item.title = splitList.join('')
   })
 }
+
+/**
+ * 删除话题，并删除评论
+ * @param
+ *  req.params.topicID 话题ID
+ */
+exports.delTopic = async(req, res) => {
+  try {
+    // 失败时的抛出错误应该在上级函数指定
+    let result = await Topics.delTopic(Number.parseInt(req.params.topicID))
+    res.json({
+      msg: '删除成功',
+      ret: 1
+    })
+  }catch(err) {
+    res.status(500).json({
+      msg: err.message,
+      ret: 0
+    })
+  }
+}

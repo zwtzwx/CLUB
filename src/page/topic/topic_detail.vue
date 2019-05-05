@@ -22,45 +22,69 @@
 
                 <!-- 评论 -->
                 <div class="comment-box">
-                    <div class="title">评论</div>
-                    <div class="publish">
-                        <div class="avatar-box">
-                            <img src="../../asset/images/default-avatar.svg" alt="" class="avatar-img">
-                        </div>
-                        <div class="rich-input">
-                            <el-input type="textarea" autosize 
-                                placeholder="输入评论..."
-                                class="comment"
-                                @focus="showAddBtn"
-                                @blur="addBtn = false"
-                                v-model="comment_params.content"></el-input>
-                        </div>
-                    </div>
-                    <div class="add-btn" v-show="addBtn">
-                        <el-button type="primary" size="small" @click="onComment">发表评论</el-button>
-                    </div>
+                    <div class="title">评论({{ commentTotal }})</div>
                     <div class="comment-list">
-                        <div class="comment-item">
-                            <div class="user-avatar">
-                                <img src="../../asset/images/default-avatar.svg" alt="" class="avatar-img">
-                            </div>
-                            <div class="comment-meta">
-                                <div class="meta-data">xl_code（作者）</div>
-                                <div class="content">在性能够好的机子上，idea确实更方便一些</div>
-                                <div class="comment-sub-box">
-                                    <div class="time">20小时前</div>
-                                    <div class="commit-action">
-                                        <div class="like-action">
-                                            <img src="../../asset/images/zan.svg" alt="">
-                                            1
-                                        </div>
-                                        <div class="comment-action">
-                                            <span>
-                                                <img src="../../asset/images/comment.svg" alt="">
-                                                回复
-                                            </span>
+                        <div class="comment-item" v-for="(item, index) in commentList" :key="item.id">
+                            <div class="comment-info-box">
+                                <div class="user-avatar">
+                                    <img src="../../asset/images/default-avatar.svg" alt="" class="avatar-img">
+                                </div>
+                                <div class="comment-meta">
+                                    <div class="meta-data">{{ item.user.name }}{{ item.user.id === author.id ? '（作者）' : '' }}</div>
+                                    <div class="content">
+                                        <el-popover
+                                        v-if="item.parent_id" 
+                                        placement="left"
+                                        width="300"
+                                        trigger="hover"
+                                        @show="getDialogue(item.parent_id)"
+                                        title="对话">
+                                        <div class="dialogue-box">
+                                            <div class="dialogue-item" v-for="ele in dialogueList" :key="ele.id">
+                                                <p style="margin: 3px 0; color: #0366D6">{{ ele.user.name }}</p>
+                                                <mavon-editor v-model="ele.content"
+                                                :boxShadow="false"
+                                                :toolbarsFlag="false"
+                                                :subfield="false"
+                                                defaultOpen="preview">
+                                                </mavon-editor>
+                                            </div>
+                                        </div>   
+                                        <a :href="`#/user/${item.user.name}`" target="_blank" slot="reference" class="reply-user">@{{ item.user.name }}</a>
+                                        </el-popover>
+                                        <mavon-editor v-model="item.content"
+                                        class="md-comment"
+                                        :toolbarsFlag="false"
+                                        :subfield="false"
+                                        defaultOpen="preview">
+                                        </mavon-editor>
+                                    </div>
+                                    <div class="comment-sub-box">
+                                        <div class="time">20小时前</div>
+                                        <div class="commit-action">
+                                            <div class="like-action">
+                                                <img src="../../asset/images/zan.svg" alt="">
+                                                {{ item.like ? item.like : '' }}
+                                            </div>
+                                            <div class="comment-action" @click.stop="showReply(index)">
+                                                <span>
+                                                    <img src="../../asset/images/comment.svg" alt="">
+                                                </span>
+                                            </div>
                                         </div>
                                     </div>
+                                </div>
+                            </div>
+                            <div class="reply" v-show="item.show">
+                                <mavon-editor
+                                class="editor"
+                                defaultOpen="edit"
+                                :boxShadow="false"
+                                @imgAdd="imgAdd"
+                                v-model="item.replyContent"
+                                :toolbars="commentToolBar"></mavon-editor>
+                                <div class="add-btn">
+                                    <el-button class="comment-btn" type="primary" size="small" :loading="btnLoading" @click="onComment(item.id, index)">回复</el-button>
                                 </div>
                             </div>
                         </div>
@@ -93,12 +117,30 @@
                     </ul>
                 </div>
             </div>
+            <div class="publish main-left">
+                <p class="title">添加评论</p>
+                <div class="rich-input">
+                    <mavon-editor
+                        ref="md"
+                        class="editor"
+                        defaultOpen="edit"
+                        :boxShadow="false"
+                        @imgAdd="imgAdd"
+                        v-model="comment_params.content"
+                        :toolbars="commentToolBar"></mavon-editor>
+                    <div class="add-btn">
+                        <el-button type="primary" class="comment-btn" size="small" :loading="btnLoading" @click="onComment">添加评论</el-button>
+                    </div>
+                </div>
+            </div>
         </main>
     </div>
 </template>
 <script>
-// import 'mavon-editor/dist/css/index.css'
+import 'mavon-editor/dist/css/index.css'
+import mavonEditor from '@/lib/mixin/mavonedit.js'
 import MyHeader from '../common/header'
+import { Popover } from 'element-ui'
 export default {
     data() {
         return {
@@ -120,11 +162,17 @@ export default {
                 content: '',  // 评论内容
                 userID: this.$store.state.user.id || localStorage.getItem('SUID') || ''
             },
-            addBtn: false
+            addBtn: false,
+            commentList: [],
+            commentTotal: 0,
+            btnLoading: false,
+            dialogueList: []
         }
     },
+    mixins: [mavonEditor],
     created() {
         this.getTopicDetail()
+        this.getCommentsList()
     },
     methods: {
         // 获取话题详情
@@ -144,6 +192,23 @@ export default {
                 }
             })
         },
+        // 获取评论列表
+        getCommentsList () {
+            this.$form.get('/comment', {
+                params: {
+                    topic_id: this.$route.params.id
+                }
+            }).then(res => {
+                if (res.ret) {
+                    this.commentTotal = res.data.total || 0
+                    res.data.data.forEach(item => {
+                        item.show = 0
+                        item.replyContent = ''
+                    })
+                    this.commentList = res.data.data || []
+                }
+            })
+        },
         formateDate (dateStr) {
             let dateList = dateStr.split('T')[0].split('-')
             if (dateList[1].indexOf('0') === 0) {
@@ -158,12 +223,22 @@ export default {
             return dateList.join('')
         },
         // 发表评论
-        onComment () {
-            if (!this.comment_params.content) return
+        onComment (parentID = '', index) {
+            let content = parentID ? this.commentList[index].replyContent : this.comment_params.content
+            if (!content) return
+            if (!this.comment_params.userID) {
+                this.$message({
+                    message: '请登录后在执行此操作',
+                    type: 'info'
+                })
+                return
+            }
+            this.btnLoading = true
             this.$json.post('comment', {
                 topicID: this.article.id,
                 userID: this.comment_params.userID,
-                content: this.comment_params.content
+                content,
+                parentID
             }).then(res => {
                 if (res.ret) {
                     this.$message({
@@ -171,16 +246,35 @@ export default {
                         type: 'success'
                     })
                 }
+                this.btnLoading = false
                 this.$router.go(0)
+            }).finally(() => {
+                this.btnLoading = false
             })
         },
-        // 评论框获取焦点时显示发表按钮
-        showAddBtn () {
-            this.addBtn = true
+        // 显示回复输入框
+        showReply (index) {
+            this.commentList[index].show = 1
+        },
+        // 显示某一评论下的所有回复对话
+        getDialogue (parentID) {
+            this.dialogueList = []
+            let length = this.commentList.length
+            while(parentID != 0) {
+                for(let i=0; i<length; i++) {
+                    let item = this.commentList[i]
+                    if (item.id == parentID) {
+                        this.dialogueList.unshift(item)
+                        parentID = item.parent_id
+                        break
+                    }
+                }
+            }
         }
     },
     components: {
-        MyHeader
+        MyHeader,
+        [Popover.name]: Popover
     }
 }
 </script>
@@ -254,29 +348,14 @@ export default {
             text-align: center;
             color: #8A9AA9;
         }
-        .publish {
-            padding: 15px;
-            display: flex;
-            background-color: #fafbfc;
-            border-radius: 4px;
-            margin: 15px 0;
-        }
-        .avatar-img {
-            border-radius: 50%;
-        }
-        textarea {
-            min-height: 36px !important;
-            margin-left: 10px;
-            width: 500px;
-            resize: none;
-        }
-    }
-    .comment-list {
-        margin-left: 45px;
     }
     .comment-item {
-        display: flex;
         font-size: 14px;
+        padding: 10px 0;
+        border-bottom: 1px solid #eee;
+        .comment-info-box {
+            display: flex;
+        }
         .comment-meta {
             flex: 1 1 auto;
             margin-left: 15px;
@@ -294,11 +373,59 @@ export default {
         }
         .content {
             margin: 8px 0;
-            color: #505050;
+        }
+        .like-action, .commit-action {
+            cursor: pointer;
         }
     }
     .add-btn {
         text-align: right;
+    }
+    .comment-btn {
+        margin-top: 10px
+    }
+    .publish {
+        margin: 30px 0;
+        padding: 10px;
+        .title {
+            font-size: 14px;
+            color: #555;
+            line-height: 31px;
+            // border-bottom: 1px solid #fafbfc;
+        }
+    }
+    .md-comment {
+        min-height: auto;
+        color: #505050;
+        font-size: 14px;
+    }
+    .reply {
+        margin: 10px 0 0 46px;
+        .editor {
+            min-height: 200px;
+        }
+    }
+    .reply-user {
+        color: #0366D6;
+        text-decoration: none;
+    }
+}
+.dialogue-item {
+    padding: 5px 0; 
+    border-top: 1px solid #eee;
+    .markdown-body {
+        min-height: auto;
+        font-size: 14px;
+    }
+    .v-note-panel {
+        border: none !important;
+    }
+    .v-show-content {
+        background: #fff !important;
+        padding: 3px 0 !important;
+        p {
+            margin-bottom: 0;
+        }
     }
 }
 </style>

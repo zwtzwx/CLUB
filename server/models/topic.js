@@ -123,3 +123,17 @@ exports.getTopicsByUser = (userId, n) => {
         limit: n
     })
 }
+
+// 删除话题
+exports.delTopic = async(topicID) => {
+    // 删除话题及其评论
+    await DB.Topic.findById(topicID).then(topic => {
+        DB.Comment.destroy({
+            where: {
+                topic_id: topic.id
+            }
+        })
+        topic.destroy()
+    })
+    return true
+}
