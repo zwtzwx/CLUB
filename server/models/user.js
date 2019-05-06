@@ -118,4 +118,31 @@ exports.updateIntegral = (id, count) =>{
   // })
 }
 
+// 修改用户信息
+exports.updateUser = (params) => {
+  return DB.User.update({
+    pic: params.avatar,
+    descript: params.descript
+  },{ 
+    where: {
+      id: params.id
+    }
+  })
+}
+
+// 修改密码，将新旧密码用私钥解密，加盐后先判断密码是否正确存储到数据库
+exports.updatePassword = async(params) => {
+  let [oldPasswd] = Crypto.rsaDecrypt(params.old)
+  let [newPasswd] = Crypto.rsaDecrypt(params.new)
+  oldPasswd = Crypto.hmacEncrypt(oldPasswd)
+  newPasswd = Crypto.hmacEncrypt(newPasswd)
+  // 先获取数据库中的密码比对，比对成功后再存储新密码
+  let user = await DB.User.findById(params.id)
+  if (!user) throw new Error('没有当前用户!')
+  if (user.password !== oldPasswd) throw new Error('密码错误!')
+  return user.update({
+    password: newPasswd
+  })
+}
+
 exports.findUser = findUser;

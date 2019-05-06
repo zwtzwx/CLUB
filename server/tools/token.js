@@ -18,3 +18,13 @@ exports.generatorToken = (tokenObj) => {
     return token;
 }
 
+// 验证 token 获取用户信息
+exports.verifyToken = (token) => {
+    return new Promise((resolve, reject) => {
+        jwt.verify(token, RSA.publicKey, { algorithms: 'RS256' }, (err, decoded) => {
+            if (err) reject(err)
+            resolve(decoded)
+        })
+    })
+}
+

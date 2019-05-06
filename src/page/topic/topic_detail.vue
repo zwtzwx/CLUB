@@ -62,14 +62,12 @@
                                     <div class="comment-sub-box">
                                         <div class="time">20小时前</div>
                                         <div class="commit-action">
-                                            <div class="like-action">
-                                                <img src="../../asset/images/zan.svg" alt="">
-                                                {{ item.like ? item.like : '' }}
+                                            <div :class="['like-action', { liked:  item.isLiked}]" @click="onLike(item)">
+                                                <i class="iconfont icon-dianzan"></i>
+                                                {{ item.likesCount ? item.likesCount : '' }}
                                             </div>
-                                            <div class="comment-action" @click.stop="showReply(index)">
-                                                <span>
-                                                    <img src="../../asset/images/comment.svg" alt="">
-                                                </span>
+                                            <div class="comment-action" @click.stop="item.show = !item.show">
+                                                <i class="iconfont icon-icon_reply"></i>
                                             </div>
                                         </div>
                                     </div>
@@ -110,11 +108,25 @@
                         <li v-for="item in articleList" :key="item.id">
                             <div>{{ item.title }}</div>
                             <div class="article-comment">
-                                <i class="iconfont icon-liuyan"></i>
-                                <span>{{ item.comment }}</span>
+                                <span style="margin-right: 10px"><i class="iconfont icon-dianzan"></i> {{ item.comment }}</span>
+                                <span><i class="iconfont icon-pinglun"></i> {{ item.comment }}</span>
                             </div>
                         </li>
                     </ul>
+                </div>
+                <!-- 文章信息 -->
+                <div class="article-meta">
+                    <el-badge :value="1" type="primary">
+                        <div class="like-box meta-box">
+                            <i class="iconfont icon-dianzan"></i>
+                        </div>
+                    </el-badge>
+                    <br>
+                    <el-badge :value="commentTotal" type="primary">
+                        <div class="reply-box meta-box">
+                            <i class="iconfont icon-pinglun"></i>
+                        </div>
+                    </el-badge>
                 </div>
             </div>
             <div class="publish main-left">
@@ -140,7 +152,7 @@
 import 'mavon-editor/dist/css/index.css'
 import mavonEditor from '@/lib/mixin/mavonedit.js'
 import MyHeader from '../common/header'
-import { Popover } from 'element-ui'
+import { Popover, Badge } from 'element-ui'
 export default {
     data() {
         return {
@@ -252,10 +264,6 @@ export default {
                 this.btnLoading = false
             })
         },
-        // 显示回复输入框
-        showReply (index) {
-            this.commentList[index].show = 1
-        },
         // 显示某一评论下的所有回复对话
         getDialogue (parentID) {
             this.dialogueList = []
@@ -270,11 +278,30 @@ export default {
                     }
                 }
             }
+        },
+        // 点赞
+        onLike (commentItem) {
+            if (!this.comment_params.userID) {
+                this.$message({
+                    message: '请登录后在执行此操作',
+                    type: 'info'
+                })
+                return
+            }
+            // 如果已点赞，则取消点赞，否则点赞
+            let [mothod, num, params] = commentItem.isLiked ? ['delete', -1, { params: { comment_id: commentItem.id } }] : ['post', 1, { comment_id: commentItem.id }]
+            this.$json[mothod]('/like', params).then(res => {
+                if (res.ret) {
+                    commentItem.isLiked = !commentItem.isLiked
+                    commentItem.likesCount = commentItem.likesCount + num
+                }
+            })
         }
     },
     components: {
         MyHeader,
-        [Popover.name]: Popover
+        [Popover.name]: Popover,
+        [Badge.name]: Badge
     }
 }
 </script>
@@ -408,6 +435,24 @@ export default {
     .reply-user {
         color: #0366D6;
         text-decoration: none;
+    }
+    .article-meta {
+        margin-top: 30px;
+        color: #8A93A0;
+        .meta-box {
+            padding: 10px 12px;
+            background-color: #fff;
+            border-radius: 50%;
+            margin-bottom: 15px;
+            cursor: pointer;
+        }
+        i {
+            font-size: 18px;
+        }
+        .el-badge__content {
+            top: 3px;
+            right: 15px;
+        }
     }
 }
 .dialogue-item {

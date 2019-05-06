@@ -5,6 +5,7 @@ const Op = Sequelize.Op
 
 DB.Comment.belongsTo(DB.Topic, { foreignKey: 'topic_id', sourceKey: 'id' })
 DB.Comment.belongsTo(DB.User, { foreignKey: 'user_id', sourceKey: 'id' })
+DB.Comment.hasMany(DB.Like, { foreignKey: 'commentID', sourceKey: 'id' })
 
 exports.addComment = async (params) => {
   await DB.Comment.create({

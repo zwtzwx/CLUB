@@ -23,7 +23,7 @@
                         ref="md"
                         class="editor"
                         defaultOpen="edit"
-                        @imgAdd="imgAdd('md')"
+                        @imgAdd="imgAdd"
                         v-model="topicContent.content"
                         :toolbars="toolbar"></mavon-editor>
                 </el-form-item>
@@ -39,7 +39,6 @@
 import 'mavon-editor/dist/css/index.css'
 import MyHeader from '../common/header';
 import mavonEditor from '@/lib/mixin/mavonedit.js';
-import { imgURL } from '@/lib/axios/base_url.js';
 import { Select, Option, Upload } from 'element-ui';
 export default {
     data() {

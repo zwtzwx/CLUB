@@ -26,11 +26,11 @@
           <div class="title">{{ item.title }}</div>
           <div class="about">
             <span class="info">
-              <i class="el-icon-view"></i>
+              <i class="iconfont icon-dianzan"></i>
               {{ item.scan }}
             </span>
             <span class="info">
-              <i class="iconfont icon-liuyan" style="top: 2px"></i>
+              <i class="iconfont icon-pinglun"></i>
               {{ item.comment }}
             </span> 
           </div>
@@ -186,16 +186,18 @@ export default {
   }
   .about {
     color: #b2bac2;
+    font-size: 0;
     i {
-      font-size: 18px;
+      font-size: 16px;
       position: relative;
       top: 1px;
-      font-weight: 700;
     }
   }
   .info {
-    margin-right: 10px;
-    // font-weight: 700;
+    display: inline-block;
+    padding: 2px 9px;
+    font-size: 14px;
+    border: 1px solid #edeeef;
   }
 }
 </style>

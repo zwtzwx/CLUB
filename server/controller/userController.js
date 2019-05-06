@@ -1,8 +1,11 @@
 const User  = require('../models/user');
 const Token = require('../tools/token');
 const Mail = require('../tools/mail');
-const config = require('../config');
-
+const fs = require('fs')
+const path = require('path')
+const crypto = require('crypto')
+const config = require('../config')
+const hash = crypto.createHash('sha256')
 
 // 用户注册
 exports.register = (req, res) => {
@@ -10,7 +13,6 @@ exports.register = (req, res) => {
   try {
     // 先验证邮箱是否合法
     Mail.vertifyCode(userInfo.code);
-    console.log(12);
     User.userRegister(userInfo).then(() => {
       res.json({
         msg: '注册成功',
@@ -63,7 +65,8 @@ exports.login = async (req, res) => {
  * @param req.query.id  用户 ID
  */
 exports.getUserInfo = async(req, res) => {
-  let result = await User.findUser('id', req.query.id);
+  let user = await Token.verifyToken(req.headers.authorization)
+  let result = await User.findUser('id', user.id);
   if (result) {
     // 删除密码和管理员标识
     delete result.dataValues.password;
@@ -78,6 +81,54 @@ exports.getUserInfo = async(req, res) => {
   }
 }
 
+/**
+ *  修改用户信息
+ *  @params
+ *  avatar 用户头像地址（半地址）
+ *  descript 用户个性签名
+ *  id 用户 id
+ */
+exports.updateUser = (req, res) => {
+  const params = req.body
+  try {
+    User.updateUser(params).then(() => {
+      res.json({
+        msg: '修改成功!',
+        data: '',
+        ret: 1
+      })
+    })
+  }catch(err) {
+    res.status(500).json({
+      msg: '保存失败!',
+      data: '',
+      ret: 0
+    })
+  }
+}
+
+exports.updatePassword = (req, res) => {
+  const params = req.body
+  try {
+    User.updatePassword(params).then(() => {
+      res.json({
+        msg: '密码更改成功，请重新登录!',
+        data: '',
+        ret: 1
+      })
+    })
+  }catch(err) {
+    res.status(500).json({
+      msg: err.message,
+      data: '',
+      ret: 0
+    })
+  }
+}
+
+/**
+ *  积分排名
+ */
 exports.TopIntegray = async(req, res) => {
   try {
     let integrayList = await User.getTopIntegray();
@@ -92,5 +143,39 @@ exports.TopIntegray = async(req, res) => {
       ret: 0
     })
   }
+}
 
+/**
+ *  头像上传
+ */
+exports.avatarUpload = (req, res) => {
+  fs.readFile(req.file.path, (err, data) => {
+    if (err) {
+      console.log(err)
+      res.status(500).json({
+        msg: '头像上传失败',
+        data: '',
+        ret: 0
+      })
+    }
+    let fileName = req.file.filename + req.file.originalname
+    fs.writeFile(`${path.resolve(__dirname, '../../public/images/avatars')}/${fileName}`, data, (err) => {
+      // 删除文件
+      fs.unlinkSync(req.file.path)
+      if (err) {
+        console.log(err)
+        res.status(500).json({
+          msg: '头像上传失败',
+          data: '',
+          ret: 0
+        })
+      } else {
+        res.json({
+          msg: '头像上传成功',
+          ret: 1,
+          data: fileName
+        })
+      }
+    })
+  })
 }

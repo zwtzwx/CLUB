@@ -67,11 +67,7 @@ export default {
   methods: {
     // 根据用户 ID 获取用户信息
     getUserInfo () {
-      this.$form.get('/user/user-info', {
-        params: {
-          id: this.authID
-        }
-      }).then((res) => {
+      this.$form.get('/user/user-info').then((res) => {
         if (res.ret) {
           this.userInfo.name = res.data.name;
           this.userInfo.integral = res.data.integral || 0;

@@ -12,7 +12,7 @@ export default new Vuex.Store({
             id: '',
             name: '',
             headpic: '',
-            // description: '',
+            // description: ''
             // integray: 0
         }
     },

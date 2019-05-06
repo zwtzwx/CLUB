@@ -23,10 +23,11 @@
               <img src="../../asset/images/default-avatar.svg" class="headpic">
               <i class="el-icon-arrow-down" style="font-size: 20px;"></i>
             </div>
-            <div v-show="dropdown" style="height: 130px">
+            <div v-show="dropdown" style="height: 177px">
               <ul class="dropdown-menu">
                 <li>用户：{{ userInfo.name }}</li>
-                <li class="dropdown-menu-item"><router-link :to="`/user/${userInfo.name}`"><i class="iconfont icon-user"></i>我的主页</router-link></li>
+                <li class="dropdown-menu-item"><router-link :to="`/user/${userInfo.name}`"><i class="iconfont icon-user"></i>主页</router-link></li>
+                <li class="dropdown-menu-item"><router-link :to="`/setting`"><i class="el-icon-setting"></i>设置</router-link></li>
                 <li class="dropdown-menu-item" @click="signOut"><i class="iconfont icon-logout"></i>登出</li>
               </ul>
               <span class="arrow"></span>

@@ -13,7 +13,7 @@ entry.setPublicKey(publicKey);
 
 export default function(...params) {
     let key = params.join('@#*');
-    let encrypt = entry.encrypt(key);
+    // let encrypt = entry.encrypt(key);
     return entry.encrypt(key);
 }
 

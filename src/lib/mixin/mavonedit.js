@@ -1,3 +1,5 @@
+import { imgURL } from '@/lib/axios/base_url.js'
+
 const toolbar =  {
   bold: true, // 粗体
   italic: true, // 斜体
@@ -80,13 +82,13 @@ export default {
   methods: {
     // 图片上传
     imgAdd (pos, file) {
-      // console.log(ref)
+      console.log(file)
       this.$json.post(`/images/uploading`, {
           image: file.miniurl,   // base64 格式的图片
           name: `${file.name}`
       }).then(res => {
           if (res.ret) {
-              this.$refs[ref].$img2Url(pos, `${imgURL}/${res.data}`);
+              this.$refs['md'].$img2Url(pos, `${imgURL}/${res.data}`);
           }
       })
     }

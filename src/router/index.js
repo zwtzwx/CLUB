@@ -4,8 +4,10 @@ const Index = loadView('Index')
 // 注册页
 const SignUp = loadView('SignUp')
 
-// 个人中心
+// 用户主页
 const Profile = loadView('user/profile')
+// 用户设置
+const Setting = loadView('user/setting')
 
 // 添加话题
 const TopicAdd = loadView('topic/topic_add')
@@ -35,6 +37,11 @@ const routes = [
     path: '/user/:username',
     name: 'profile',
     component: Profile
+  },
+  {
+    path: '/setting',
+    name: 'setting',
+    component: Setting
   },
   {
     path: '/topic/topic_add/:id',
