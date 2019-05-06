@@ -65,7 +65,6 @@ export default {
       }).then(res => {
         if (res.ret) {
           res.data.data && this.topicList.push(...res.data.data)
-          console.log(this.topicList)
           this.total = res.data.total || 0
           this.page_params.page = res.data.currentPage || 1
           if (this.page_params.page * this.page_params.size < this.total) {

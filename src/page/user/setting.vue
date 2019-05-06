@@ -4,7 +4,7 @@
     <div class="main-box">
       <!-- 设置个人信息 -->
       <div class="personal-set">
-        <p class="title">个人信息</p>
+        <p class="title user-title">个人信息</p>
         <el-form label-width="80px" class="personal-form">
           <el-form-item label="头像:">
             <el-upload
@@ -157,12 +157,12 @@ export default {
 </script>
 <style lang="scss">
 .setting {
-  .title {
-    padding: 10px;
-    background-color: #fafafa;
-    font-size: 14px;
-    color: #0366d6;
-  }
+  // .title {
+  //   padding: 10px;
+  //   background-color: #fafafa;
+  //   font-size: 14px;
+  //   color: #0366d6;
+  // }
   .personal-set, .password-set {
     background-color: #fff;
     border-radius: 4px;

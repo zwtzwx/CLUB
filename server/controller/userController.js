@@ -1,4 +1,5 @@
 const User  = require('../models/user');
+const TopicModel = require('../models/topic')
 const Token = require('../tools/token');
 const Mail = require('../tools/mail');
 const fs = require('fs')
@@ -65,8 +66,16 @@ exports.login = async (req, res) => {
  * @param req.query.id  用户 ID
  */
 exports.getUserInfo = async(req, res) => {
-  let user = await Token.verifyToken(req.headers.authorization)
-  let result = await User.findUser('id', user.id);
+  let query = req.query
+  let result
+  if (query.name) {
+    // 别人或自己的信息（主页）
+    result = await User.findUser('name', query.name);
+  } else {
+    // 自己的
+    let user = await Token.verifyToken(req.headers.authorization)
+    result = await User.findUser('id', user.id);
+  }
   if (result) {
     // 删除密码和管理员标识
     delete result.dataValues.password;
@@ -107,6 +116,9 @@ exports.updateUser = (req, res) => {
   }
 }
 
+/**
+ *  更改密码
+ */
 exports.updatePassword = (req, res) => {
   const params = req.body
   try {
@@ -178,4 +190,33 @@ exports.avatarUpload = (req, res) => {
       }
     })
   })
+}
+
+exports.getTopicsByUser = async(req, res) => {
+  const params = req.query
+  params.page = Number(params.page)
+  params.size = Number(params.size)
+  try {
+    // 先根据用户名获取用户 ID
+    let user = await User.findUser('name', params.name)
+    console.log(user)
+    params.id = user.id
+    TopicModel.getTopicsByUserID(params).then(result => {
+      res.json({
+        msg: '',
+        ret: 1,
+        data: {
+          total: result.count,
+          topic_list: result.rows,
+          currentPage: params.page
+        }
+      })
+    })
+  }catch(err) {
+    res.status(500).json({
+      ret: 0,
+      data: '',
+      msg: err.messge
+    })
+  }
 }

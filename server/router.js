@@ -29,6 +29,8 @@ router.get('/user/user-info', userControl.getUserInfo)
 router.put('/user/user-info', userControl.updateUser)
 // 修改密码
 router.put('/user/password', userControl.updatePassword)
+// 获取用户发表的话题
+router.get('/user/topics', userControl.getTopicsByUser)
 
 // 获取积分排行榜
 router.get('/client/integray', userControl.TopIntegray)

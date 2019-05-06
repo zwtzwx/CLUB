@@ -59,6 +59,29 @@ exports.getTopics = (params) => {
     })
 }
 
+// 根据用户ID 获取用户发表的文章
+exports.getTopicsByUserID = (params) => {
+    return DB.Topic.findAndCountAll({
+        attributes: [
+            'id',
+            'user_id',
+            'title',
+            'recommend',
+            'comment',
+            'scan',
+            'created'
+        ],
+        offset: (params.page - 1) * params.size,
+        limit: params.size,
+        order: [
+            ['created', 'DESC']
+        ],
+        where: {
+           user_id: params.id
+        }
+    })
+}
+
 exports.getTopicsByTitle = (params) => {
     return DB.Topic.findAndCountAll({
         attributes: [

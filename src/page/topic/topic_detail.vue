@@ -4,12 +4,11 @@
         <main class="main-box">
             <div class="main-left article">
                 <div class="author-info-block">
-                    <a href="#" target="_blank" class="author-avatar" 
-                    >
+                    <a :href="`#/user/${author.name}`" target="_blank" class="author-avatar" >
                         <img :src="avatar" alt="avatar" style="width: 100%">
                     </a>
                     <div>
-                        <a href="#" target="_blank" class="author-name">{{ author.name }}</a>
+                        <a :href="`#/user/${author.name}`" target="_blank" class="author-name">{{ author.name }}</a>
                         <div class="meta-box">{{ article.createdAt }} 浏览 {{ article.scan }}</div>
                     </div>
                 </div>
