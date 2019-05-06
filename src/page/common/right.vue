@@ -10,11 +10,11 @@
         <div class="title">个人信息</div>
         <div class="user">
           <div>
-            <span class="headpic"><img src="../../asset/images/default-avatar.svg" alt=""></span>
+            <span class="headpic"><img :src="avatar" alt="avatar"></span>
             <span class="user-name">{{ userInfo.name }}</span>
           </div>
-          <div>积分：{{ userInfo.integral }}</div>
-          <div>"{{ userInfo.descirpt }}"</div>
+          <div style="line-height: 25px">积分：{{ userInfo.integral }}</div>
+          <div style="font-style: italic">"{{ userInfo.descript }}"</div>
         </div>
       </div>
     </div>
@@ -44,7 +44,9 @@
 </template>
 <script>
 import EditLogin from '@/lib/proxy/login';
-export default {
+// import { userInfo } from 'os'
+import { avatarURL } from '@/lib/axios/base_url.js'
+ export default {
   data() {
     return {
       userInfo: {
@@ -52,7 +54,7 @@ export default {
         name: '',  // 用户名
         pic: '',  // 用户头像
         integral: 0,  // 用户积分
-        descirpt: ''  // 用户个性签名
+        descript: ''  // 用户个性签名
       },
       integrayList: []  // 积分排行数组
     }
@@ -72,7 +74,7 @@ export default {
           this.userInfo.name = res.data.name;
           this.userInfo.integral = res.data.integral || 0;
           this.userInfo.pic = res.data.pic || 'default-avatar.svg';
-          this.userInfo.descirpt = res.data.descirpt || '这个人没留下个性签名！';
+          this.userInfo.descript = res.data.descript || '这个人没留下个性签名！';
         }
       })
     },
@@ -96,6 +98,13 @@ export default {
   computed: {
     authID () {
       return localStorage.getItem('SUID') || '';
+    },
+    avatar () {
+      if (this.userInfo.pic) {
+        return `${avatarURL}/${this.userInfo.pic}`
+      } else {
+        return '../../asset/images/default-avatar.svg'
+      }
     }
   }
 }

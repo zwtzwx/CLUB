@@ -20,7 +20,7 @@
         <li v-else style="position:relative">
           <div class="dropdown">
             <div class="dropdown-link" @click="dropdown = !dropdown">
-              <img src="../../asset/images/default-avatar.svg" class="headpic">
+              <img :src="avatar" class="headpic">
               <i class="el-icon-arrow-down" style="font-size: 20px;"></i>
             </div>
             <div v-show="dropdown" style="height: 177px">
@@ -41,8 +41,9 @@
   </header>
 </template>
 <script>
-import editLogin from '@/lib/proxy/login.js';
-import { mapState } from 'vuex';
+import editLogin from '@/lib/proxy/login.js'
+// import { mapState } from 'vuex'
+import { avatarURL } from '@/lib/axios/base_url.js'
 export default {
   props: ['query'],
   data() {
@@ -75,8 +76,14 @@ export default {
     }
   },
   computed: {
-    headPic () {
-      return this.$store.state.user['headpic'] || 'default-avatar.svg';
+    avatar () {
+      // return this.$store.state.user['headpic'] || 'default-avatar.svg';
+      let avatar = this.$store.state.user['headpic']
+      if (avatar) {
+        return `${avatarURL}/${avatar}`
+      } else {
+        return '../../asset/images/default-avatar.svg'
+      }
     },
     userInfo () {
       return this.$store.state.user

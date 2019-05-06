@@ -5,7 +5,8 @@
             <div class="main-left article">
                 <div class="author-info-block">
                     <a href="#" target="_blank" class="author-avatar" 
-                    style="background-image: url('../../asset/images/default-avatar.svg')">
+                    >
+                        <img :src="avatar" alt="avatar" style="width: 100%">
                     </a>
                     <div>
                         <a href="#" target="_blank" class="author-name">{{ author.name }}</a>
@@ -95,11 +96,11 @@
                     <div class="title">关于作者</div>
                     <div class="author-info">
                         <div class="author-avatar">
-                            <img src="../../asset/images/default-avatar.svg" alt="">
+                            <img :src="avatar" alt="avatar" style="width: 100%">
                         </div>
                         <div class="author-name">{{ author.name }}</div>
                     </div>
-                    <div class="descript">{{ author.descript || '"这个人什么也没留下！"' }}</div>
+                    <div class="descript" style="font-style: italic">{{ author.descript || '"这个人什么也没留下！"' }}</div>
                 </div>
                 <!-- 作者文章   -->
                 <div class="author-article">
@@ -152,6 +153,7 @@
 import 'mavon-editor/dist/css/index.css'
 import mavonEditor from '@/lib/mixin/mavonedit.js'
 import MyHeader from '../common/header'
+import { avatarURL } from '@/lib/axios/base_url.js'
 import { Popover, Badge } from 'element-ui'
 export default {
     data() {
@@ -296,6 +298,15 @@ export default {
                     commentItem.likesCount = commentItem.likesCount + num
                 }
             })
+        }
+    },
+    computed: {
+        avatar () {
+            if (this.author.pic) {
+                return `${avatarURL}/${this.author.pic}`
+            } else {
+                return '../../asset/images/default-avatar.svg'
+            }
         }
     },
     components: {
