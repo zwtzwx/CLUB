@@ -12,6 +12,7 @@ export default new Vuex.Store({
             id: '',
             name: '',
             headpic: '',
+            admin: ''
             // description: ''
             // integray: 0
         }
@@ -36,6 +37,7 @@ export default new Vuex.Store({
             state.user.id = user.id;
             state.user.name = user.name;
             state.user.headpic = user.pic;
+            state.user.admin = user.admin;
             localStorage.setItem('SUID', user.id);
         }
     },

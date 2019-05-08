@@ -73,7 +73,7 @@ import { avatarURL } from '@/lib/axios/base_url.js'
         if (res.ret) {
           this.userInfo.name = res.data.name;
           this.userInfo.integral = res.data.integral || 0;
-          this.userInfo.pic = res.data.pic || 'default-avatar.svg';
+          this.userInfo.pic = res.data.pic;
           this.userInfo.descript = res.data.descript || '这个人没留下个性签名！';
         }
       })

@@ -17,6 +17,17 @@ const TopicDetail = loadView('topic/topic_detail')
 
 // 搜索文章
 const TopicSearch = loadView('topic/search')
+
+// 后台布局
+const Layout = loadView('admin/layout')
+// 板块管理
+const Section = loadView('admin/section')
+// 用户管理
+const User = loadView('admin/user')
+// 话题管理
+const Topic = loadView('admin/topic')
+// 话题添加和修改
+const SectionConfig = loadView('admin/section_addedit')
 // 按需加载
 function loadView(view) {
   return () => import(/* webpackChunkName: "chunks" */ `@/page/${view}.vue`)
@@ -57,6 +68,39 @@ const routes = [
     path: '/topic/search',
     name: 'topicsearch',
     component: TopicSearch
+  },
+  {
+    path: '/admin',
+    name: 'layout',
+    redirect: '/admin/section',
+    component: Layout,
+    children: [
+      {
+        path: 'section',
+        name: 'sectionconfig',
+        component: Section
+      },
+      {
+        path: 'user',
+        name: 'userconfig',
+        component: User
+      },
+      {
+        path: 'topic',
+        name: 'topicconfig',
+        component: Topic
+      },
+      {
+        path: 'section/add',
+        name: 'sectionadd',
+        component: SectionConfig
+      },
+      {
+        path: 'section/edit',
+        name: 'sectionedit',
+        component: SectionConfig
+      }
+    ]
   }
 ]
 

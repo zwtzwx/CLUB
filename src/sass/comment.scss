@@ -1,3 +1,4 @@
+@import './variable';
 html, body {
   margin: 0;
   padding: 0;
@@ -5,6 +6,58 @@ html, body {
   height: 100%;
   background-color: #F4F5F5;
   font-family: -apple-system,system-ui,BlinkMacSystemFont,Helvetica Neue,PingFang SC,Hiragino Sans GB,Microsoft YaHei,Arial,sans-serif;
+}
+
+// 按钮公共样式
+@mixin action-btn ($color) {
+  padding: 7px 9px !important;
+  background: $white !important;
+  border: 1px solid $color !important;
+  color: $color !important;
+  transition: 0.4s all ease !important;
+  span {
+    font-size: 14px !important;
+  }
+  &:focus {
+    background: lighten($color, 10%) !important;
+    border: 1px solid lighten($color, 10%) !important;
+    color: $white !important;
+  }
+  &:hover {
+    background: $color !important;
+    border: 1px solid $color !important;
+    color: $white !important;
+  }
+}
+.btn-blue {
+  @include action-btn($blue);
+}
+.btn-green {
+  @include action-btn($green);
+}
+.btn-dark-green {
+  @include action-btn($dark-green);
+}
+.btn-blue-green {
+  @include action-btn($blue-green);
+}
+.btn-light-red {
+  @include action-btn($light-red);
+}
+.btn-purple {
+  @include action-btn($purple);
+}
+.btn-deep-purple {
+  @include action-btn($deep-purple);
+}
+.btn-yellow {
+  @include action-btn($yellow);
+}
+.btn-pink {
+  @include action-btn($pink);
+}
+.btn-orangey-red {
+  @include action-btn($orangey-red);
 }
 .main-box {
   width: 1000px;

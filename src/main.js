@@ -8,7 +8,7 @@ import store from './store';
 import baseURL from './lib/axios/base_url';
 import {
   Form, FormItem, Input, Button, Tag, Pagination,
-  Icon, Dialog, Message
+  Icon, Dialog, Message, Loading, Notification
 } from 'element-ui';
 
 Vue.use(VueRouter);
@@ -22,8 +22,10 @@ Vue.use(Tag);
 Vue.use(Pagination);
 Vue.use(Icon);
 Vue.use(Dialog);
+Vue.use(Loading)
 
 Vue.prototype.$message = Message;
+Vue.prototype.$notify = Notification;
 Vue.prototype.$baseURL = baseURL;
 // 初始化 TOKEN
 store.commit('initToken');

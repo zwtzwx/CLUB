@@ -7,7 +7,7 @@
           <div class="meta-row">
             <span class="hot" v-if="item.recommend">推荐</span>
             <span class="username">{{ item.user && item.user.name }}</span>
-            <span class="time">2019-01-01</span>
+            <span class="time">{{ item.created.split('T')[0] }}</span>
             <!-- <span class="tag">JavaScript</span> -->
           </div>
           <div class="title" v-html="item.title"></div>

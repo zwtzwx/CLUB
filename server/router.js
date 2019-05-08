@@ -5,6 +5,7 @@ const userControl = require('./controller/userController')
 const topicControl = require('./controller/topicController')
 const commentControl = require('./controller/commentController')
 const likeControl = require('./controller/likeController')
+const sectionControl = require('./controller/sectionController')
 const multer = require('multer')
 const router = express.Router()
 router.use(bodyParser.json())
@@ -12,7 +13,7 @@ router.use(bodyParser.urlencoded({extended: false}))
 var upload = multer({ dest: 'uploads/' })
 
 
-
+// 客户端
 
 // 发送邮箱
 router.post('/mail/send', mailControl.sendMail)
@@ -68,4 +69,15 @@ router.post('/like', likeControl.addLike)
 // 取消点赞
 router.delete('/like', likeControl.removeLike)
 
+
+// 管理员端
+
+// 获取版块列表
+router.get('/admin/section', sectionControl.getSections)
+// 添加版块
+router.post('/admin/section', sectionControl.addSection)
+// 修改板块
+router.put('/admin/section/:id', sectionControl.updateSection)
+// 获取单个版块信息
+router.get('/admin/section/:id', sectionControl.getSection)
 module.exports = router;

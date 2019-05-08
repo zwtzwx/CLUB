@@ -58,7 +58,7 @@ exports.userLogin = async (userKey) => {
         { email: loginName } 
       ]
     },
-    attributes: ['id', 'name', 'password', 'pic']
+    attributes: ['id', 'name', 'password', 'pic', 'admin']
   });
   if (result) {
     // 将铭文密码加盐加密与数据库中的密码比对

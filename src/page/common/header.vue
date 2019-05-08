@@ -3,6 +3,7 @@
     <div class="main-box">
       <ul class="operate-list">
         <li><router-link to="/">首页</router-link></li>
+        <li v-if="userInfo.admin"><router-link to="/admin">后台管理</router-link></li>
         <li>
           <el-input
             v-model="title"

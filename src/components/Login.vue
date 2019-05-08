@@ -36,7 +36,6 @@
 </template>
 <script>
 import getKey from '../lib/key';
-import { log } from 'util';
 export default {
   data () {
     return {
@@ -64,8 +63,9 @@ export default {
           type: 'success',
         });
         this.btnLoading =false;
+        this.loginVisible = false
       }).finally(() => {
-        this.btnLoading = true;
+        this.btnLoading = false;
       })
     },
     // 登录
