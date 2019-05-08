@@ -3,6 +3,8 @@ import VueRouter from 'vue-router'
 const Index = loadView('Index')
 // 注册页
 const SignUp = loadView('SignUp')
+// 忘记密码
+const Forget = loadView('forget')
 
 // 用户主页
 const Profile = loadView('user/profile')
@@ -43,6 +45,11 @@ const routes = [
     path: '/signup', 
     name: 'signup',
     component: SignUp
+  },
+  {
+    path: '/forget',
+    name: 'forget',
+    component: Forget
   },
   {
     path: '/user/:username',

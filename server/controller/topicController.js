@@ -1,6 +1,8 @@
 const fs = require('fs');
 const path = require('path');
 const crypto = require('crypto');
+const LikeModel = require('../models/like')
+const Token = require('../tools/token')
 const Topics = require('../models/topic');
 
 /**
@@ -69,6 +71,10 @@ exports.topicAdd = (req, res) => {
  */
 exports.getTopicList = async(req, res) => {
   let params = req.query;
+  let token = req.headers.authorization
+  if (token && token !== 'null') {
+    token = await Token.verifyToken(token)
+  }
   if (!params.page) {
     params.page = 1;
   } else {
@@ -76,7 +82,26 @@ exports.getTopicList = async(req, res) => {
   }
   params.size = Number.parseInt(params.size);
   try {
-    let result = await Topics.getTopics(params);
+    let result = await Topics.getTopics(params)
+    // 判断当前用户是否点赞该话题
+    for(let length=result.rows.length, i=0; i<length; i++) {
+      let item = result.rows[i]
+      let likes = await LikeModel.getLikes(item.id , 1)
+      item.dataValues.likesCount = likes.count
+      if (token.id) {
+        let isLiked = false
+        for(let length=likes.rows.length,i=0; i<length; i++) {
+          let ele = likes.rows[0]
+          if (ele.userID == token.id) {
+            isLiked = true
+            break
+          }
+        }
+        item.dataValues.isLiked = isLiked
+      } else {
+        item.dataValues.isLiked = false
+      }
+    }
     res.json({
       ret: 1,
       msg: 1,
@@ -106,8 +131,31 @@ exports.topicSearch = async(req, res) => {
   let params = req.query
   params.page = Number.parseInt(params.page)
   params.size = Number.parseInt(params.size)
+  let token = req.headers.authorization
+  if (token && token !== 'null') {
+    token = await Token.verifyToken(token)
+  }
   try {
     let result = await Topics.getTopicsByTitle(params)
+    // 判断当前用户是否点赞该话题
+    for(let length=result.rows.length, i=0; i<length; i++) {
+      let item = result.rows[i]
+      let likes = await LikeModel.getLikes(item.id , 1)
+      item.dataValues.likesCount = likes.count
+      if (token.id) {
+        let isLiked = false
+        for(let length=likes.rows.length,i=0; i<length; i++) {
+          let ele = likes.rows[0]
+          if (ele.userID == token.id) {
+            isLiked = true
+            break
+          }
+        }
+        item.dataValues.isLiked = isLiked
+      } else {
+        item.dataValues.isLiked = false
+      }
+    }
     // 将查到 Title 与搜索内容相同的进行高亮显示
     markTitle(params.query, result.rows)
     res.json({
@@ -214,3 +262,5 @@ exports.updateRecommend = (req, res) => {
     })
   }
 }
+
+

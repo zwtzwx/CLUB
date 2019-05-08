@@ -35,10 +35,6 @@ const Comment = sequelize.define('comment', {
     type: Sequelize.DATE,
     field: 'created_at'
   },
-  like: {
-    type: Sequelize.INTEGER,
-    defaultValue: 0
-  },
   status: {
     type: Sequelize.TINYINT,
     defaultValue: 1

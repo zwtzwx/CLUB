@@ -36,7 +36,8 @@ exports.removeLike = async(req, res) => {
     // 先验证 token 获取用户信息 id
     let user = await Token.verifyToken(token)
     params.userID = user.id
-    LikeModel.removeLike(params, 0).then(() => {
+    let isTopic = params.comment_id ? 0 : 1
+    LikeModel.removeLike(params, isTopic).then(() => {
       res.json({
         msg: '取消点赞成功!',
         data: '',

@@ -16,14 +16,14 @@ const mailTransport = nodeMailer.createTransport({
   }
 });
 
-// 发送邮件
-exports.sendMail = async(req, res) => {
+// 发送注册邮件
+exports.registerMail = async(req, res) => {
   let mail = req.body.mail;
   let baseURL = req.headers.origin;
   config.mailOption.to = mail;
   try {
     // 渲染邮箱模板
-    let str = await renderEmail(baseURL, mail);
+    let str = await renderEmail(baseURL, mail, 'signup');
     config.mailOption.html = str;
     // 发送邮箱
     mailTransport.sendMail(config.mailOption, (err, info) => {
@@ -36,12 +36,6 @@ exports.sendMail = async(req, res) => {
           });
       }
     })
-    // Mail.sendEmail(mailOption).then(() => {
-    //   res.json({
-    //     msg: '邮件发送成功，请验证你的邮箱',
-    //     ret: 1
-    //   });
-    // });
   } catch (err) {
     console.log(err)
     res.status(500).json({
@@ -51,24 +45,46 @@ exports.sendMail = async(req, res) => {
   }
 }
 
-// sendEmail = function (mail) {
-//   return new Promise((resolve, reject) => {
-//     config.mailTransport.sendMail(mail, (err, info) => {
-//       if (err) {
-//         reject();
-//       }
-//       resolve();
-//     })
-//   });
-// }
+// 发送忘记邮件
+exports.forgetMail = async(req, res) => {
+  let mail = req.body.mail;
+  let baseURL = req.headers.origin;
+  config.mailOption.to = mail;
+  try {
+    // 渲染邮箱模板
+    let str = await renderEmail(baseURL, mail, 'forget');
+    config.mailOption.subject = '忘记密码';
+    config.mailOption.html = str;
+    // 发送邮箱
+    mailTransport.sendMail(config.mailOption, (err, info) => {
+      if (err) {
+        console.log(err)
+      } else {
+          res.json({
+            msg: '邮件发送成功，请进入你的邮箱查看',
+            ret: 1
+          });
+      }
+    })
+  } catch (err) {
+    console.log(err)
+    res.status(500).json({
+      msg: '邮件发送失败',
+      ret: 0
+    });
+  }
+}
+
+
 
 // 渲染邮件模板
-const renderEmail = function (baseURL, mail) {
+const renderEmail = function (baseURL, mail, url) {
   // 根据当前时间戳加密
   let code = Mail.aseEncrypt(Date.now().toString(), config.appKey);
+  let mailPah = url === 'signup' ? 'registermail' : 'forgetmail'
   return new Promise((resolve, reject) => {
-    ejs.renderFile(path.resolve(__dirname, '../view/email.ejs'), {
-      url: `${baseURL}/#/signup?code=${code}&email=${mail}`
+    ejs.renderFile(path.resolve(__dirname, `../view/${mailPah}.ejs`), {
+      url: `${baseURL}/#/${url}?code=${code}&email=${mail}`
     }, (err, str) => {
       if (err) {
         console.log(err)

@@ -62,6 +62,34 @@ exports.login = async (req, res) => {
 }
 
 /**
+ *  忘记密码
+ */
+exports.forget = (req, res) => {
+  let userInfo = req.body.userInfo;
+  try {
+    // 先验证邮箱是否过期
+    Mail.vertifyCode(userInfo.code);
+    User.forgetPassword(userInfo).then(() => {
+      res.json({
+        msg: '提交成功',
+        ret: 1
+      })
+    }).catch(err => {
+      res.json({
+        msg: err.message,
+        ret: 0
+      })
+    })
+  } catch (e) {
+    console.log(e);
+    res.json({
+      msg: e.message,
+      ret: 0
+    })
+  }
+}
+
+/**
  * 获取用户信息
  * @param req.query.id  用户 ID
  */

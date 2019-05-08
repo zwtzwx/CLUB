@@ -15,8 +15,10 @@ var upload = multer({ dest: 'uploads/' })
 
 // 客户端
 
-// 发送邮箱
-router.post('/mail/send', mailControl.sendMail)
+// 发送注册邮箱
+router.post('/mail/register', mailControl.registerMail)
+// 发送忘记密码邮箱
+router.post('/mail/forget', mailControl.forgetMail)
 
 // 注册
 router.post('/user/signup', userControl.register)
@@ -30,6 +32,8 @@ router.get('/user/user-info', userControl.getUserInfo)
 router.put('/user/user-info', userControl.updateUser)
 // 修改密码
 router.put('/user/password', userControl.updatePassword)
+// 忘记密码
+router.post('/user/forget', userControl.forget)
 // 获取用户发表的话题
 router.get('/user/topics', userControl.getTopicsByUser)
 

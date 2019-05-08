@@ -41,6 +41,7 @@ exports.getTopics = (params) => {
             'comment',
             'scan',
             'created',
+            'like'
         ],
         include:[
             {

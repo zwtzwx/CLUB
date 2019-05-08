@@ -12,12 +12,12 @@
           </div>
           <div class="title" v-html="item.title"></div>
           <div class="about">
-            <span class="info">
-              <i class="el-icon-view"></i>
-              {{ item.scan }}
+             <span :class="['info', { liked: item.isLiked }]" @click.stop="onTopicLike(item)">
+              <i class="iconfont icon-dianzan"></i>
+              {{ item.likesCount ? item.likesCount : '' }}
             </span>
             <span class="info">
-              <i class="iconfont icon-liuyan" style="top: 2px"></i>
+              <i class="iconfont icon-pinglun"></i>
               {{ item.comment }}
             </span> 
           </div>
@@ -77,6 +77,17 @@ export default {
     },
     onTopicDetail (id) {
       this.$router.push({ name: 'topicdetail', params: { id } })
+    },
+    // 点赞、取消点赞
+    onTopicLike (item) {
+      if (!this.$store.state.user.id) return this.$message.info('请登录后在执行此操作')
+       let [method, num, params] = item.isLiked ? ['delete', -1, { params: { topic_id: item.id } }] : ['post', 1, { topic_id: item.id }]
+      this.$json[method](`/like`, params).then (res => {
+        if (res.ret) {
+          item.likesCount += num
+          item.isLiked = !item.isLiked
+        }
+      })
     }
   },
   beforeRouteUpdate (to, from, next) {
@@ -98,6 +109,21 @@ export default {
   mark {
     background: none;
     color: #f00;
+  }
+  .about {
+    color: #b2bac2;
+    font-size: 0;
+    i {
+      font-size: 16px;
+      position: relative;
+      top: 1px;
+    }
+  }
+  .info {
+    display: inline-block;
+    padding: 2px 9px;
+    font-size: 14px;
+    border: 1px solid #edeeef;
   }
   .search-item {
     height: 80px;

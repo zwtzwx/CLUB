@@ -41,6 +41,21 @@ exports.userRegister = async (userInfo) => {
   
 }
 
+exports.forgetPassword = async(params) => {
+  // 根据邮箱名查找数据
+  let user = await findUser('email', params.email)
+  if (user && !user.status)  throw new Error('该账号已禁用，请联系管理员')
+  if (user) {
+    let [password] = Crypto.rsaDecrypt(params.password);
+    password = Crypto.hmacEncrypt(password);
+    user.update({
+      password
+    })
+  }else {
+    throw new Error('该账号不存在')
+  }
+}
+
 /**
  * loginInfo 输入的用户信息
  *    name: 用户名或邮箱

@@ -48,6 +48,10 @@ const Topic = sequelize.define('topic', {
         field: 'scan_num',
         type: Sequelize.INTEGER,
         defaultValue: 0
+    },
+    like: {
+        type: Sequelize.INTEGER,
+        defaultValue: 0
     }
 });
 module.exports = Topic;
