@@ -7,10 +7,10 @@
                 <!-- 板块 -->
                 <el-form-item label="请选择板块：" label-width="100px" prop="plate">
                     <el-select v-model="topicContent.plate" placeholder="清选择">
-                        <el-option v-for="item in plateList" 
-                        :key="item.value"
-                        :value="item.value"
-                        :label="item.label"></el-option>
+                        <el-option v-for="item in sections" 
+                        :key="item.id"
+                        :value="item.id"
+                        :label="item.name"></el-option>
                         </el-select>
                 </el-form-item>
                 <!-- 标题 -->
@@ -44,20 +44,7 @@ export default {
     data() {
         return {
             // 板块数组
-            plateList: [
-                {
-                    label: '分享',
-                    value: 1
-                },
-                {
-                    label: "问答",
-                    value: 2
-                },
-                {
-                    label: "招聘",
-                    value: 3
-                }
-            ],
+            sections: [],
             topicContent: {
                 plate: '',
                 title: '',
@@ -67,7 +54,18 @@ export default {
         }
     },
     mixins: [mavonEditor],
+    created () {
+        this.getSection()
+    },
     methods: {
+        // 获取板块列表
+        getSection () {
+            this.$form.get('/section').then(res => {
+                if (res.ret) {
+                this.sections = res.data || []
+                }
+            })
+        },
         // 发表评论
         saveTopic () {
             this.btnLoading = true;

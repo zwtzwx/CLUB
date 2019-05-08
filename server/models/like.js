@@ -1,6 +1,7 @@
 const DB = require('../db/models')
 
 DB.Like.belongsTo(DB.Comment, { foreignKey: 'commentID', sourceKey: 'id' })
+DB.Like.belongsTo(DB.Topic, { foreignKey: 'topicID', sourceKey: 'id' })
 exports.addLike = (params) => {
   return DB.Like.create({
     commentID: params.comment_id || 0,

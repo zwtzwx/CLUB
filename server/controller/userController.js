@@ -220,3 +220,50 @@ exports.getTopicsByUser = async(req, res) => {
     })
   }
 }
+
+/**
+ *  获取用户列表
+ */
+exports.getUsers = (req, res) => {
+  const params = req.query
+  params.page = Number(params.page)
+  params.size = Number(params.size)
+  try {
+    User.getUsers(params).then(result => {
+      res.json({
+        msg: '',
+        ret: 1,
+        data: {
+          total: result.count,
+          data: result.rows,
+          currentPage: params.page
+        }
+      })
+    })
+  }catch(err) {
+    res.status(500).json({
+      ret: 0,
+      data: 0,
+      msg: err.message
+    })
+  }
+}
+
+exports.updateUserStatus = (req, res) => {
+  const id = req.params.id
+  try {
+    User.udpateStatus(id).then(() => {
+      res.json({
+        msg: '修改成功!',
+        ret: 1,
+        data: ''
+      })
+    })
+  }catch(err) {
+    res.status(500).json({
+      ret: 0,
+      data: '',
+      msg: err.message
+    })
+  }
+}

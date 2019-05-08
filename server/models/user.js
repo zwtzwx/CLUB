@@ -58,7 +58,7 @@ exports.userLogin = async (userKey) => {
         { email: loginName } 
       ]
     },
-    attributes: ['id', 'name', 'password', 'pic', 'admin']
+    attributes: ['id', 'name', 'password', 'pic', 'admin', 'status']
   });
   if (result) {
     // 将铭文密码加盐加密与数据库中的密码比对
@@ -67,6 +67,7 @@ exports.userLogin = async (userKey) => {
     if (loginPasswd !== result.dataValues.password) {
       throw new Error('密码不正确');
     }
+    if (!result.status) throw new Error('该账号已被禁用，请联系管理员!!')
     // 更新最后登录时间
     DB.User.update({
       login: new Date(),
@@ -145,4 +146,23 @@ exports.updatePassword = async(params) => {
   })
 }
 
+exports.getUsers = (params) => {
+  return DB.User.findAndCountAll({
+    limit: params.size,
+    offset: (params.page - 1) * params.size,
+    where: {
+      name: {
+        [Op.like]: params.name ? `%${params.name}%` : '%'
+      }
+    }
+  })
+}
+
+exports.udpateStatus = async(id) => {
+  let user = await DB.User.findById(id, {
+    attributes: ['status']
+  })
+  let status = user.status ? 0 : 1
+  return DB.User.update({ status }, { where: { id } })
+}
 exports.findUser = findUser;

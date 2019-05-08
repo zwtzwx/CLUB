@@ -16,7 +16,7 @@
         <el-button type="primary" class="btn" @click="signIn">登录</el-button>
       </el-form>
       <p class="other">
-        已有账号？<span class="link" @click="isLogin = false">登录</span>
+        还没有账号？<span class="link" @click="isLogin = false">注册</span>
         <span class="link forget">忘记密码</span>
       </p>
     </div>

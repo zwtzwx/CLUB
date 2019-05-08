@@ -10,7 +10,7 @@ const Like = sequelize.define('like', {
   topicID: {
     type: Sequelize.INTEGER,
     field: 'topic_id',
-    defaultValue: 0   // 如果这个点赞不属于话题而是评论  则 topic_id = 0
+    defaultValue: 0
   },
   commentID: {
     type: Sequelize.INTEGER,

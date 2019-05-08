@@ -16,6 +16,10 @@ const Section = sequelize.define('section', {
     created: {
         type: Sequelize.DATE,
         field: 'created_at'
+    },
+    status: {
+        type: Sequelize.TINYINT,
+        defaultValue: 1
     }
 })
 // Section.hasMany(Topic, {foreignKey: 'section_id', sourceKey: 'id'});

@@ -3,8 +3,8 @@
     <!-- 文章分类导航 -->
     <div class="category-nav">
       <ul>
-        <li @click="changeSection(item.key)" v-for="item in sections" :key="item.key"
-          :class="[item.key === selected && 'select']">{{ item.value }}</li>
+        <li @click="changeSection(item.id)" v-for="item in sections" :key="item.id"
+          :class="[item.id === selected && 'select']">{{ item.name }}</li>
         <!-- <li>全部</li>
         <li>推荐</li>
         <li>问答</li>
@@ -39,6 +39,7 @@
         <li class="article-item">
           <el-pagination
           class="pagination"
+          @current-change="handleCurrentChange"
           layout="prev, pager, next, total, jumper"
           :current-page="page_params.page"
           :page-size="page_params.size"
@@ -60,31 +61,24 @@ export default {
         section: '',
         total: 0
       },
-      sections: [
-        {
-          key: 0,
-          value: '全部'
-        },
-        {
-          key: 1,
-          value: '分享'
-        },
-        {
-          key: 2,
-          value: '问答'
-        },
-        {
-          key: 3,
-          value: '招聘'
-        }
-      ],
+      sections: [],
       selected: 0
     }
   },
   created() {
+    this.getSection()
     this.getTopicList()
   },
   methods: {
+    // 获取板块列表
+    getSection () {
+      this.$form.get('/section').then(res => {
+        if (res.ret) {
+          this.sections = res.data || []
+          this.sections.unshift({ id: 0, name: '全部'})
+        }
+      })
+    },
     // 获取话题列表，默认获取 `全部` 下的话题
     getTopicList () {
       this.$form.get(`topic`, {
@@ -114,6 +108,10 @@ export default {
       } else {
         this.page_params.section = ''
       }
+      this.getTopicList()
+    },
+    handleCurrentChange (page) {
+      this.page_params.page = page
       this.getTopicList()
     }
   }

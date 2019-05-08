@@ -1,5 +1,6 @@
 const Sequelize = require('sequelize');
 const UserModel = require('./user');
+const sequelize = require('../tools/db')
 const DB = require('../db/models');
 const Op = Sequelize.Op;
 
@@ -8,6 +9,7 @@ const Op = Sequelize.Op;
 DB.Topic.belongsTo(DB.Section, {foreignKey: 'section_id', sourceKey: 'id'});
 DB.Topic.belongsTo(DB.User, {foreignKey: 'user_id', sourceKey: 'id'});
 DB.Topic.hasMany(DB.Comment, { foreignKey: 'topic_id', sourceKey: 'id' })
+DB.Topic.hasMany(DB.Like, { foreignKey: 'topicID', sourceKey: 'id' })
 // 发表话题
 // topic : {
 //     user_id,
@@ -38,12 +40,16 @@ exports.getTopics = (params) => {
             'recommend',
             'comment',
             'scan',
-            'created'
+            'created',
         ],
         include:[
             {
                 model: DB.User,
                 attributes: ['name']
+            },
+            {
+                model: DB.Section,
+                attributes: ['id', 'name']
             }
         ],
         offset: (params.page - 1) * params.size,
@@ -54,6 +60,9 @@ exports.getTopics = (params) => {
         where: {
             section_id: {
                 [Op.like]: params.section ? params.section : '%'
+            },
+            title: {
+                [Op.like]: params.name ? `%${params.name}%` : '%'
             }
         }
     })
@@ -150,13 +159,63 @@ exports.getTopicsByUser = (userId, n) => {
 // 删除话题
 exports.delTopic = async(topicID) => {
     // 删除话题及其评论
-    await DB.Topic.findById(topicID).then(topic => {
-        DB.Comment.destroy({
-            where: {
-                topic_id: topic.id
-            }
-        })
-        topic.destroy()
+    // return sequelize.transaction(function (t) {
+    //     return DB.Topic.findById(topicID, {transaction: t}).then(function (topic) {
+    //         const topicID = topic.id
+    //         DB.Like.destroy({
+    //             where: {
+    //                 topicID: topicID
+    //             },
+    //             transaction: t
+    //         }).then(() => {
+    //             DB.Comment.destroy({
+    //                 where: {
+    //                     topic_id: topicID
+    //                 },
+    //                 transaction: t
+    //             })
+    //         })
+    //         return topic.destroy()
+    //     })
+    // })
+    return sequelize.transaction().then(function (t) {
+        DB.Topic.findById(topicID, {transaction: t}).then(function (topic) {
+            const topicID = topic.id
+            DB.Like.destroy({
+                where: {
+                    topicID: topicID
+                },
+                transaction: t
+            }).then(() => {
+                topic.destroy()
+            })
+            return DB.Comment.destroy({
+                where: {
+                    topic_id: topicID
+                },
+                transaction: t
+            })
+        }).then(function () {
+          return t.commit();
+        }).catch(function (err) {
+          return t.rollback();
+        });
+      });
+    // await DB.Topic.findById(topicID).then(topic => {
+    //     DB.Comment.destroy({
+    //         where: {
+    //             topic_id: topic.id
+    //         }
+    //     })
+    //     topic.destroy()
+    // })
+    // return true
+}
+
+exports.updateRecommend = async(id) => {
+    let topic = await DB.Topic.findById(id, {
+        attributes: ['recommend']
     })
-    return true
+    let recommend = topic.recommend ? 0 : 1
+    return DB.Topic.update({ recommend }, { where: { id } })
 }

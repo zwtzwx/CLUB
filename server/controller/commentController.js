@@ -32,16 +32,10 @@ exports.getComment = async(req, res) => {
   try {
     const topicID = Number.parseInt(req.query.topic_id)
     let token = req.headers.authorization
-    if (token) {
+    if (token && token !== 'null') {
       token = await Token.verifyToken(token)
     }
     let comments = await Comment.getComment(topicID)
-    // comments.rows.forEach(async(item) => {
-    //   let likes = await LikeModel.getLikes(item.id , 0)
-    //   console.log(likes.count, likes.rows)
-    //   item.likesCount = likes.count
-    //   item.isLiked = token ? false : likes.rows.includes(token)
-    // })
     for(let length=comments.rows.length, i=0; i<length; i++) {
       let item = comments.rows[i]
       let likes = await LikeModel.getLikes(item.id , 0)

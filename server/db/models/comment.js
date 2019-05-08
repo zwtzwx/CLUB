@@ -38,6 +38,10 @@ const Comment = sequelize.define('comment', {
   like: {
     type: Sequelize.INTEGER,
     defaultValue: 0
+  },
+  status: {
+    type: Sequelize.TINYINT,
+    defaultValue: 1
   }
 })
 

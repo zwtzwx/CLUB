@@ -71,6 +71,8 @@ exports.getTopicList = async(req, res) => {
   let params = req.query;
   if (!params.page) {
     params.page = 1;
+  } else {
+    params.page = Number.parseInt(params.page)
   }
   params.size = Number.parseInt(params.size);
   try {
@@ -170,22 +172,45 @@ const markTitle = (query, titleList = []) => {
 }
 
 /**
- * 删除话题，并删除评论
+ * 删除话题，并删除评论 点赞
  * @param
  *  req.params.topicID 话题ID
  */
 exports.delTopic = async(req, res) => {
   try {
     // 失败时的抛出错误应该在上级函数指定
-    let result = await Topics.delTopic(Number.parseInt(req.params.topicID))
-    res.json({
-      msg: '删除成功',
-      ret: 1
+    Topics.delTopic(Number.parseInt(req.params.id)).then((result) => {
+      console.log(111)
+      res.json({
+        msg: '删除成功',
+        ret: 1,
+        data: ''
+      })
     })
   }catch(err) {
     res.status(500).json({
       msg: err.message,
-      ret: 0
+      ret: 0,
+      data: ''
+    })
+  }
+}
+
+exports.updateRecommend = (req, res) => {
+  const id = req.params.id
+  try {
+    Topics.updateRecommend(id).then(() => {
+      res.json({
+        msg: '修改成功!',
+        ret: 1,
+        data: ''
+      })
+    })
+  }catch(err) {
+    res.status(500).json({
+      ret: 0,
+      data: '',
+      msg: err.message
     })
   }
 }

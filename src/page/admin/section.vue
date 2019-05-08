@@ -10,6 +10,11 @@
     border>
       <el-table-column type="index"></el-table-column>
       <el-table-column label="版块名" prop="name"></el-table-column>
+      <el-table-column label="版块状态">
+        <template slot-scope="scope">
+          <span v-if="!scope.row.status">隐藏</span>
+        </template>
+      </el-table-column>
       <el-table-column label="创建时间">
         <template slot-scope="scope">
           <span>{{ scope.row.created | formateTime }}</span>
@@ -18,11 +23,12 @@
       <el-table-column label="操作">
         <template slot-scope="scope">
           <el-button class="btn-green" @click="sectionChange(scope.row.id)">修改</el-button>
-          <el-button class="btn-light-red">隐藏版块</el-button>
+          <el-button v-if="scope.row.status" class="btn-light-red" @click="onSectionShow(scope.row.id)">隐藏版块</el-button>
+          <el-button v-else class="btn-orangey-red" @click="onSectionShow(scope.row.id)">显示版块</el-button>
         </template>
       </el-table-column>
     </el-table>
-    <div class="pagination">
+    <div class="admin-pagination">
       <el-pagination
         @size-change="handleSizeChange"
         @current-change="handleCurrentChange"
@@ -93,6 +99,18 @@ export default {
     // 修改分类
     sectionChange (id) {
       this.$router.push({ name: 'sectionedit', query: { id } })
+    },
+    // 隐藏、显示版块
+    onSectionShow (id) {
+      this.$form.put(`admin/section/status/${id}`).then(res => {
+        if (res.ret) {
+          this.$notify.success({
+            title: '操作成功',
+            message: res.msg
+          })
+          this.getList()
+        }
+      })
     }
   }
 }
@@ -100,10 +118,6 @@ export default {
 <style lang="scss">
 .admin-section {
   .add-section {
-    text-align: right;
-  }
-  .pagination {
-    margin-top: 20px;
     text-align: right;
   }
 }

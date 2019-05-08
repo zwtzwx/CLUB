@@ -141,7 +141,7 @@
                         v-model="comment_params.content"
                         :toolbars="commentToolBar"></mavon-editor>
                     <div class="add-btn">
-                        <el-button type="primary" class="comment-btn" size="small" :loading="btnLoading" @click="onComment">添加评论</el-button>
+                        <el-button type="primary" class="comment-btn" size="small" :loading="btnLoading" @click="onComment()">添加评论</el-button>
                     </div>
                 </div>
             </div>
@@ -237,6 +237,7 @@ export default {
         },
         // 发表评论
         onComment (parentID = '', index) {
+            console.log(parentID)
             let content = parentID ? this.commentList[index].replyContent : this.comment_params.content
             if (!content) return
             if (!this.comment_params.userID) {
@@ -290,7 +291,7 @@ export default {
                 return
             }
             // 如果已点赞，则取消点赞，否则点赞
-            let [mothod, num, params] = commentItem.isLiked ? ['delete', -1, { params: { comment_id: commentItem.id } }] : ['post', 1, { comment_id: commentItem.id }]
+            let [mothod, num, params] = commentItem.isLiked ? ['delete', -1, { params: { comment_id: commentItem.id } }] : ['post', 1, { comment_id: commentItem.id, topic_id: this.article.id }]
             this.$json[mothod]('/like', params).then(res => {
                 if (res.ret) {
                     commentItem.isLiked = !commentItem.isLiked

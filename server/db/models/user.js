@@ -39,6 +39,10 @@ const User = sequelize.define('user', {
     login: {
       type: Sequelize.DATE,
       field: 'login_at'
+    },
+    status: {
+      type: Sequelize.TINYINT,
+      defaultValue: 1
     }
 });
 

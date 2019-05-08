@@ -69,6 +69,8 @@ router.post('/like', likeControl.addLike)
 // 取消点赞
 router.delete('/like', likeControl.removeLike)
 
+// 获取板块列表
+router.get('/section', sectionControl.getSectionForClient)
 
 // 管理员端
 
@@ -80,4 +82,17 @@ router.post('/admin/section', sectionControl.addSection)
 router.put('/admin/section/:id', sectionControl.updateSection)
 // 获取单个版块信息
 router.get('/admin/section/:id', sectionControl.getSection)
+router.put('/admin/section/status/:id', sectionControl.updateSectionStatus)
+
+// 获取用户列表
+router.get('/admin/user', userControl.getUsers)
+// 取消用户权限
+router.put('/admin/user/status/:id', userControl.updateUserStatus)
+
+// 获取话题列表
+router.get('/admin/topic', topicControl.getTopicList)
+// 话题推荐、取消推荐
+router.put('/admin/topic/recommend/:id', topicControl.updateRecommend)
+// 删除话题
+router.delete('/admin/topic/:id', topicControl.delTopic)
 module.exports = router;
