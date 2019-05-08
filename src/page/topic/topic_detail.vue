@@ -108,7 +108,9 @@
                         <li v-for="item in articleList" :key="item.id">
                             <div>{{ item.title }}</div>
                             <div class="article-comment">
-                                <span style="margin-right: 10px"><i class="iconfont icon-dianzan"></i> {{ item.comment }}</span>
+                                <span style="margin-right: 10px" @click="onTopicLike(item)">
+                                    <i :class="['iconfont', 'icon-dianzan', { liked: item.isLiked }]"></i> {{ item.likesCount ? item.likesCount : '' }}
+                                </span>
                                 <span><i class="iconfont icon-pinglun"></i> {{ item.comment }}</span>
                             </div>
                         </li>
@@ -116,9 +118,9 @@
                 </div>
                 <!-- 文章信息 -->
                 <div class="article-meta">
-                    <el-badge :value="1" type="primary">
-                        <div class="like-box meta-box">
-                            <i class="iconfont icon-dianzan"></i>
+                    <el-badge :value="article.likesCount" type="primary">
+                        <div class="like-box meta-box"  @click.stop="onTopicLike(article)">
+                            <i :class="['iconfont', 'icon-dianzan', { liked: article.isLiked }]"></i>
                         </div>
                     </el-badge>
                     <br>
@@ -151,6 +153,7 @@
 <script>
 import 'mavon-editor/dist/css/index.css'
 import mavonEditor from '@/lib/mixin/mavonedit.js'
+import topicLike from '@/lib/mixin/topiclike.js'
 import MyHeader from '../common/header'
 import { avatarURL } from '@/lib/axios/base_url.js'
 import { Popover, Badge } from 'element-ui'
@@ -162,7 +165,9 @@ export default {
                 content: '',  // 文章内容
                 title: '',  // 文章标题
                 scan: 0,  // 文章浏览数
-                createdAt: ''  // 文章发表时间
+                createdAt: '',  // 文章发表时间
+                likesCount: 0,
+                isLiked: false
             },
             author: {
                 id: '',  // 作者 id
@@ -182,7 +187,7 @@ export default {
             dialogueList: []
         }
     },
-    mixins: [mavonEditor],
+    mixins: [mavonEditor, topicLike],
     created() {
         this.getTopicDetail()
         this.getCommentsList()
@@ -200,6 +205,8 @@ export default {
                     this.article.title = res.data.topic.title
                     this.article.content = res.data.topic.content
                     this.article.scan = res.data.topic.scan || 0
+                    this.article.likesCount = res.data.topic.likesCount || 0
+                    this.article.isLiked = res.data.topic.isLiked || false
                     this.article.createdAt = this.formateDate(res.data.topic.created)
                     this.articleList = res.data.articles || []
                 }
@@ -281,7 +288,7 @@ export default {
                 }
             }
         },
-        // 点赞
+        // 评论点赞
         onLike (commentItem) {
             if (!this.comment_params.userID) {
                 this.$message({

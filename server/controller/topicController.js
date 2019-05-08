@@ -184,16 +184,56 @@ exports.topicSearch = async(req, res) => {
 exports.topcDetails = async(req, res) => {
   try {
     let result = await Topics.topcDetails(Number.parseInt(req.params.topicID))
-    // 获取用户点击量最高的5条话题
-    Topics.getTopicsByUser(result.user.id, 5).then(resp => {
-      res.json({
-        ret: 1,
-        msg: '',
-        data: {
-          topic: result,
-          articles: resp
+    let token = req.headers.authorization
+    if (token && token !== 'null') {
+      token = await Token.verifyToken(token)
+    }
+    // 判断当前用户是否点赞该话题
+    let likes = await LikeModel.getLikes(result.id , 1)
+    result.dataValues.likesCount = likes.count
+    if (token.id) {
+      let isLiked = false
+      for(let length=likes.rows.length,i=0; i<length; i++) {
+        let ele = likes.rows[0]
+        if (ele.userID == token.id) {
+          isLiked = true
+          break
         }
-      })
+      }
+      result.dataValues.isLiked = isLiked
+    } else {
+      result.dataValues.isLiked = false
+    }
+    // 获取用户点击量最高的5条话题
+    let params = {}
+    params.userID = result.user.id
+    params.topicID = req.params.topicID
+    let resp = await Topics.getTopicsByUser(params, 5)
+    for(let length=resp.length, i=0; i<length; i++) {
+      let item = resp[i]
+      let likes = await LikeModel.getLikes(item.id , 1)
+      item.dataValues.likesCount = likes.count
+      if (token.id) {
+        let isLiked = false
+        for(let length=likes.rows.length,i=0; i<length; i++) {
+          let ele = likes.rows[0]
+          if (ele.userID == token.id) {
+            isLiked = true
+            break
+          }
+        }
+        item.dataValues.isLiked = isLiked
+      } else {
+        item.dataValues.isLiked = false
+      }
+    }
+    res.json({
+      ret: 1,
+      msg: '',
+      data: {
+        topic: result,
+        articles: resp
+      }
     })
   }catch(err) {
     res.status(500).json({

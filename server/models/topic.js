@@ -142,11 +142,14 @@ exports.topcDetails = async(topicID) => {
 }
 
 // 获取用户回复数最高的 n 篇文章
-exports.getTopicsByUser = (userId, n) => {
+exports.getTopicsByUser = (params, n) => {
     return DB.Topic.findAll({
         attributes: ['id', 'title', 'comment'],
         where: {
-            user_id: userId
+            user_id: params.userID,
+            id: {
+                [Op.not]: params.topicID
+            }
         },
         // group: 'user_id',
         // having: ['user_id=?', userId],
