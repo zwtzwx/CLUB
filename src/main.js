@@ -39,21 +39,35 @@ Vue.filter('formateTime', function (value) {
   return value.split('T').join(' ').split('.')[0]
 })
 // 2019-04-19T06:16:51.00Z 2019年4月19日
-// Vue.filter('formateDate', function (value) {
-//   if (!value) return ''
-//   console.log(value, 111)
-//   let dateList = value.split('T')[0].split('-')
-//   if (dateList[1].indexOf('0') === 0) {
-//       dateList[1] = dateList[1].slice(1)
-//   }
-//   if (dateList[2].indexOf('0') === 0) {
-//       dateList[2] = dateList[2].slice(1)
-//   }
-//   dateList.splice(1, 0, '年')
-//   dateList.splice(3, 0, '月')
-//   dateList.push('日')
-//   return dateList.join('')
-// })
+Vue.filter('formateDateTime', function (dateTime) {
+  if (!dateTime) return ''
+  let dateTimeStamp = new Date(dateTime).getTime()
+  let minute = 1000 * 60  // 分钟
+  let hour = 60 * minute  // 小时
+  let day = hour * 24  // 日
+  let month = day * 30  // 月
+  let year = month * 12  // 年
+  let now = new Date().getTime()  // 当前时间戳
+  let diffValue = now - dateTimeStamp
+  if (diffValue < 0) return ''
+  let yearC = diffValue / year
+  let monthC = diffValue / month
+  let dayC = diffValue / day
+  let hourC = diffValue / hour
+  let minC = diffValue / minC
+  let result = '刚刚'
+  if (yearC >= 1) {
+    result = `${Number.parseInt(yearC)}年前`
+  }else if (monthC >= 1) {
+    result = `${Number.parseInt(monthC)}月前`
+  }else if (dayC >= 1) {
+    result = `${Number.parseInt(dayC)}天前`
+  }else if (minC >= 1) {
+    result = `${Number.parseInt(minC)}分钟前`
+  }
+  return result
+})
+
 new Vue({
   router,
   store,

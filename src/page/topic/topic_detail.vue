@@ -11,6 +11,9 @@
                         <a :href="`#/user/${author.name}`" target="_blank" class="author-name">{{ author.name }}</a>
                         <div class="meta-box">{{ article.createdAt }} 浏览 {{ article.scan }}</div>
                     </div>
+                    <div class="delete-btn" @click.stop="onTopicDelete" v-if="author.id === auid">
+                         <el-button type="danger" icon="el-icon-delete" size="small"></el-button>
+                    </div>
                 </div>
                 <h1>{{ article.title }}</h1>
                 <mavon-editor v-model="article.content"
@@ -60,7 +63,7 @@
                                         </mavon-editor>
                                     </div>
                                     <div class="comment-sub-box">
-                                        <div class="time">20小时前</div>
+                                        <div class="time">{{ item.create | formateDateTime }}</div>
                                         <div class="commit-action">
                                             <div :class="['like-action', { liked:  item.isLiked}]" @click="onLike(item)">
                                                 <i class="iconfont icon-dianzan"></i>
@@ -68,6 +71,10 @@
                                             </div>
                                             <div class="comment-action" @click.stop="item.show = !item.show">
                                                 <i class="iconfont icon-icon_reply"></i>
+                                            </div>
+                                            <div v-if="item.user.id === auid">
+                                                <!-- <el-button type="danger" icon="el-icon-delete" circle></el-button> -->
+                                                 <i class="el-icon-delete" style="color: red"></i>
                                             </div>
                                         </div>
                                     </div>
@@ -78,7 +85,6 @@
                                 class="editor"
                                 defaultOpen="edit"
                                 :boxShadow="false"
-                                @imgAdd="imgAdd"
                                 v-model="item.replyContent"
                                 :toolbars="commentToolBar"></mavon-editor>
                                 <div class="add-btn">
@@ -184,7 +190,8 @@ export default {
             commentList: [],
             commentTotal: 0,
             btnLoading: false,
-            dialogueList: []
+            dialogueList: [],
+            mdIndex: 0
         }
     },
     mixins: [mavonEditor, topicLike],
@@ -305,6 +312,15 @@ export default {
                     commentItem.likesCount = commentItem.likesCount + num
                 }
             })
+        },
+        // 删除话题
+        onTopicDelete () {
+            this.$form.delete(`topic/${this.article.id}`).then(res => {
+                if (res.ret) {
+                    this.$message.success(res.msg)
+                    this.$router.replace({ name: 'home' })
+                }
+            })
         }
     },
     computed: {
@@ -314,6 +330,9 @@ export default {
             } else {
                 return '../../asset/images/default-avatar.svg'
             }
+        },
+        auid () {
+            return this.$store.state.user.id || ''
         }
     },
     components: {
@@ -331,6 +350,12 @@ export default {
     .author-info-block {
         display: flex; 
         margin-bottom: 20px; 
+        position: relative;
+    }
+    .delete-btn {
+        position: absolute;
+        right: 0;
+        top: 5px;
     }
     .author-avatar {
         width: 50px;

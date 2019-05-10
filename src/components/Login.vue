@@ -27,7 +27,7 @@
           <el-form-item>
             <el-input placeholder="请输入邮箱" 
             type="email" v-model="registerMail" autofocus
-            @input="checkMail" @keyup.enter.native="signUp"></el-input>
+            @input="checkMail(0)" @keyup.enter.native="signUp"></el-input>
           </el-form-item>
           <el-button type="primary" class="btn" :disabled="correctMail" @click="signUp" :loading="btnLoading">注册</el-button>
         </el-form>
@@ -81,14 +81,14 @@ export default {
       // 获取验证码
       this.btnLoading = true;
       this.$json.post('/mail/register', {
-        mail: this.forgetMail
+        mail: this.registerMail
       }).then((res) => {
         this.$message({
           message: res.msg,
           type: 'success',
         });
         this.btnLoading =false;
-        this.registerMail = false
+        this.loginVisible = false
       }).finally(() => {
         this.btnLoading = false;
       })

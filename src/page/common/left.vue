@@ -20,7 +20,7 @@
           <div class="meta-row">
             <span class="hot" v-if="item.recommend">推荐</span>
             <span class="username">{{ item.user.name }}</span>
-            <span class="time">{{ item.created | formateTime }}</span>
+            <span class="time">{{ item.created | formateDateTime }}</span>
             <!-- <span class="tag">JavaScript</span> -->
           </div>
           <div class="title">{{ item.title }}</div>

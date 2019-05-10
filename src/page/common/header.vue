@@ -18,7 +18,7 @@
           <li @click="register(0)">注册</li>
           <li @click="register(1)">登录</li>
         </template>
-        <li v-else style="position:relative">
+        <li v-else style="position:relative; z-index: 1">
           <div class="dropdown">
             <div class="dropdown-link" @click="dropdown = !dropdown">
               <img :src="avatar" class="headpic">

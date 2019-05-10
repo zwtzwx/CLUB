@@ -59,7 +59,7 @@ router.get('/topic/:topicID', topicControl.topcDetails)
 router.get('/search', topicControl.topicSearch)
 
 // 删除话题
-router.delete('/topic/:topicID', topicControl.delTopic)
+router.delete('/topic/:id', topicControl.delTopic)
 
 // 添加评论
 router.post('/comment', commentControl.addComment)
